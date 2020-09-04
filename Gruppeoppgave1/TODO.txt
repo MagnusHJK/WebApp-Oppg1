@@ -1,0 +1,31 @@
+﻿TODO for grupperposjekt 1
+
+###index.js
+	Skriv om slik at stasjons retning og stasjons ID lagres i url, med URLSearchParams og/eller jQuery.param()
+
+	#lagBestillingsBoks()
+		Ta ut dato til variabel
+		Lag dropdown for antall billetter
+		Send til lagBestilling()
+
+	#lagBestilling()
+		Skriv ferdig funksjon til å lage bestilling som legges inn i db
+
+
+
+
+###Bestilling.cs
+	Skriv klasse for en bestilling som består av stasjoner, tidspunkt, dato, etc...
+
+
+
+
+
+###BestillingController.cs
+	Lag metoder for å legge inn bestilling i db
+	Lag metode for å vise alle bestillinger
+
+
+
+###Database
+	Lag tabell for Bestilling med, id, til, fra, dato, tidspunkt
