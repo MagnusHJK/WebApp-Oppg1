@@ -1,18 +1,17 @@
 ﻿$(function () {
     hentAlleStasjoner();
+    sessionStorage.clear();
 });
+
+//vet dette er dumt men...
+var stasjonTil;
+var stasjonFra;
 
 function hentAlleStasjoner() {
     $.get("Stasjon/HentAlleStasjoner", function (stasjoner) {
         stasjonerAutocomplete(stasjoner);
     });
 }
-
-var stasjon = {
-
-}
-
-
 //Autocompleter søk på stasjoner
 function stasjonerAutocomplete(stasjoner) {
     $(".stasjonerAutocomplete").autocomplete({
@@ -42,11 +41,8 @@ function stasjonerAutocomplete(stasjoner) {
         //ui.item er objektet valgt i dropdown, den har to attributter. Label som er teksten(navn) og value som er indeks i db
         select: function (event, ui) {
             var stasjon = ui.item.obj;
-            //var stasjonsId = ui.item.value;
-            //var stasjonsNavn = ui.item.label;
-
             stasjonsValg(stasjon);
-            return false;
+            return false; 
         }
     });
 }
@@ -54,19 +50,20 @@ function stasjonerAutocomplete(stasjoner) {
 //Velger stasjoner og lagrer hvilken stasjon som er valgt som til eller fra
 function stasjonsValg(stasjon) {
     var step = sessionStorage.getItem("step");
- 
-        //Det er første stasjons valg
-        if (step === null || step === 1) {
-            sessionStorage.setItem("fra", stasjon.navn);
-            sessionStorage.setItem("step", 1);
-            lagDestinasjonsBoksFra(stasjon);
-        }
-        //Andre valg
-        else {
-            sessionStorage.setItem("til", stasjon.navn);
-            sessionStorage.setItem("step", 2);
-            lagDestinasjonsBoksTil(stasjon);
-        }
+
+    //Det er første stasjons valg
+    if (step == null || step == 1) {
+        sessionStorage.setItem("step", 2);
+        stasjonFra = stasjon;
+        $("#tilSøk").show("slow");
+        lagDestinasjonsBoksFra(stasjon);
+    }
+    //Andre valg
+    else {
+        sessionStorage.setItem("step", 2);
+        stasjonTil = stasjon;
+        lagDestinasjonsBoksTil(stasjon);
+    }
 }
 
 
@@ -75,12 +72,10 @@ function lagDestinasjonsBoksFra(stasjon) {
     $("#fraSøk").hide("slow");
     var ut = "";
 
-    //var stasjon = sessionStorage.getItem("fra");
-
     ut += '<b style="font-size:3em;">Fra: </b>' +
-          '<b style="font-size:2.5em;">' + stasjon.navn + '</b>' +
+          '<b style="font-size:2.5em;" id="stasjonFraNavn">' + stasjon.navn + '</b>' +
           '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
-          'onclick="endreStasjon(fra)">Endre</button></br>';
+          'onclick="endreStasjon(1)">Endre</button></br>';
 
     $("#fraBoks").html(ut);
     $("#fraBoks").show("slow");
@@ -95,12 +90,11 @@ function lagDestinasjonsBoksFra(stasjon) {
 function lagDestinasjonsBoksTil(stasjon) {
     $("#tilSøk").hide("slow");
     var ut = "";
-    //var stasjon = sessionStorage.getItem("til");
 
     ut += '<b style="font-size:3em;">Til: </b>' +
-          '<b style="font-size:2.5em;">' + stasjon.navn + '</b>' +
+          '<b style="font-size:2.5em;"id="stasjonTilNavn">' + stasjon.navn + '</b>' +
           '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
-          'onclick="endreStasjon(til)">Endre</button></br>';
+          'onclick="endreStasjon(2)">Endre</button></br>';
 
     $("#tilBoks").html(ut);
     $("#tilBoks").show("slow");
@@ -113,12 +107,29 @@ function lagDestinasjonsBoksTil(stasjon) {
 
 //Boks for dato og billett valg
 function lagBestillingBoks() {
+    var dato;
+    var tidspunkt;
     $("#bestillingsBoks").show("slow");
-    $("#datovalg").datepicker();
+    $("#datovalg").datepicker({
+        minDate: 0,
+        firstDay: 1,
+        onSelect: function (dateText, inst) {
+            dato = dateText;
+        }
+    });
+
+    stasjonFraId = sessionStorage.getItem("fraId");
+    stasjonTilId = sessionStorage.getItem("tilId");
+    genererAvganger();
 
     //lagBestilling(stasjonFraId, stasjonTilId, dato, tidspunkt);
 }
 
+//genererer avganger, alle avganger er bare oppdiktet utifra stasjoner, dato og tid.
+function genererAvganger() {
+
+
+}
 //Når alle valg er utført lager vi en bestilling og pusher til database
 function lagBestilling(stasjonFra, stasjonTil, dato, tidspunkt) {
 
@@ -131,15 +142,13 @@ function endreStasjon(retning) {
     //Fjerner tekst fra tidligere
     $(".stasjonerAutocomplete").val("");
 
-    console.log(retning);
-
-    if (retning == "fra") {
+    if (retning == 1) {
         $("#fraSøk").show("slow");
         $("#fraBoks").hide();
         sessionStorage.setItem("step", 1);
     } else{
         $("#tilSøk").show("slow");
         $("#tilBoks").hide();
-        sessionStorage.setItem("step", 1);
+        sessionStorage.setItem("step", 2);
     }
 }
