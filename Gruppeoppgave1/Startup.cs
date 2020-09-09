@@ -30,6 +30,7 @@ namespace Gruppeoppgave1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                DBInit.Initialize(app);
             }
 
             app.UseRouting();

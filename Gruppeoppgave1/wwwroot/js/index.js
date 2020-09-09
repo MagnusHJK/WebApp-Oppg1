@@ -4,8 +4,8 @@
 });
 
 //vet dette er dumt men...
-var stasjonTil;
-var stasjonFra;
+var stasjonTilVar;
+var stasjonFraVar;
 
 function hentAlleStasjoner() {
     $.get("Stasjon/HentAlleStasjoner", function (stasjoner) {
@@ -77,6 +77,8 @@ function lagDestinasjonsBoksFra(stasjon) {
           '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
           'onclick="endreStasjon(1)">Endre</button></br>';
 
+    stasjonFraVar = stasjon.navn;
+
     $("#fraBoks").html(ut);
     $("#fraBoks").show("slow");
 
@@ -95,6 +97,8 @@ function lagDestinasjonsBoksTil(stasjon) {
           '<b style="font-size:2.5em;"id="stasjonTilNavn">' + stasjon.navn + '</b>' +
           '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
           'onclick="endreStasjon(2)">Endre</button></br>';
+
+    stasjonTilVar = stasjon.navn;
 
     $("#tilBoks").html(ut);
     $("#tilBoks").show("slow");
@@ -152,9 +156,27 @@ function hentAvganger(stasjonFraId, stasjonTilId, dato, tidspunkt) {
 
 
 //Når alle valg er utført lager vi en bestilling og pusher til database
-function lagBestilling(stasjonFra, stasjonTil, dato, tidspunkt) {
+function lagBestilling() {
+    var fraStasjon = stasjonFraVar;
+    var tilStasjon = stasjonTilVar;
 
-}
+
+    const bestilling = {
+        stasjonFra: fraStasjon,
+        stasjonTil: tilStasjon,
+        dato: $("#datovalg").val(),
+        tidspunkt: $("#tidspunkt").val()
+    }
+    const url = "Bestilling/Bestill";
+    $.post(url, bestilling, function (OK) {
+        if (OK) {
+            window.location.href = 'bestillingsliste.html';
+        }
+        else {
+            $("#feil").html("Feil i db - prøv igjen senere");
+        }
+    });
+};
 
 
 //Hvis bruker trykker på rød endre knapp.
