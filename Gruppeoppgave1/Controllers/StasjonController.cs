@@ -46,6 +46,8 @@ namespace Gruppeoppgave1.Controllers
             }
         }
 
+
+
         public bool Test()
         {
             return true;

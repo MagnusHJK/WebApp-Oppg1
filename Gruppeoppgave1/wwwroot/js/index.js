@@ -115,21 +115,42 @@ function lagBestillingBoks() {
         firstDay: 1,
         onSelect: function (dateText, inst) {
             dato = dateText;
+            //Ligger her midlertidig slik at den ikke alltid blir "triggered"
+            hentAvganger();
         }
     });
-
-    stasjonFraId = sessionStorage.getItem("fraId");
-    stasjonTilId = sessionStorage.getItem("tilId");
-    genererAvganger();
 
     //lagBestilling(stasjonFraId, stasjonTilId, dato, tidspunkt);
 }
 
-//genererer avganger, alle avganger er bare oppdiktet utifra stasjoner, dato og tid.
+//VIL BLI BYTTET UT
+//genererer avganger i js, alle avganger er bare oppdiktet utifra stasjoner, dato og tid.
 function genererAvganger() {
+    var dato = "05/05/2005";
+    var tidspunkt = "12:30";
+    var splittetTid = tidspunkt.split(":");
+    var ut = "Avganger fra " + stasjonFra.navn + ", til " + stasjonTil.navn + " på dato " + dato;
 
+    var time = splittetTid[0];
+    var minutt = splittetTid[1];
 
+    for (i = time; i < 24; i++) {
+        ut += "Tid: "+ i +"</br>";
+    }
+
+    $("#avganger").html(ut);
 }
+
+//Henter avganger fra backend
+function hentAvganger(stasjonFraId, stasjonTilId, dato, tidspunkt) {
+    const url = "Stasjoner/HentAvganger";
+    $.get(url, function (avganger) {
+
+    });
+}
+
+
+
 //Når alle valg er utført lager vi en bestilling og pusher til database
 function lagBestilling(stasjonFra, stasjonTil, dato, tidspunkt) {
 
