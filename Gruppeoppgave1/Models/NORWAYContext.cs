@@ -14,5 +14,8 @@ namespace Gruppeoppgave1.Models
         }
         
         public DbSet<Stasjon> Stasjoner { get; set; }
+        public DbSet<Bestilling> Bestillinger { get; set; }
+
+
     }
 }

@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>NOR-WAY</title>
+    <title>NOR-WAY - Stasjonsliste</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="js/index.js"></script>
+    <script src="js/bestillingsliste.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -33,38 +33,11 @@
         </div>
     </nav>
 
-
     <div class="container">
-        <div id="fraSøk">
-            <section style="margin-left: auto; margin-right: auto;">
-                <label for="fraStasjoner" style="font-size:2em">Jeg skal reise fra: </label><br />
-                <input id="fraStasjoner" class="stasjonerAutocomplete" placeholder="Skriv inn sted" style="width: 80%">
-            </section>
-        </div>
-        <div class="container" id="fraBoks" style="display:none"></div>
-
-        <br />
-
-        <div id="tilSøk" style="display:none">
-            <label for="fraStasjoner" style="font-size:2em">Jeg skal reise til: </label><br />
-            <input id="tilStasjoner" class="stasjonerAutocomplete" placeholder="Skriv inn sted" style="width:80%">
-        </div>
-        <div class="container" id="tilBoks" style="display:none"></div>
-
-        <br />
-
-        <div class="container" id="bestillingsBoks" style="display:none">
-            <label for="datovalg">Dato</label>
-            <input type="text" id="datovalg">
-
-            <label for="tidspunkt">Tidspunkt</label>
-            <input type="time" id="tidspunkt" />
-        </div>
-
-        <button type="button" class="btn btn-primary" onclick="lagBestilling()">Bestill</button>
-
-        <div id="feil" style="color: red"></div>
+        <h1>Liste over bestillinger</h1>
+        <div id="bestillinger"></div>
 
     </div>
+
 </body>
 </html>
