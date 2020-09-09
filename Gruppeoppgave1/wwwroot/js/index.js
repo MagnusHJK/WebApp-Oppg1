@@ -111,6 +111,7 @@ function lagDestinasjonsBoksTil(stasjon) {
 
 //Boks for dato og billett valg
 function lagBestillingBoks() {
+<<<<<<< Updated upstream
     var dato;
     var tidspunkt;
     $("#bestillingsBoks").show("slow");
@@ -134,6 +135,42 @@ function genererAvganger() {
     var tidspunkt = "12:30";
     var splittetTid = tidspunkt.split(":");
     var ut = "Avganger fra " + stasjonFra.navn + ", til " + stasjonTil.navn + " på dato " + dato;
+=======
+    var today = new Date();
+    $("#bestillingsBoks").show("slow");
+    $("#datovalg").datepicker({
+        minDate: today,
+        dateFormat: 'dd/mm/yy'
+    });
+}
+
+//Når alle valg er utført lager vi en bestilling og pusher til database etter inputvalidering
+
+$(document).ready(function () {
+    var ut = "";
+    var sjekk = true;
+    $("#btnlagre").click(function () {
+        console.log("hei");
+        if ($("#datovalg").val() == "") {
+            ut += "Det er nødvendig å velge en dato. <br/>";
+            sjekk = false;
+        }
+
+        if ($("#tidspunkt").val() == "") {
+            ut += "Det må velges et tidspunkt. <br/>";
+            sjekk = false;
+        }
+        $("#feil").html(ut);
+        ut = "";
+
+        if (sjekk === true) {
+            visOrdre();
+        }
+    });
+});
+
+function visOrder() {
+>>>>>>> Stashed changes
 
     var time = splittetTid[0];
     var minutt = splittetTid[1];
@@ -155,6 +192,7 @@ function hentAvganger(stasjonFraId, stasjonTilId, dato, tidspunkt) {
 
 
 
+<<<<<<< Updated upstream
 //Når alle valg er utført lager vi en bestilling og pusher til database
 function lagBestilling() {
     var fraStasjon = stasjonFraVar;
@@ -178,6 +216,8 @@ function lagBestilling() {
     });
 };
 
+=======
+>>>>>>> Stashed changes
 
 //Hvis bruker trykker på rød endre knapp.
 //Retning er enten "fra" eller "til"
