@@ -61,8 +61,14 @@
         <br />
 
         <div class="container" id="bestillingsBoks" style="display:none">
+            <label for="bestillingsboks" style="font-size:2em">Når vil du reise?</label> <br/>
             <label for="datovalg">Dato</label>
             <input type="text" id="datovalg">
+            <br/>
+            <label for="tidspunkt">Tidspunkt</label>
+            <input type="time" id="tidspunkt" />
+            <br/>   
+            <button type="button" id="btnlagre" class="btn btn-primary">Lagre</button>
 
             <label for="tidspunkt">Tidspunkt</label>
             <input type="time" id="tidspunkt" />
@@ -73,7 +79,13 @@
 
             </div>
         </div>
+<<<<<<< Updated upstream
 
+        <button type="button" class="btn btn-primary" onclick="lagBestilling()">Bestill</button>
+
+=======
+>>>>>>> Stashed changes
+        <div id="feil" style="color: red"></div>
     </div>
 </body>
 </html>

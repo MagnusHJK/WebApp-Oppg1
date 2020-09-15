@@ -112,6 +112,7 @@ function lagDestinasjonsBoksTil(stasjon) {
 
 //Boks for dato og billett valg
 function lagBestillingBoks() {
+<<<<<<< Updated upstream
     var dato;
     //FIKS TID FRA VALG
     var tidspunkt = "12:00";
@@ -124,10 +125,26 @@ function lagBestillingBoks() {
             //Ligger her midlertidig slik at den ikke alltid blir "triggered"
             sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt);
         }
-        //Dette bare gir en større "følelse" av at noe mer er blitt endret
     });
 
     //lagBestilling(stasjonFraId, stasjonTilId, dato, tidspunkt);
+}
+
+//Sjekker om avganger eksisterer, hvis de gjør det hentes de. Hvis ikke blir de generert og så hentet
+function sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt) {
+    let url = "Avgang/SjekkAvganger";
+    let data = {
+        stasjonFraId: stasjonFra.id,
+        stasjonTilId: stasjonTil.id,
+        dato: dato
+    }
+    let ut = "";
+
+    for (i = time; i < 24; i++) {
+        ut += "Tid: " + i + "</br>";
+    }
+
+    $("#avganger").html(ut);
 }
 
 //Sjekker om avganger eksisterer, hvis de gjør det hentes de. Hvis ikke blir de generert og så hentet
@@ -198,7 +215,6 @@ function formaterAvganger(avganger) {
     $("#avganger").html(ut);
 }
 
-
 //Når alle valg er utført lager vi en bestilling og pusher til database
 function lagBestilling(avgang) {
     $("#feil").html("StasjonFra: " + avgang.stasjonFra + " StasjonTil: " + avgang.stasjonTil + " dato: " + avgang.dato + " tidspunkt: " + avgang.tidspunkt);
@@ -220,6 +236,8 @@ function lagBestilling(avgang) {
     });
 };
 
+=======
+>>>>>>> Stashed changes
 
 //Hvis bruker trykker på gul endre knapp.
 //Retning er enten "fra" eller "til"
