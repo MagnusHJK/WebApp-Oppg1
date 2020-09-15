@@ -38,6 +38,10 @@
 
 
     <div class="container">
+        <!--Feilmeldinger-->
+        <div id="feil" style="color: red"></div>
+
+
         <div id="fraSøk">
             <section style="margin-left: auto; margin-right: auto;">
                 <label for="fraStasjoner" style="font-size:2em">Jeg skal reise fra: </label><br />
@@ -62,14 +66,13 @@
 
             <label for="tidspunkt">Tidspunkt</label>
             <input type="time" id="tidspunkt" />
-            <div id="avganger">
+            
+            <br />
+            
+            <div id="avganger" style="margin-left: auto; margin-right: auto; width: 50%;">
 
             </div>
         </div>
-
-        <button type="button" class="btn btn-primary" onclick="lagBestilling()">Bestill</button>
-
-        <div id="feil" style="color: red"></div>
 
     </div>
 </body>

@@ -4,8 +4,8 @@
 });
 
 //vet dette er dumt men...
-var stasjonTilVar;
-var stasjonFraVar;
+var stasjonTil;
+var stasjonFra;
 
 function hentAlleStasjoner() {
     $.get("Stasjon/HentAlleStasjoner", function (stasjoner) {
@@ -43,6 +43,7 @@ function stasjonerAutocomplete(stasjoner) {
             var stasjon = ui.item.obj;
             stasjonsValg(stasjon);
             return false; 
+            //Sett inn if som sjekker om stasjon til er lik fra.
         }
     });
 }
@@ -74,10 +75,10 @@ function lagDestinasjonsBoksFra(stasjon) {
 
     ut += '<b style="font-size:3em;">Fra: </b>' +
           '<b style="font-size:2.5em;" id="stasjonFraNavn">' + stasjon.navn + '</b>' +
-          '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
+          '<button class="btn btn-warning" style="display:flex;justify-content:flex-end;align-items:center"' +
           'onclick="endreStasjon(1)">Endre</button></br>';
 
-    stasjonFraVar = stasjon.navn;
+    //stasjonFraVar = stasjon.navn;
 
     $("#fraBoks").html(ut);
     $("#fraBoks").show("slow");
@@ -95,10 +96,10 @@ function lagDestinasjonsBoksTil(stasjon) {
 
     ut += '<b style="font-size:3em;">Til: </b>' +
           '<b style="font-size:2.5em;"id="stasjonTilNavn">' + stasjon.navn + '</b>' +
-          '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
+          '<button class="btn btn-warning" style="display:flex;justify-content:flex-end;align-items:center"' +
           'onclick="endreStasjon(2)">Endre</button></br>';
 
-    stasjonTilVar = stasjon.navn;
+    //stasjonTilVar = stasjon.navn;
 
     $("#tilBoks").html(ut);
     $("#tilBoks").show("slow");
@@ -112,7 +113,8 @@ function lagDestinasjonsBoksTil(stasjon) {
 //Boks for dato og billett valg
 function lagBestillingBoks() {
     var dato;
-    var tidspunkt;
+    //FIKS TID FRA VALG
+    var tidspunkt = "12:00";
     $("#bestillingsBoks").show("slow");
     $("#datovalg").datepicker({
         minDate: 0,
@@ -120,52 +122,92 @@ function lagBestillingBoks() {
         onSelect: function (dateText, inst) {
             dato = dateText;
             //Ligger her midlertidig slik at den ikke alltid blir "triggered"
-            hentAvganger();
+            sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt);
         }
+        //Dette bare gir en større "følelse" av at noe mer er blitt endret
     });
 
     //lagBestilling(stasjonFraId, stasjonTilId, dato, tidspunkt);
 }
 
-//VIL BLI BYTTET UT
-//genererer avganger i js, alle avganger er bare oppdiktet utifra stasjoner, dato og tid.
-function genererAvganger() {
-    var dato = "05/05/2005";
-    var tidspunkt = "12:30";
-    var splittetTid = tidspunkt.split(":");
-    var ut = "Avganger fra " + stasjonFra.navn + ", til " + stasjonTil.navn + " på dato " + dato;
-
-    var time = splittetTid[0];
-    var minutt = splittetTid[1];
-
-    for (i = time; i < 24; i++) {
-        ut += "Tid: "+ i +"</br>";
+//Sjekker om avganger eksisterer, hvis de gjør det hentes de. Hvis ikke blir de generert og så hentet
+function sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt) {
+    let url = "Avgang/SjekkAvganger";
+    let data = {
+        stasjonFraId: stasjonFra.id,
+        stasjonTilId: stasjonTil.id,
+        dato: dato
     }
+    let ut = "";
 
-    $("#avganger").html(ut);
+    //Sjekker om avganger mellom stasjoner eksisterer, hvis ikke blir de generert
+    $.get(url, data, function (OK) {
+        if (OK) {
+            hentAvganger(stasjonFra.id, stasjonTil.id, dato, tidspunkt);
+            //hentAvganger();
+        }
+        else {
+            url = "Avgang/GenererAvganger";
+
+            $.get(url, data, function (OK) {
+                if (OK) {
+                    hentAvganger(stasjonFra.id, stasjonTil.id, dato, tidspunkt);
+                    //hentAvganger();
+                } else {
+                    ut = "<h2>Feil i db...</h2>";
+                    $("#avganger").html(ut);
+                }
+            });
+        }
+    });
 }
 
-//Henter avganger fra backend
+//Henter avganger for gitt strekning og dato
+//filtrer også slik at bare de av dem som oppfyller tidspunkt blir sendt til formatering
 function hentAvganger(stasjonFraId, stasjonTilId, dato, tidspunkt) {
-    const url = "Stasjoner/HentAvganger";
-    $.get(url, function (avganger) {
+    const url = "Avgang/HentAvganger";
+    const data = {
+        stasjonFraId: stasjonFraId,
+        stasjonTilId: stasjonTilId,
+        dato: dato
+    }
 
+    $.get(url, data, function (avganger) {
+        formaterAvganger(avganger);
     });
 }
 
 
+//Formaterer de hentede avgangene i table
+function formaterAvganger(avganger) {
+    let ut = "<h3>Avganger for dato: " + avganger[0].dato + "</h3>" +
+        "<table class='table table-hover'>" +
+        "<tr>" +
+        "<th>Avreise tidspunkt</th>" +
+        "<th>Pris</th>" +
+        "<th></th>" +
+        "</tr>";
+    for (let avgang of avganger) {
+        ut += "<tr>" +
+            "<td>" + avgang.tidspunkt + "</td>" +
+            "<td>" + avgang.pris + ",-</td>" +
+            "<td> <button class='btn btn-success' onclick='lagBestilling(" + avgang + ")'>Velg</button></td>" +
+            "</tr>";
+    }
+    ut += "</table>";
+    $("#avganger").html(ut);
+}
+
 
 //Når alle valg er utført lager vi en bestilling og pusher til database
-function lagBestilling() {
-    var fraStasjon = stasjonFraVar;
-    var tilStasjon = stasjonTilVar;
-
+function lagBestilling(avgang) {
+    $("#feil").html("StasjonFra: " + avgang.stasjonFra + " StasjonTil: " + avgang.stasjonTil + " dato: " + avgang.dato + " tidspunkt: " + avgang.tidspunkt);
 
     const bestilling = {
-        stasjonFra: fraStasjon,
-        stasjonTil: tilStasjon,
-        dato: $("#datovalg").val(),
-        tidspunkt: $("#tidspunkt").val()
+        stasjonFra: avgang.stasjonFra,
+        stasjonTil: avgang.stasjonTil,
+        dato: avgang.dato,
+        tidspunkt: avgang.tidspunkt
     }
     const url = "Bestilling/Bestill";
     $.post(url, bestilling, function (OK) {
@@ -179,7 +221,7 @@ function lagBestilling() {
 };
 
 
-//Hvis bruker trykker på rød endre knapp.
+//Hvis bruker trykker på gul endre knapp.
 //Retning er enten "fra" eller "til"
 function endreStasjon(retning) {
     //Fjerner tekst fra tidligere

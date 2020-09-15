@@ -22,11 +22,13 @@ namespace Gruppeoppgave1.Controllers
         {
             try
             {
-                var nyBestillingRad = new Bestilling();
-                nyBestillingRad.StasjonFra = innBestilling.StasjonFra;
-                nyBestillingRad.StasjonTil = innBestilling.StasjonTil;
-                nyBestillingRad.Dato = innBestilling.Dato;
-                nyBestillingRad.Tidspunkt = innBestilling.Tidspunkt;
+                var nyBestillingRad = new Bestilling
+                {
+                    StasjonFra = innBestilling.StasjonFra,
+                    StasjonTil = innBestilling.StasjonTil,
+                    Dato = innBestilling.Dato,
+                    Tidspunkt = innBestilling.Tidspunkt
+                };
 
                 _db.Bestillinger.Add(nyBestillingRad);
                 await _db.SaveChangesAsync();
