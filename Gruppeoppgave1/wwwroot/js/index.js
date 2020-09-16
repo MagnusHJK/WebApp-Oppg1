@@ -124,6 +124,30 @@ function lagBestillingBoks() {
     });
 }
 
+$(document).ready(function () {
+    var ut = "";
+    var sjekk = true;
+    $("#btnlagre").click(function () {
+        console.log("hei");
+        if ($("#datovalg").val() == "") {
+            ut += "Det er nødvendig å velge en dato. <br/>";
+            sjekk = false;
+        }
+
+        if ($("#tidspunkt").val() == "") {
+            ut += "Det må velges et tidspunkt. <br/>";
+            sjekk = false;
+        }
+        $("#feil").html(ut);
+        ut = "";
+
+        if (sjekk === true) {
+            visOrdre();
+        }
+    });
+});
+
+
 //Sjekker om avganger eksisterer, hvis de gjør det hentes de. Hvis ikke blir de generert og så hentet
 function sjekkAvganger(stasjonFra, stasjonTil, dato) {
     let url = "Avgang/SjekkAvganger";
