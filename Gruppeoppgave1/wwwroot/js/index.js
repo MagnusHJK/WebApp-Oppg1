@@ -113,25 +113,19 @@ function lagDestinasjonsBoksTil(stasjon) {
 //Boks for dato og billett valg
 function lagBestillingBoks() {
     var dato;
-    //FIKS TID FRA VALG
-    var tidspunkt = "12:00";
     $("#bestillingsBoks").show("slow");
     $("#datovalg").datepicker({
         minDate: 0,
         firstDay: 1,
         onSelect: function (dateText, inst) {
             dato = dateText;
-            //Ligger her midlertidig slik at den ikke alltid blir "triggered"
-            sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt);
-            //var button = $('<button type="button" class="btn btn-primary" onclick=sjekkAvganger(' + stasjonFra + ', ' + stasjonTil + ', ' + dato + ', ' + tidspunkt + ')>Se etter avganger</button>');
-            //$("#avganger").append(button);
+            sjekkAvganger(stasjonFra, stasjonTil, dato);
         }
     });
-    //lagBestilling(stasjonFraId, stasjonTilId, dato, tidspunkt);
 }
 
 //Sjekker om avganger eksisterer, hvis de gjør det hentes de. Hvis ikke blir de generert og så hentet
-function sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt) {
+function sjekkAvganger(stasjonFra, stasjonTil, dato) {
     let url = "Avgang/SjekkAvganger";
     let data = {
         stasjonFraId: stasjonFra.id,
@@ -143,16 +137,14 @@ function sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt) {
     //Sjekker om avganger mellom stasjoner eksisterer, hvis ikke blir de generert
     $.get(url, data, function (OK) {
         if (OK) {
-            hentAvganger(stasjonFra.id, stasjonTil.id, dato, tidspunkt);
-            //hentAvganger();
+            hentAvganger(stasjonFra.id, stasjonTil.id, dato);
         }
         else {
             url = "Avgang/GenererAvganger";
 
             $.get(url, data, function (OK) {
                 if (OK) {
-                    hentAvganger(stasjonFra.id, stasjonTil.id, dato, tidspunkt);
-                    //hentAvganger();
+                    hentAvganger(stasjonFra.id, stasjonTil.id, dato);
                 } else {
                     ut = "<h2>Feil i db...</h2>";
                     $("#avganger").html(ut);
@@ -164,7 +156,7 @@ function sjekkAvganger(stasjonFra, stasjonTil, dato, tidspunkt) {
 
 //Henter avganger for gitt strekning og dato
 //filtrer også slik at bare de av dem som oppfyller tidspunkt blir sendt til formatering
-function hentAvganger(stasjonFraId, stasjonTilId, dato, tidspunkt) {
+function hentAvganger(stasjonFraId, stasjonTilId, dato) {
     const url = "Avgang/HentAvganger";
     const data = {
         stasjonFraId: stasjonFraId,
@@ -180,6 +172,8 @@ function hentAvganger(stasjonFraId, stasjonTilId, dato, tidspunkt) {
 
 //Formaterer de hentede avgangene i table
 function formaterAvganger(avganger) {
+    $("#avganger").show();
+
     let ut = "<h3>Avganger for dato: " + avganger[0].dato + "</h3>" +
         "<table class='table table-hover'>" +
         "<tr>" +
@@ -188,25 +182,36 @@ function formaterAvganger(avganger) {
         "<th></th>" +
         "</tr>";
     for (let avgang of avganger) {
+        var avgangStringify = JSON.stringify(avgang);
+        var variabel = "Hello";
+
+
+
         ut += "<tr>" +
             "<td>" + avgang.tidspunkt + "</td>" +
             "<td>" + avgang.pris + ",-</td>" +
-            "<td> <button class='btn btn-success' onclick='lagBestilling(" + avgang + ")'>Velg</button></td>" +
+            '<td> <button class="btn btn-success" onclick="test(\'' + avgangStringify + '\')">Velg</button></td>' +
             "</tr>";
     }
     ut += "</table>";
     $("#avganger").html(ut);
 }
 
+
+function test(avgangStringify) {
+   var avgang = JSON.parse(avgangStringify);
+
+    $("#feil").html(avgang.stasjonFra);
+}
+
 //Når alle valg er utført lager vi en bestilling og pusher til database
-function lagBestilling(avgang) {
+function lagBestilling(avgangStringify) {
+    var avgang = JSON.parse(avgangStringify);
+
     $("#feil").html("StasjonFra: " + avgang.stasjonFra + " StasjonTil: " + avgang.stasjonTil + " dato: " + avgang.dato + " tidspunkt: " + avgang.tidspunkt);
 
     const bestilling = {
-        stasjonFra: avgang.stasjonFra,
-        stasjonTil: avgang.stasjonTil,
-        dato: avgang.dato,
-        tidspunkt: avgang.tidspunkt
+        avgang: avgang
     }
     const url = "Bestilling/Bestill";
     $.post(url, bestilling, function (OK) {
@@ -222,8 +227,11 @@ function lagBestilling(avgang) {
 //Hvis bruker trykker på gul endre knapp.
 //Retning er enten "fra" eller "til"
 function endreStasjon(retning) {
-    //Fjerner tekst fra tidligere
+    //Fjerner tekst fra tidligere, og gjemmer ting som skal velges senere i prosessen
     $(".stasjonerAutocomplete").val("");
+    $("#bestillingsBoks").hide();
+    $("#datovalg").datepicker("setDate", null);
+    $("#avganger").hide();
 
     if (retning == 1) {
         $("#fraSøk").show("slow");

@@ -9,13 +9,8 @@ namespace Gruppeoppgave1.Models
     {
         public int Id { get; set; }
         
-        public int StasjonFra { get; set; }
+        public Avgang Avgang { get; set; }
 
-        public int StasjonTil { get; set; }
-
-        public string Dato { get; set; }
-
-        public string Tidspunkt { get; set; }
-
+        //public Kunde Kunde { get; set; }
     }
 }

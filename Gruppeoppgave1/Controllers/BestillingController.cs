@@ -24,10 +24,7 @@ namespace Gruppeoppgave1.Controllers
             {
                 var nyBestillingRad = new Bestilling
                 {
-                    StasjonFra = innBestilling.StasjonFra,
-                    StasjonTil = innBestilling.StasjonTil,
-                    Dato = innBestilling.Dato,
-                    Tidspunkt = innBestilling.Tidspunkt
+                    Avgang = innBestilling.Avgang,
                 };
 
                 _db.Bestillinger.Add(nyBestillingRad);
@@ -44,14 +41,7 @@ namespace Gruppeoppgave1.Controllers
         {
             try
             {
-                List<Bestilling> alleBestillinger = await _db.Bestillinger.Select(b => new Bestilling
-                {
-                    Id = b.Id,
-                    StasjonFra = b.StasjonFra,
-                    StasjonTil = b.StasjonTil,
-                    Dato = b.Dato,
-                    Tidspunkt = b.Tidspunkt
-                }).ToListAsync();
+                List<Bestilling> alleBestillinger = await _db.Bestillinger.ToListAsync();
 
                 return alleBestillinger;
             }

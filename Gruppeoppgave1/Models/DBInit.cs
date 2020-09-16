@@ -11,7 +11,7 @@ namespace Gruppeoppgave1.Models
     {
         public static void Initialize(IApplicationBuilder app)
         {
-            using(var serviceScope = app.ApplicationServices.CreateScope())
+            using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<NORWAYContext>();
 
@@ -36,7 +36,9 @@ namespace Gruppeoppgave1.Models
                 context.Stasjoner.Add(stasjon7);
                 context.Stasjoner.Add(stasjon8);
 
-                var bestilling1 = new Bestilling { StasjonFra = 1, StasjonTil = 6, Dato = "10/10/2020", Tidspunkt = "10:00:00" };
+                var avgang1 = new Avgang { Dato = "09/19/2020", StasjonFra = 1, StasjonTil = 2, Tidspunkt = "0:00", Pris = "200" };
+
+                var bestilling1 = new Bestilling { Avgang = avgang1 };
                 context.Bestillinger.Add(bestilling1);
 
                 context.SaveChanges();
