@@ -4,8 +4,8 @@
 });
 
 //vet dette er dumt men...
-var stasjonTil;
 var stasjonFra;
+var stasjonTil;
 
 function hentAlleStasjoner() {
     $.get("Stasjon/HentAlleStasjoner", function (stasjoner) {
@@ -78,14 +78,18 @@ function lagDestinasjonsBoksFra(stasjon) {
           '<button class="btn btn-warning" style="display:flex;justify-content:flex-end;align-items:center"' +
           'onclick="endreStasjon(1)">Endre</button></br>';
 
-    //stasjonFraVar = stasjon.navn;
-
     $("#fraBoks").html(ut);
     $("#fraBoks").show("slow");
 
     //Hvis både til og fra stasjon er valgt vil de neste instillingene komme opp
     if (($("#tilBoks").is(":visible")) && ($("#fraBoks").is(":visible"))) {
-        lagBestillingBoks();
+        //Sjekker kjapt om stasjonene er identiske
+        if (stasjonFra.id === stasjonTil.id) {
+            $("#feil").html("Stasjonene kan ikke være like!");
+        } else {
+            $("#feil").html("");
+            lagBestillingBoks();
+        }
     }
 }
 
@@ -99,14 +103,18 @@ function lagDestinasjonsBoksTil(stasjon) {
           '<button class="btn btn-warning" style="display:flex;justify-content:flex-end;align-items:center"' +
           'onclick="endreStasjon(2)">Endre</button></br>';
 
-    //stasjonTilVar = stasjon.navn;
-
     $("#tilBoks").html(ut);
     $("#tilBoks").show("slow");
 
     //Hvis både til og fra stasjon er valgt vil de neste instillingene komme opp
     if (($("#tilBoks").is(":visible")) && ($("#fraBoks").is(":visible"))) {
-        lagBestillingBoks();
+        //Sjekker kjapt om stasjonene er identiske
+        if (stasjonFra.id === stasjonTil.id) {
+            $("#feil").html("Stasjonene kan ikke være like!");
+        } else {
+            $("#feil").html("");
+            lagBestillingBoks();
+        }
     }
 }
 
@@ -165,7 +173,6 @@ function sjekkAvganger(stasjonFra, stasjonTil, dato) {
         }
         else {
             url = "Avgang/GenererAvganger";
-
             $.get(url, data, function (OK) {
                 if (OK) {
                     hentAvganger(stasjonFra.id, stasjonTil.id, dato);
