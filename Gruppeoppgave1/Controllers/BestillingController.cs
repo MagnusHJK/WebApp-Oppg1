@@ -18,13 +18,15 @@ namespace Gruppeoppgave1.Controllers
             _db = db;
         }
 
-        public async Task<bool> Bestill(Bestilling innBestilling)
+        public async Task<bool> Bestill(int avgangId)
         {
             try
             {
+                var AvgangValg = _db.Avganger.Find(avgangId);
+
                 var nyBestillingRad = new Bestilling
                 {
-                    Avgang = innBestilling.Avgang,
+                    Avgang = AvgangValg
                 };
 
                 _db.Bestillinger.Add(nyBestillingRad);
