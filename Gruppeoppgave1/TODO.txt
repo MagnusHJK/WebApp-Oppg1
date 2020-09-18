@@ -2,6 +2,5 @@
 
 ###index.js
 
-	Sørg for at stasjon til og fra ikke er den samme
-	Gjør stasjonene lik de om nor-way har
-	Fiks så avgang element kan bli sendt til bestillings funksjon
+	Gjør stasjonene lik de som nor-way har
+	Fiks så avgang objekt kan bli sendt til bestillings funksjon

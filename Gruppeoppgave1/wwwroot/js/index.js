@@ -40,8 +40,19 @@ function stasjonerAutocomplete(stasjoner) {
         //Hva som skjer når en stasjon blir valgt
         //ui.item er objektet valgt i dropdown, den har to attributter. Label som er teksten(navn) og value som er indeks i db
         select: function (event, ui) {
+            $("#feil").html(this.id);
             var stasjon = ui.item.obj;
-            stasjonsValg(stasjon);
+
+            if (this.id == "fraStasjoner") {
+                stasjonFra = stasjon;
+                lagDestinasjonsBoks(stasjon, "fra");
+
+            } else {
+                stasjonTil = stasjon;
+                lagDestinasjonsBoks(stasjon, "til");
+            }
+
+            //stasjonsValg(stasjon);
             return false; 
             //Sett inn if som sjekker om stasjon til er lik fra.
         }
@@ -56,7 +67,7 @@ function stasjonsValg(stasjon) {
     if (step == null || step == 1) {
         sessionStorage.setItem("step", 2);
         stasjonFra = stasjon;
-        $("#tilSøk").show("slow");
+        $("#tilSøk").show("slow"); //Denne gir en feil
         lagDestinasjonsBoksFra(stasjon);
     }
     //Andre valg
@@ -66,6 +77,48 @@ function stasjonsValg(stasjon) {
         lagDestinasjonsBoksTil(stasjon);
     }
 }
+
+function lagDestinasjonsBoks(stasjon, retning) {
+    var ut = "";
+
+    //Destinasjon fra
+    if (retning === "fra") {
+        $("#fraSøk").hide("slow");
+        ut = '<b style="font-size:3em;">Fra: </b>' +
+            '<b style="font-size:2.5em;" id="stasjonFraNavn">' + stasjon.navn + '</b>' +
+            '<button class="btn btn-warning" style="display:flex;justify-content:flex-end;align-items:center"' +
+            'onclick="endreStasjon(1)">Endre</button></br>';
+
+        $("#fraBoks").html(ut);
+        $("#fraBoks").show("slow");
+    }
+    //Destinasjon til
+    else {
+        $("#tilSøk").hide("slow");
+        ut = '<b style="font-size:3em;">Til: </b>' +
+            '<b style="font-size:2.5em;"id="stasjonTilNavn">' + stasjon.navn + '</b>' +
+            '<button class="btn btn-warning" style="display:flex;justify-content:flex-end;align-items:center"' +
+            'onclick="endreStasjon(2)">Endre</button></br>';
+
+        $("#tilBoks").html(ut);
+        $("#tilBoks").show("slow");
+    }
+
+    //Hvis både til og fra stasjon er valgt vil de neste instillingene komme opp
+    if (($("#tilBoks").is(":visible")) && ($("#fraBoks").is(":visible"))) {
+        //Sjekker kjapt om stasjonene er identiske
+        if (stasjonFra.id === stasjonTil.id) {
+            $("#feil").html("Stasjonene kan ikke være like!");
+        } else {
+            $("#feil").html("");
+            lagBestillingBoks();
+        }
+    }
+}
+
+
+
+
 
 
 //Lager bokser etter at man har valg en stasjon enten fra eller til
@@ -216,8 +269,6 @@ function formaterAvganger(avganger) {
         var avgangStringify = JSON.stringify(avgang);
         var variabel = "Hello";
 
-
-
         ut += "<tr>" +
             "<td>" + avgang.tidspunkt + "</td>" +
             "<td>" + avgang.pris + ",-</td>" +
@@ -263,6 +314,8 @@ function endreStasjon(retning) {
     $("#bestillingsBoks").hide();
     $("#datovalg").datepicker("setDate", null);
     $("#avganger").hide();
+
+    $("#feil").html(retning);
 
     if (retning == 1) {
         $("#fraSøk").show("slow");
