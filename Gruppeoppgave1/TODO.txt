@@ -3,4 +3,4 @@
 ###index.js
 
 	Gjør stasjonene lik de som nor-way har
-	Fiks så avgang objekt kan bli sendt til bestillings funksjon
+	

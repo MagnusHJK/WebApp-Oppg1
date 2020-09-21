@@ -27,7 +27,7 @@ namespace Gruppeoppgave1.Models
 
         public string Tidspunkt { get; set; }
 
-        public string Pris { get; set; }
+        public int Pris { get; set; }
     }
 
     public class Bestillinger
@@ -36,6 +36,8 @@ namespace Gruppeoppgave1.Models
         public int Id { get; set; }
 
         virtual public Avgang Avgang { get; set; }
+
+        public int Antall { get; set; }
     }
 
     public class NORWAYContext : DbContext

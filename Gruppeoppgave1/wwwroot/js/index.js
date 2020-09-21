@@ -103,6 +103,11 @@ function lagBestillingBoks() {
         onSelect: function (dateText, inst) {
             dato = dateText;
             sjekkAvganger(stasjonFra, stasjonTil, dato);
+
+            //Genererer dropdown for valg av antall billetter
+            for (i = 1; i <= 10; i++) {
+                $("#antallBilletter").append($('<option></option>').val(i).html(i));
+            }
         }
     });
 }
@@ -164,13 +169,13 @@ function sjekkAvganger(stasjonFra, stasjonTil, dato) {
 //filtrer også slik at bare de av dem som oppfyller tidspunkt blir sendt til formatering
 function hentAvganger(stasjonFra, stasjonTil, dato) {
     const url = "Avgang/HentAvganger";
-    const data = {
+    const avgang = {
         stasjonFraId: stasjonFra.id,
         stasjonTilId: stasjonTil.id,
         dato: dato
     }
 
-    $.get(url, data, function (avganger) {
+    $.get(url, avgang, function (avganger) {
         formaterAvganger(avganger);
     });
 }
@@ -184,13 +189,10 @@ function formaterAvganger(avganger) {
         "<table class='table table-hover'>" +
         "<tr>" +
         "<th>Avreise tidspunkt</th>" +
-        "<th>Pris</th>" +
+        "<th>Pris per billett</th>" +
         "<th></th>" +
         "</tr>";
     for (let avgang of avganger) {
-        var avgangStringify = JSON.stringify(avgang);
-        var variabel = "Hello";
-
         ut += "<tr>" +
             "<td>" + avgang.tidspunkt + "</td>" +
             "<td>" + avgang.pris + ",-</td>" +
@@ -201,10 +203,25 @@ function formaterAvganger(avganger) {
     $("#avganger").html(ut);
 }
 
-//Når alle valg er utført lager vi en bestilling og pusher til database
+function test(avgangId) {
+    var antall = $("#antallBilletter").val();
+
+    alert(antall);
+}
+
+
+
+//Når alle valg er utført lager vi en bestilling
 function lagBestilling(avgangId) {
-    const url = "Bestilling/Bestill?avgangId=" + avgangId;
-    $.get(url, function (OK) {
+    var antall = $("#antallBilletter").val();
+    const url = "Bestilling/LagBestilling";
+
+    const bestilling = {
+        avgangId: avgangId,
+        antall: antall
+    }
+
+    $.get(url, bestilling, function (OK) {
         if (OK) {
             window.location.href = 'bestillingsliste.html';
         }

@@ -36,9 +36,9 @@ namespace Gruppeoppgave1.Models
                 context.Stasjoner.Add(stasjon7);
                 context.Stasjoner.Add(stasjon8);
 
-                var avgang1 = new Avgang { Dato = "09/19/2020", StasjonFra = stasjon1, StasjonTil = stasjon2, Tidspunkt = "0:00", Pris = "200" };
+                var avgang1 = new Avgang { Dato = "09/19/2020", StasjonFra = stasjon1, StasjonTil = stasjon2, Tidspunkt = "0:00", Pris = 200 };
 
-                var bestilling1 = new Bestilling { Avgang = avgang1 };
+                var bestilling1 = new Bestilling { Avgang = avgang1, Antall = 1 };
                 context.Bestillinger.Add(bestilling1);
 
                 context.SaveChanges();

@@ -17,6 +17,6 @@ namespace Gruppeoppgave1.Models
 
         public string Tidspunkt { get; set; }
 
-        public string Pris { get; set; }
+        public int Pris { get; set; }
     }
 }

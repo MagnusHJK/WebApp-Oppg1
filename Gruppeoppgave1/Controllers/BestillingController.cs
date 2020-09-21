@@ -18,11 +18,10 @@ namespace Gruppeoppgave1.Controllers
             _db = db;
         }
 
-        public async Task<bool> Bestill(int avgangId)
+        public async Task<bool> LagBestilling(int avgangId, int antall)
         {
             try
             {
-                //avgangId = 1;
                 var nyBestillingRad = new Bestilling();
 
                 var AvgangValg = _db.Avganger.Find(avgangId);
@@ -30,6 +29,8 @@ namespace Gruppeoppgave1.Controllers
                 if(AvgangValg != null)
                 {
                     nyBestillingRad.Avgang = AvgangValg;
+                    nyBestillingRad.Antall = antall;
+
                     _db.Bestillinger.Add(nyBestillingRad);
                     await _db.SaveChangesAsync();
                     return true;
@@ -52,7 +53,8 @@ namespace Gruppeoppgave1.Controllers
                 List<Bestilling> alleBestillinger = await _db.Bestillinger.Select(b => new Bestilling
                 {
                     Id = b.Id,
-                    Avgang = b.Avgang
+                    Avgang = b.Avgang,
+                    Antall = b.Antall
 
                 }).ToListAsync();
 

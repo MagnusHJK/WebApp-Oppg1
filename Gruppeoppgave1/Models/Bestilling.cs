@@ -11,6 +11,10 @@ namespace Gruppeoppgave1.Models
         
         virtual public Avgang Avgang { get; set; }
 
-        //public Kunde Kunde { get; set; }
+        public int Antall { get; set; } //Vil bli erstattet med billett objekt i oppg2
+
+        //public Kunde Kunde { get; set; } - Når kunder blir implementert
+
+        //public Billett Billett { get; set; } 
     }
 }

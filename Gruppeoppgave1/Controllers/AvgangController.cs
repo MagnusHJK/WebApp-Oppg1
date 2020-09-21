@@ -59,7 +59,7 @@ namespace Gruppeoppgave1.Controllers
                             StasjonTil = stasjonTilValg,
                             Dato = dato,
                             Tidspunkt = i + ":00",
-                            Pris = "200"
+                            Pris = 200
                         };
                         _db.Avganger.Add(nyAvgangRad);
                     }
