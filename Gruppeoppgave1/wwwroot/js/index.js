@@ -144,13 +144,13 @@ function sjekkAvganger(stasjonFra, stasjonTil, dato) {
     //Sjekker om avganger mellom stasjoner eksisterer, hvis ikke blir de generert
     $.get(url, data, function (OK) {
         if (OK) {
-            hentAvganger(stasjonFra.id, stasjonTil.id, dato);
+            hentAvganger(stasjonFra, stasjonTil, dato);
         }
         else {
             url = "Avgang/GenererAvganger";
             $.get(url, data, function (OK) {
                 if (OK) {
-                    hentAvganger(stasjonFra.id, stasjonTil.id, dato);
+                    hentAvganger(stasjonFra, stasjonTil, dato);
                 } else {
                     ut = "<h2>Feil i db...</h2>";
                     $("#avganger").html(ut);
@@ -162,11 +162,11 @@ function sjekkAvganger(stasjonFra, stasjonTil, dato) {
 
 //Henter avganger for gitt strekning og dato
 //filtrer også slik at bare de av dem som oppfyller tidspunkt blir sendt til formatering
-function hentAvganger(stasjonFraId, stasjonTilId, dato) {
+function hentAvganger(stasjonFra, stasjonTil, dato) {
     const url = "Avgang/HentAvganger";
     const data = {
-        stasjonFraId: stasjonFraId,
-        stasjonTilId: stasjonTilId,
+        stasjonFraId: stasjonFra.id,
+        stasjonTilId: stasjonTil.id,
         dato: dato
     }
 
@@ -203,7 +203,7 @@ function formaterAvganger(avganger) {
 
 //Når alle valg er utført lager vi en bestilling og pusher til database
 function lagBestilling(avgangId) {
-    const url = "Bestilling/Bestill?avgang=" + avgangId;
+    const url = "Bestilling/Bestill?avgangId=" + avgangId;
     $.get(url, function (OK) {
         if (OK) {
             window.location.href = 'bestillingsliste.html';

@@ -9,9 +9,9 @@ namespace Gruppeoppgave1.Models
     {
         public int Id { get; set; }
 
-        public int StasjonFra { get; set; }
+        virtual public Stasjon StasjonFra { get; set; }
 
-        public int StasjonTil { get; set; }
+        virtual public Stasjon StasjonTil { get; set; }
         
         public string Dato { get; set; }
 

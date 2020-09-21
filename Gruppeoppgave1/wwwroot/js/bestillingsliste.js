@@ -15,7 +15,7 @@ function formaterBestillinger(bestillinger) {
         "</tr>";
     for (let bestilling of bestillinger) {
         ut += "<tr>" +
-            "<td>" + bestilling.avgang.stasjonFra + "</td><td>" + bestilling.avgang.stasjonTil + "</td><td>" + bestilling.avgang.dato + "</td><td>" + bestilling.avgang.tidspunkt + "</td>" +
+            "<td>" + bestilling.avgang.stasjonFra.navn + "</td><td>" + bestilling.avgang.stasjonTil.navn + "</td><td>" + bestilling.avgang.dato + "</td><td>" + bestilling.avgang.tidspunkt + "</td>" +
             "</tr>";
     }
     ut += "</table>";

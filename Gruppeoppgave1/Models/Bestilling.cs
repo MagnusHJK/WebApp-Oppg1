@@ -9,7 +9,7 @@ namespace Gruppeoppgave1.Models
     {
         public int Id { get; set; }
         
-        public Avgang Avgang { get; set; }
+        virtual public Avgang Avgang { get; set; }
 
         //public Kunde Kunde { get; set; }
     }

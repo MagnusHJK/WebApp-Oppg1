@@ -26,7 +26,7 @@ namespace Gruppeoppgave1.Controllers
                 List<Avgang> alleAvganger = await _db.Avganger.ToListAsync();
 
                 //Sjekker om en avgang har de riktige stasjonene og dato
-                if(alleAvganger.Any(a => a.StasjonFra == stasjonFraId && a.StasjonTil == stasjonTilId && a.Dato == dato))
+                if(alleAvganger.Any(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato == dato))
                 {
                     return true;
                 }
@@ -43,21 +43,36 @@ namespace Gruppeoppgave1.Controllers
         {
             try
             {
-                for(int i = 0; i<24; i+=2)
-                {
-                    Avgang avgang = new Avgang
-                    {
-                        StasjonFra = stasjonFraId,
-                        StasjonTil = stasjonTilId,
-                        Dato = dato,
-                        Tidspunkt = i + ":00",
-                        Pris = "200"
-                    };
-                    _db.Avganger.Add(avgang);
-                }
+                Stasjon stasjonFraValg = new Stasjon();
+                stasjonFraValg = _db.Stasjoner.Find(stasjonFraId);
 
-                await _db.SaveChangesAsync();
-                return true;
+                Stasjon stasjonTilValg = new Stasjon();
+                stasjonTilValg = _db.Stasjoner.Find(stasjonTilId);
+
+                if (stasjonFraValg != null && stasjonTilValg != null)
+                {
+                    for (int i = 0; i < 24; i += 2)
+                    {
+                        Avgang nyAvgangRad = new Avgang
+                        {
+                            StasjonFra = stasjonFraValg,
+                            StasjonTil = stasjonTilValg,
+                            Dato = dato,
+                            Tidspunkt = i + ":00",
+                            Pris = "200"
+                        };
+                        _db.Avganger.Add(nyAvgangRad);
+                    }
+
+                    await _db.SaveChangesAsync();
+                    return true;
+
+
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch
             {
@@ -71,7 +86,7 @@ namespace Gruppeoppgave1.Controllers
         {
             try
             {
-                List<Avgang> Avganger = await _db.Avganger.Where(a => a.StasjonFra == stasjonFraId && a.StasjonTil == stasjonTilId && a.Dato == dato).ToListAsync();
+                List<Avgang> Avganger = await _db.Avganger.Where(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato == dato).ToListAsync();
                 return Avganger;
             }
             catch

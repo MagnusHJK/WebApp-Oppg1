@@ -22,16 +22,22 @@ namespace Gruppeoppgave1.Controllers
         {
             try
             {
+                //avgangId = 1;
+                var nyBestillingRad = new Bestilling();
+
                 var AvgangValg = _db.Avganger.Find(avgangId);
 
-                var nyBestillingRad = new Bestilling
+                if(AvgangValg != null)
                 {
-                    Avgang = AvgangValg
-                };
-
-                _db.Bestillinger.Add(nyBestillingRad);
-                await _db.SaveChangesAsync();
-                return true;
+                    nyBestillingRad.Avgang = AvgangValg;
+                    _db.Bestillinger.Add(nyBestillingRad);
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch
             {
@@ -43,7 +49,12 @@ namespace Gruppeoppgave1.Controllers
         {
             try
             {
-                List<Bestilling> alleBestillinger = await _db.Bestillinger.ToListAsync();
+                List<Bestilling> alleBestillinger = await _db.Bestillinger.Select(b => new Bestilling
+                {
+                    Id = b.Id,
+                    Avgang = b.Avgang
+
+                }).ToListAsync();
 
                 return alleBestillinger;
             }
