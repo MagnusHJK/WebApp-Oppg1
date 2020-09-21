@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gruppeoppgave1.DAL;
 using Gruppeoppgave1.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +22,9 @@ namespace Gruppeoppgave1
         {
             services.AddControllers();
             services.AddDbContext<NORWAYContext>(options => options.UseSqlite("Data source=NORWAY.db"));
-
+            services.AddScoped<IStasjonRepository, StasjonRepository>();
+            services.AddScoped<IBestillingRepository, BestillingRepository>();
+            services.AddScoped<IAvgangRepository, AvgangRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

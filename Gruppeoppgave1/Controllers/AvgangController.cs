@@ -5,99 +5,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using Gruppeoppgave1.Models;
 using Microsoft.EntityFrameworkCore;
+using Gruppeoppgave1.DAL;
 
 namespace Gruppeoppgave1.Controllers
 {
     [Route("[controller]/[action]")]
     public class AvgangController : ControllerBase
     {
-        private readonly NORWAYContext _db;
-
-        public AvgangController(NORWAYContext db)
+        private readonly IAvgangRepository _db;
+        public AvgangController(IAvgangRepository db)
         {
             _db = db;
         }
 
-        //Sjekker om avganger for reise mellom stasjonene eksisterer
         public async Task<bool> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
-            try
-            {
-                List<Avgang> alleAvganger = await _db.Avganger.ToListAsync();
-
-                //Sjekker om en avgang har de riktige stasjonene og dato
-                if(alleAvganger.Any(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato == dato))
-                {
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
+            return await _db.SjekkAvganger(stasjonFraId, stasjonTilId, dato);
         }
-        
-        //Generer avganger hver andre time for gitt strekning og dato. Disse blir filtrert senere
+
         public async Task<bool> GenererAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
-            try
-            {
-                Stasjon stasjonFraValg = new Stasjon();
-                stasjonFraValg = _db.Stasjoner.Find(stasjonFraId);
-
-                Stasjon stasjonTilValg = new Stasjon();
-                stasjonTilValg = _db.Stasjoner.Find(stasjonTilId);
-
-                if (stasjonFraValg != null && stasjonTilValg != null)
-                {
-                    for (int i = 0; i < 24; i += 2)
-                    {
-                        Avgang nyAvgangRad = new Avgang
-                        {
-                            StasjonFra = stasjonFraValg,
-                            StasjonTil = stasjonTilValg,
-                            Dato = dato,
-                            Tidspunkt = i + ":00",
-                            Pris = 200
-                        };
-                        _db.Avganger.Add(nyAvgangRad);
-                    }
-
-                    await _db.SaveChangesAsync();
-                    return true;
-
-
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-
+            return await _db.GenererAvganger(stasjonFraId, stasjonTilId, dato);
         }
 
-        //Gir liste over avganger for spesifikk strekning på valgt dato
         public async Task<List<Avgang>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
-            try
-            {
-                List<Avgang> Avganger = await _db.Avganger.Where(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato == dato).ToListAsync();
-                return Avganger;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public string Test(int stasjonFra, int stasjonTil)
-        {
-            return "return fra test: " + stasjonFra + " " + stasjonTil;
+            return await _db.HentAvganger(stasjonFraId, stasjonTilId, dato);
         }
     }
 }

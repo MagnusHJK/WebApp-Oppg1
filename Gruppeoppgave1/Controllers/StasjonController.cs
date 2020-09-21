@@ -5,52 +5,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Gruppeoppgave1.Models;
 using Microsoft.EntityFrameworkCore;
+using Gruppeoppgave1.DAL;
 
 namespace Gruppeoppgave1.Controllers
 {
     [Route("[controller]/[action]")]
     public class StasjonController : ControllerBase
     {
-        private readonly NORWAYContext _db;
-
-        public StasjonController(NORWAYContext db)
+        private readonly IStasjonRepository _db;
+        public StasjonController(IStasjonRepository db)
         {
             _db = db;
         }
 
-        //Komplett array av stasjoner
         public async Task<List<Stasjon>> HentAlleStasjoner()
         {
-            try
-            {
-                List<Stasjon> alleStasjoner = await _db.Stasjoner.ToListAsync();
-                return alleStasjoner;
-            }
-            catch
-            {
-                return null;
-            }
+            return await _db.HentAlleStasjoner();
         }
 
         public async Task<Stasjon> HentEnStasjon(int id)
         {
-            try
-            {
-                Stasjon enStasjon = await _db.Stasjoner.FindAsync(id);
-                await _db.SaveChangesAsync();
-                return enStasjon;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-
-
-        public bool Test()
-        {
-            return true;
+            return await _db.HentEnStasjon(id);
         }
     }
 }
