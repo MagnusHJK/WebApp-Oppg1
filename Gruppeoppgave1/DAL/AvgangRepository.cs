@@ -22,17 +22,12 @@ namespace Gruppeoppgave1.DAL
         {
             try
             {
-                //Henter dagens dato og formaterer den likt som parameter dato slik at de kan sammenlignes
-                string lokalDato = DateTime.Now.ToString("dd/MM/yyyy");
-
-                DateTime datetime = DateTime.Parse(dato);
-                string gittDato = datetime.ToString("dd/MM/yyyy");
-
+                DateTime gittDato = DateTime.Parse(dato);
 
                 List<Avgang> alleAvganger = await _db.Avganger.ToListAsync();
 
                 //Sjekker om en avgang har de riktige stasjonene og dato
-                if (alleAvganger.Any(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato.ToString("dd/MM/yyyy") == gittDato))
+                if (alleAvganger.Any(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato.Date == gittDato.Date))
                 {
                     return true;
                 }
@@ -56,8 +51,6 @@ namespace Gruppeoppgave1.DAL
                 Stasjon stasjonTilValg = new Stasjon();
                 stasjonTilValg = _db.Stasjoner.Find(stasjonTilId);
 
-                //string timer = "";
-
                 //Lager DateTime objekt
                 DateTime datetime = DateTime.Parse(dato);
                 
@@ -65,24 +58,12 @@ namespace Gruppeoppgave1.DAL
                 {
                     for (int i = 0; i < 24; i += 2)
                     {
-                        //Sørger for at alle timer er to siffrede
-                        /*
-                        if(i < 10)
-                        {
-                            timer = "0" + i;
-                        }
-                        else 
-                        { 
-                            timer = "" + i + "";
-                        }
-                        */
                         //Ny avgang
                         Avgang nyAvgangRad = new Avgang
                         {
                             StasjonFra = stasjonFraValg,
                             StasjonTil = stasjonTilValg,
                             Dato = datetime.AddHours(i),
-                            //Tidspunkt = timer + ":00",
                             Pris = 200
                         };
                         _db.Avganger.Add(nyAvgangRad);
