@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Gruppeoppgave1.DAL
 {
@@ -21,10 +22,17 @@ namespace Gruppeoppgave1.DAL
         {
             try
             {
+                //Henter dagens dato og formaterer den likt som parameter dato slik at de kan sammenlignes
+                string lokalDato = DateTime.Now.ToString("dd/MM/yyyy");
+
+                DateTime datetime = DateTime.Parse(dato);
+                string gittDato = datetime.ToString("dd/MM/yyyy");
+
+
                 List<Avgang> alleAvganger = await _db.Avganger.ToListAsync();
 
                 //Sjekker om en avgang har de riktige stasjonene og dato
-                if (alleAvganger.Any(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato == dato))
+                if (alleAvganger.Any(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato.ToString("dd/MM/yyyy") == gittDato))
                 {
                     return true;
                 }
@@ -36,7 +44,8 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
-        //Generer avganger hver andre time for gitt strekning og dato. Disse blir filtrert senere
+        //Generer avganger hver andre time for gitt strekning og dato.
+        //Denne blir kalt hvis det ikke eksisterer noen avganger for gitt strekning og dato
         public async Task<bool> GenererAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
             try
@@ -47,25 +56,40 @@ namespace Gruppeoppgave1.DAL
                 Stasjon stasjonTilValg = new Stasjon();
                 stasjonTilValg = _db.Stasjoner.Find(stasjonTilId);
 
+                //string timer = "";
+
+                //Lager DateTime objekt
+                DateTime datetime = DateTime.Parse(dato);
+                
                 if (stasjonFraValg != null && stasjonTilValg != null)
                 {
                     for (int i = 0; i < 24; i += 2)
                     {
+                        //Sørger for at alle timer er to siffrede
+                        /*
+                        if(i < 10)
+                        {
+                            timer = "0" + i;
+                        }
+                        else 
+                        { 
+                            timer = "" + i + "";
+                        }
+                        */
+                        //Ny avgang
                         Avgang nyAvgangRad = new Avgang
                         {
                             StasjonFra = stasjonFraValg,
                             StasjonTil = stasjonTilValg,
-                            Dato = dato,
-                            Tidspunkt = i + ":00",
+                            Dato = datetime.AddHours(i),
+                            //Tidspunkt = timer + ":00",
                             Pris = 200
                         };
                         _db.Avganger.Add(nyAvgangRad);
+                        
                     }
-
                     await _db.SaveChangesAsync();
                     return true;
-
-
                 }
                 else
                 {
@@ -76,15 +100,44 @@ namespace Gruppeoppgave1.DAL
             {
                 return false;
             }
-
         }
 
-        //Gir liste over avganger for spesifikk strekning på valgt dato
+        //Henter liste over avganger for spesifikk strekning på valgt dato
+        //Hvis det er avganger for nåværende dag vil det kun hentes avganger som ikke er i fortiden.
         public async Task<List<Avgang>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
             try
             {
-                List<Avgang> Avganger = await _db.Avganger.Where(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato == dato).ToListAsync();
+
+                List<Avgang> Avganger;
+
+                //Henter dagens dato
+                DateTime lokalDato = DateTime.Now;
+                DateTime gittDato = DateTime.Parse(dato);
+
+                //Hvis det er snakk om dagens dato blir kun avganger som ikke har dratt enda hentet
+                if (gittDato.Date == lokalDato.Date)
+                {
+                    //Finner tiden, kan ikke bruke gittDato ettersom denne kun inneholder dato og ikke tid
+                    int lokalTid = DateTime.Now.Hour;
+
+                    Avganger = await _db.Avganger
+                        .Where(a => a.StasjonFra.Id == stasjonFraId &&
+                               a.StasjonTil.Id == stasjonTilId &&
+                               a.Dato.Date == gittDato.Date &&
+                               a.Dato.Hour > lokalTid)
+                        .ToListAsync();
+                }
+                //Alle avganger for dagen blir hentet
+                else
+                {
+                    Avganger = await _db.Avganger
+                        .Where(a => a.StasjonFra.Id == stasjonFraId && 
+                               a.StasjonTil.Id == stasjonTilId && 
+                               a.Dato.Date == gittDato.Date)
+                        .ToListAsync();
+                }
+
                 return Avganger;
             }
             catch

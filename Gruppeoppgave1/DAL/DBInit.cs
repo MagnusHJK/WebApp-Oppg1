@@ -18,30 +18,23 @@ namespace Gruppeoppgave1.Models
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
-                var stasjon1 = new Stasjon { Navn = "Oslo" };
-                var stasjon2 = new Stasjon { Navn = "Fredrikstad" };
-                var stasjon3 = new Stasjon { Navn = "Kristiansand" };
-                var stasjon4 = new Stasjon { Navn = "Trondheim" };
-                var stasjon5 = new Stasjon { Navn = "Bergen" };
-                var stasjon6 = new Stasjon { Navn = "Stavanger" };
-                var stasjon7 = new Stasjon { Navn = "Bodø" };
-                var stasjon8 = new Stasjon { Navn = "Tromsø" };
+                string[] stasjonNavn = 
+                { 
+                    "Oslo", "Skien", "Porsgrunn", "Arendal", "Kristiansand", 
+                    "Stavanger", "Haugesund", "Seljestad", "Bergen", "Lærdal", 
+                    "Sogndal", "Fagernes", "Lillehammer", "Trysil", "Førde", "Stryn" 
+                };
 
-                context.Stasjoner.Add(stasjon1);
-                context.Stasjoner.Add(stasjon2);
-                context.Stasjoner.Add(stasjon3);
-                context.Stasjoner.Add(stasjon4);
-                context.Stasjoner.Add(stasjon5);
-                context.Stasjoner.Add(stasjon6);
-                context.Stasjoner.Add(stasjon7);
-                context.Stasjoner.Add(stasjon8);
+                List<Stasjon> stasjoner = new List<Stasjon>();
 
-                var avgang1 = new Avgang { Dato = "09/19/2020", StasjonFra = stasjon1, StasjonTil = stasjon2, Tidspunkt = "0:00", Pris = 200 };
+                for(int i = 0; i < stasjonNavn.Length; i++)
+                {
+                    stasjoner.Add(new Stasjon { Navn = stasjonNavn[i] });
+                }
 
-                var bestilling1 = new Bestilling { Avgang = avgang1, Antall = 1 };
-                context.Bestillinger.Add(bestilling1);
+                context.Stasjoner.AddRange(stasjoner);
 
-                context.SaveChanges();
+               context.SaveChanges();
             }
         }
     }

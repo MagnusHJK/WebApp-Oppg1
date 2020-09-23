@@ -13,9 +13,7 @@ namespace Gruppeoppgave1.Models
 
         virtual public Stasjon StasjonTil { get; set; }
         
-        public string Dato { get; set; }
-
-        public string Tidspunkt { get; set; }
+        public DateTime Dato { get; set; }
 
         public int Pris { get; set; }
     }

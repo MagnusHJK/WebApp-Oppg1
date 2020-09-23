@@ -20,11 +20,13 @@ function formaterBestillinger(bestillinger) {
         "</tr>";
     for (let bestilling of bestillinger) {
         var totalpris = (bestilling.antall * bestilling.avgang.pris);
+        var dato = new Date(bestilling.avgang.dato);
+
         ut += "<tr>" +
             "<td>" + bestilling.avgang.stasjonFra.navn + "</td>" +
             "<td>" + bestilling.avgang.stasjonTil.navn + "</td>" +
-            "<td>" + bestilling.avgang.dato + "</td>" +
-            "<td>" + bestilling.avgang.tidspunkt + "</td>" +
+            "<td>" + dato.toDateString() + "</td>" +
+            "<td>" + dato.toTimeString() + "</td>" +
             "<td>" + bestilling.antall + "</td>" +
             "<td>" + totalpris + ",- </td>" +
             "</tr>";

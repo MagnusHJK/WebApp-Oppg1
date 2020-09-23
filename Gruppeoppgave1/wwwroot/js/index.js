@@ -11,6 +11,7 @@ function hentAlleStasjoner() {
         stasjonerAutocomplete(stasjoner);
     });
 }
+
 //Autocompleter søk på stasjoner
 function stasjonerAutocomplete(stasjoner) {
     $(".stasjonerAutocomplete").autocomplete({
@@ -83,6 +84,7 @@ function lagDestinasjonsBoks(stasjon, retning) {
 
     //Hvis både til og fra stasjon er valgt vil de neste instillingene komme opp
     if (($("#tilBoks").is(":visible")) && ($("#fraBoks").is(":visible"))) {
+
         //Sjekker kjapt om stasjonene er identiske
         if (stasjonFra.id === stasjonTil.id) {
             $("#feil").html("Stasjonene kan ikke være like!");
@@ -98,11 +100,17 @@ function lagBestillingBoks() {
     var dato;
     $("#bestillingsBoks").show("slow");
     $("#datovalg").datepicker({
+        dateFormat: 'dd/mm/yy',
         minDate: 0,
         firstDay: 1,
         onSelect: function (dateText, inst) {
-            dato = dateText;
-            sjekkAvganger(stasjonFra, stasjonTil, dato);
+            dato = dateText; //String for dato, i format dd/mm/yyyy
+
+            //Henter ut dato og sørger for at den er på ISO8601 standard
+            var datoObj = $(this).datepicker('getDate');
+            var datoISO = datoObj.toISOString();
+
+            sjekkAvganger(stasjonFra, stasjonTil, datoISO);
 
             //Genererer dropdown for valg av antall billetter
             for (i = 1; i <= 10; i++) {
@@ -111,30 +119,6 @@ function lagBestillingBoks() {
         }
     });
 }
-
-$(document).ready(function () {
-    var ut = "";
-    var sjekk = true;
-    $("#btnlagre").click(function () {
-        console.log("hei");
-        if ($("#datovalg").val() == "") {
-            ut += "Det er nødvendig å velge en dato. <br/>";
-            sjekk = false;
-        }
-
-        if ($("#tidspunkt").val() == "") {
-            ut += "Det må velges et tidspunkt. <br/>";
-            sjekk = false;
-        }
-        $("#feil").html(ut);
-        ut = "";
-
-        if (sjekk === true) {
-            visOrdre();
-        }
-    });
-});
-
 
 //Sjekker om avganger eksisterer, hvis de gjør det hentes de. Hvis ikke blir de generert og så hentet
 function sjekkAvganger(stasjonFra, stasjonTil, dato) {
@@ -180,12 +164,13 @@ function hentAvganger(stasjonFra, stasjonTil, dato) {
     });
 }
 
-
 //Formaterer de hentede avgangene i table
 function formaterAvganger(avganger) {
     $("#avganger").show();
 
-    let ut = "<h3>Avganger for dato: " + avganger[0].dato + "</h3>" +
+    var dato = new Date(avganger[0].dato);
+
+    let ut = "<h3>Avganger for " + dato.toDateString() + "</h3>" +
         "<table class='table table-hover'>" +
         "<tr>" +
         "<th>Avreise tidspunkt</th>" +
@@ -193,8 +178,10 @@ function formaterAvganger(avganger) {
         "<th></th>" +
         "</tr>";
     for (let avgang of avganger) {
+        var tid = new Date(avgang.dato);
+
         ut += "<tr>" +
-            "<td>" + avgang.tidspunkt + "</td>" +
+            "<td>" + tid.toTimeString() + "</td>" +
             "<td>" + avgang.pris + ",-</td>" +
             '<td><button class="btn btn-success" onclick="lagBestilling(' + avgang.id + ')">Velg</button></td>' +
              "</tr>";
@@ -205,10 +192,8 @@ function formaterAvganger(avganger) {
 
 function test(avgangId) {
     var antall = $("#antallBilletter").val();
-
     alert(antall);
 }
-
 
 
 //Når alle valg er utført lager vi en bestilling
