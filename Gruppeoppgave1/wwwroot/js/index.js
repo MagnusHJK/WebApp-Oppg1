@@ -97,15 +97,12 @@ function lagDestinasjonsBoks(stasjon, retning) {
 
 //Boks for dato og billett valg
 function lagBestillingBoks() {
-    var dato;
     $("#bestillingsBoks").show("slow");
     $("#datovalg").datepicker({
         dateFormat: 'dd/mm/yy',
         minDate: 0,
         firstDay: 1,
         onSelect: function (dateText, inst) {
-            dato = dateText; //String for dato, i format dd/mm/yyyy
-
             //Henter ut dato og sørger for at den er på ISO8601 standard
             var datoObj = $(this).datepicker('getDate');
             var datoISO = datoObj.toISOString();
@@ -150,7 +147,6 @@ function sjekkAvganger(stasjonFra, stasjonTil, dato) {
 }
 
 //Henter avganger for gitt strekning og dato
-//filtrer også slik at bare de av dem som oppfyller tidspunkt blir sendt til formatering
 function hentAvganger(stasjonFra, stasjonTil, dato) {
     const url = "Avgang/HentAvganger";
     const avgang = {
