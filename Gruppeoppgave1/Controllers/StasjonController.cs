@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Gruppeoppgave1.Models;
 using Microsoft.EntityFrameworkCore;
 using Gruppeoppgave1.DAL;
+using Microsoft.Extensions.Logging;
 
 namespace Gruppeoppgave1.Controllers
 {
@@ -13,19 +14,28 @@ namespace Gruppeoppgave1.Controllers
     public class StasjonController : ControllerBase
     {
         private readonly IStasjonRepository _db;
-        public StasjonController(IStasjonRepository db)
+        private ILogger<StasjonController> _log;
+        public StasjonController(IStasjonRepository db, ILogger<StasjonController> log)
         {
             _db = db;
+            _log = log;
         }
 
-        public async Task<List<Stasjon>> HentAlleStasjoner()
+        public async Task<ActionResult> HentAlleStasjoner()
         {
-            return await _db.HentAlleStasjoner();
+            List<Stasjon> alleStasjoner = await _db.HentAlleStasjoner();
+            return Ok(alleStasjoner);
         }
 
-        public async Task<Stasjon> HentEnStasjon(int id)
+        public async Task<ActionResult> HentEnStasjon(int id)
         {
-            return await _db.HentEnStasjon(id);
+            Stasjon stasjon = await _db.HentEnStasjon(id);
+            if (stasjon == null)
+            {
+                _log.LogInformation("Fant ikke stasjonen med ID: " + id);
+                return NotFound("Fant ikke stasjonen med ID: " + id);
+            }
+            return Ok(stasjon);
         }
     }
 }

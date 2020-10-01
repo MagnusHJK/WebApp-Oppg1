@@ -46,13 +46,13 @@ function stasjonerAutocomplete(stasjoner) {
             var stasjon = ui.item.obj;
 
             //Ser hvilken retning som var valgt
-            //IF STEP: 0, SET STEP: 1
+            //IF STEP: 0 (Ingen valgt tatt)
             if (step == 0) {
                 step = 1;
                 stasjonFra = stasjon;
                 lagDestinasjonsBoks(stasjon);
             }
-            //IF STEP: 2, SET STEP: 3
+            //IF STEP: 2 (Stasjon til valgt)
             else if (step == 2) {
                 step = 3;
                 stasjonTil = stasjon;
@@ -66,7 +66,7 @@ function stasjonerAutocomplete(stasjoner) {
 function lagDestinasjonsBoks(stasjon) {
     var ut = "";
     //Destinasjon fra
-    //IF STEP: 1, SET STEP: 2
+    //IF STEP: 1 (Stasjon fra valgt)
     if (step == 1) {
         step = 2;
 
@@ -80,7 +80,7 @@ function lagDestinasjonsBoks(stasjon) {
         $("#tilSøk").show("slow");
     }
     //Destinasjon til
-    //IF STEP: 3, SET STEP: 4
+    //IF STEP: 3 (Stasjon til valgt, og beskrivelse kommer opp)
     else if (step == 3) {
         step = 4;
 
@@ -94,7 +94,7 @@ function lagDestinasjonsBoks(stasjon) {
     }
 
     //Hvis både til og fra stasjon er valgt vil de neste instillingene komme opp
-    //IF STEP: 4, SET STEP: 5
+    //IF STEP: 4 (Begge stasjoner valgt)
     if (step == 4) {
         step = 5;
         //Sjekker kjapt om stasjonene er identiske
@@ -122,11 +122,14 @@ function endreStasjon(nyStep) {
 
     step = nyStep;
 
+    //Step 0: ingen valg tatt
     if (step == 0) {
         $("#fraSøk").show("slow");
         $("#fraBoks").hide();
         $("#tilBoks").html("");
-    } else if(step == 2) {
+    }
+    //Step 2: Til stasjon skal velges
+    else if (step == 2) {
         $("#tilSøk").show("slow");
         $("#tilBoks").hide();
     }
@@ -136,6 +139,7 @@ function endreStasjon(nyStep) {
 //Boks for dato og billett valg for første reise
 function lagAvreiseBoks() {
     $("#bestillingsBoks").show("slow");
+    $("#avreiseValg").show();
 
     //Genererer dropdown for valg av antall billetter
     for (i = 1; i <= 10; i++) {
@@ -150,7 +154,7 @@ function lagAvreiseBoks() {
 
         sjekkAvganger(stasjonFra, stasjonTil, datoISO);
     });
-
+    //Dato settings
     $("#datoValg").datepicker({
         dateFormat: 'dd/mm/yy',
         minDate: 0,
@@ -182,121 +186,6 @@ function lagReturBoks(dato) {
     });
 }
 
-
-//Sjekker om avganger eksisterer, hvis de gjør det hentes de. Hvis ikke blir de generert og så hentet
-function sjekkAvganger(stasjonFra, stasjonTil, dato) {
-    let url = "Avgang/SjekkAvganger";
-    let data = {
-        stasjonFraId: stasjonFra.id,
-        stasjonTilId: stasjonTil.id,
-        dato: dato
-    }
-    let ut = "";
-
-    //Sjekker om avganger mellom stasjoner eksisterer, hvis ikke blir de generert
-    $.get(url, data, function (OK) {
-        if (OK) {
-            hentAvganger(stasjonFra, stasjonTil, dato);
-        }
-        else {
-            url = "Avgang/GenererAvganger";
-            $.get(url, data, function (OK) {
-                if (OK) {
-                    hentAvganger(stasjonFra, stasjonTil, dato);
-                } else {
-                    ut = "<h2>Feil i db...</h2>";
-                    $("#avganger").html(ut);
-                }
-            });
-        }
-    });
-}
-
-//Henter avganger for gitt strekning og dato
-function hentAvganger(stasjonFra, stasjonTil, dato) {
-    const url = "Avgang/HentAvganger";
-    const avgang = {
-        stasjonFraId: stasjonFra.id,
-        stasjonTilId: stasjonTil.id,
-        dato: dato
-    }
-
-    $.get(url, avgang, function (avganger) {
-        formaterAvganger(avganger);
-    });
-}
-
-//Formaterer de hentede avgangene i table
-function formaterAvganger(avganger) {
-    $("#avganger").show();
-
-    var dato = new Date(avganger[0].dato);
-
-    let ut = "<h3>Avganger for " + dato.toDateString() + "</h3>" +
-        "<table class='table table-hover'>" +
-        "<tr>" +
-        "<th>Avreise tidspunkt</th>" +
-        "<th>Pris per billett</th>" +
-        "<th></th>" +
-        "</tr>";
-    for (let avgang of avganger) {
-        var datoAvgang = new Date(avgang.dato);
-        //var avgangJSON = JSON.stringify(av);
-
-        ut += "<tr>" +
-            "<td>" + datoAvgang.toTimeString() + "</td>" +
-            "<td>" + avgang.pris + ",-</td>" +
-            "<td><button class='btn btn-success' onclick='lagBillett(\"" + avgang.id + "\", \"" + datoAvgang.toISOString() + "\", \"" + avgang.pris + "\")' > Velg</button ></td > " +
-            "</tr>";
-    }
-    ut += "</table>";
-
-    $("#avganger").html(ut);
-}
-
-//Lager "billett" som gir info om valgte avganger
-function lagBillett(avgangId, datoAvgang, pris) {
-    let ut = "";
-    let knapper = "";
-    var dato = new Date(datoAvgang);
-    var antall = $("#antallBilletter").val();
-
-    $("#reiseValg").hide();
-    $("#avganger").html("");
-
-
-    //IF STEP: 5, SET STEP: 6
-    if (step == 5) {
-        step = 6;
-        avgangerId[0] = avgangId;
-
-        ut = "<h4>Avreise:</h4>" +
-            "<b>Fra: " + stasjonFra.navn + " Til: " + stasjonTil.navn + "</b><br>" +
-            dato.toString() + "<br>" +
-            antall + " billett(er) til " + pris + ",- per stk <br>";
-        $("#avreise").html(ut);
-
-        knapper = "<button class='btn btn-warning' id='endreAvganger' onclick='endreAvganger()'>Endre</button>  " +
-                  "<button class='btn btn-secondary' id='returKnapp' onclick='lagRetur(\"" + datoAvgang + "\")'>Jeg ønsker retur billett</button>  " +
-                  "<button class='btn btn-success' id='bestillKnapp' onclick='lagBestilling()'>Bestill</button>";
-            
-        $("#knapper").html(knapper);
-    }
-    //IF STEP: 6, SET STEP: 7
-    else if (step == 6) {
-        step = 7;
-        avgangerId[1] = avgangId;
-
-        ut = "<h4>Retur:</h4>" +
-            "<b>Fra: " + stasjonTil.navn + " Til: " + stasjonFra.navn + "</b><br>" +
-            dato.toString() + "<br>" +
-            antall + " billett(er) til " + pris + ",- per stk";
-        $("#retur").html(ut);
-
-        $("#returKnapp").remove();
-    }
-}
-
 //Hvis det trykkes på gul endre knapp under avreise og retur valg
 function endreAvganger() {
     $("#avreise").html("");
@@ -313,50 +202,9 @@ function endreAvganger() {
 
 //Etter avreise er valgt, skal retur velges
 function lagRetur(dato) {
-    $("avreiseValg").hide();
+    $("#avreiseValg").hide();
     $("#reiseTekst").html("Når vil du returnere?");
     $("#reiseValg").show();
 
     lagReturBoks(dato);
-}
-
-//Når alle valg er utført lager vi selve bestillingen til backend
-function lagBestilling() {
-    var antall = $("#antallBilletter").val();
-    const url = "Bestilling/LagBestilling";
-    var sannhet = false;
-
-    for (var i = 0; i < avgangerId.length; i++) {
-        const bestilling = {
-            avgangId: avgangerId[i],
-            antall: antall
-        }
-        sannhet = bestillingAjax(url, bestilling);
-    }
-
-    if (sannhet) {
-        window.location.href = 'bestillingsliste.html';
-    } else {
-        $("#feil").html("Feil i db - prøv igjen senere");
-    }
-}
-
-//Ajax kall i egen funskjon
-function bestillingAjax(url, bestilling) {
-    var sannhet = false;
-
-    $.ajax({
-        method: 'get',
-        url: url,
-        data: bestilling,
-        async: false,
-        success: function (OK) {
-            if (OK) {
-                sannhet = true;
-            } else {
-                sannhet = false;
-            }
-        }
-    });
-    return sannhet;
 }

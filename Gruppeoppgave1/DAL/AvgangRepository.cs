@@ -89,7 +89,6 @@ namespace Gruppeoppgave1.DAL
         {
             try
             {
-
                 List<Avgang> Avganger;
 
                 //Henter dagens dato

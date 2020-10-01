@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Gruppeoppgave1.Models;
 using Microsoft.EntityFrameworkCore;
 using Gruppeoppgave1.DAL;
+using Microsoft.Extensions.Logging;
 
 namespace Gruppeoppgave1.Controllers
 {
@@ -13,21 +14,31 @@ namespace Gruppeoppgave1.Controllers
     public class BestillingController : ControllerBase
     {
         private readonly IBestillingRepository _db;
-        public BestillingController(IBestillingRepository db)
+        private ILogger<BestillingController> _log;
+
+        public BestillingController(IBestillingRepository db, ILogger<BestillingController> log)
         {
             _db = db;
+            _log = log;
         }
 
 
-        public async Task<bool> LagBestilling(int avgangId, int antall)
+        public async Task<ActionResult> LagBestilling(int avgangId, int antall)
         {
-            return await _db.LagBestilling(avgangId, antall);
+            bool returOK = await _db.LagBestilling(avgangId, antall);
+
+            if (!returOK)
+            {
+                _log.LogInformation("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
+                return BadRequest("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
+            }
+            return Ok("Bestilling opprettet");
         }
 
-        public async Task<List<Bestilling>> HentAlleBestillinger()
+        public async Task<ActionResult> HentAlleBestillinger()
         {
-            return await _db.HentAlleBestillinger();
+            List<Bestilling> alleBestillinger = await _db.HentAlleBestillinger();
+            return Ok(alleBestillinger);
         }
-
     }
 }
