@@ -53,7 +53,7 @@ namespace Gruppeoppgave1.DAL
 
                 //Lager DateTime objekt
                 DateTime datetime = DateTime.Parse(dato);
-                
+
                 if (stasjonFraValg != null && stasjonTilValg != null)
                 {
                     for (int i = 0; i < 24; i += 2)
@@ -67,7 +67,7 @@ namespace Gruppeoppgave1.DAL
                             Pris = 200
                         };
                         _db.Avganger.Add(nyAvgangRad);
-                        
+
                     }
                     await _db.SaveChangesAsync();
                     return true;
@@ -113,8 +113,8 @@ namespace Gruppeoppgave1.DAL
                 else
                 {
                     Avganger = await _db.Avganger
-                        .Where(a => a.StasjonFra.Id == stasjonFraId && 
-                               a.StasjonTil.Id == stasjonTilId && 
+                        .Where(a => a.StasjonFra.Id == stasjonFraId &&
+                               a.StasjonTil.Id == stasjonTilId &&
                                a.Dato.Date == gittDato.Date)
                         .ToListAsync();
                 }
@@ -133,4 +133,3 @@ namespace Gruppeoppgave1.DAL
         }
     }
 }
-

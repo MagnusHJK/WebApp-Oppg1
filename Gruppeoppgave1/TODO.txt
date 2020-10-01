@@ -2,5 +2,11 @@
 
 ###index.js
 
-	Gjør stasjonene lik de som nor-way har
+	Bytt om lagBestilling med lagBillett. Der blir det laget billett div for avreise eller retur utifra hva det er snakk om.
+	Når både avreise og retur er valgt kommer en knapp opp som utfører lagBestillig.
+	lagBestilling må kanskje endres til å sende array istedenfor enkelt objekt.
+
+
+
+	SKRIV OM: Lag en global variabel som sier om hvor langt i prosessen du er kommet. Istedenfor masse if tester på forskjellige ting
 	

@@ -15,6 +15,6 @@ namespace Gruppeoppgave1.Models
 
         //public Kunde Kunde { get; set; } - Når kunder blir implementert
 
-        //public Billett Billett { get; set; } 
+        //public Billett Billett { get; set; }
     }
 }

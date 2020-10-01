@@ -61,19 +61,38 @@
         <br />
 
         <div class="container" id="bestillingsBoks" style="display:none">
-            <label for="bestillingsboks" style="font-size:2em">Når vil du reise?</label> <br />
+            <!--Her havner oppsummering av valgene-->
+            <div id="billetter">
+                <div id="avreise" class="container" style="float:left;"></div>
 
-            <label for="datovalg">Dato</label>
-            <input type="text" id="datovalg">
+                <br />
 
-            <label for="antallBilletter">Antall Billetter:</label>
-            <select id="antallBilletter">
-            </select>
+                <div id="retur" class="container" style="float:right;"></div>
+                
+                <br />
+                
+                <div id="knapper" class="container" style="margin-left: auto; margin-right: auto;"></div>
+            </div>
+
             <br />
 
-            <div id="avganger" style="margin-left: auto; margin-right: auto; width: 70%;">
+            <div id="reiseValg" class="container">
+                <p id="reiseTekst" style="font-size:2em">Når vil du reise?</p>
+
+                <label for="datoValg">Dato</label>
+                <input type="text" id="datoValg">
+
+                <!--Disse er kun relevant for avreise, og er derfor i egen div så de kan bli skjult ved valg av retur-->
+                <div id="avreiseValg">
+                    <label for="antallBilletter">Antall Billetter:</label>
+                    <select id="antallBilletter"></select>
+                </div>
 
             </div>
+
+            <br />
+
+            <div id="avganger" style="margin-left: auto; margin-right: auto; width: 70%;"></div>
         </div>
     </div>
 </body>

@@ -43,13 +43,6 @@ namespace Gruppeoppgave1.DAL
                 return null;
             }
         }
-
-
-
-        public bool Test()
-        {
-            return true;
-        }
     }
 }
 
