@@ -14,7 +14,7 @@ namespace Gruppeoppgave1.Controllers
     public class BestillingController : ControllerBase
     {
         private readonly IBestillingRepository _db;
-        private ILogger<BestillingController> _log;
+        private readonly ILogger<BestillingController> _log;
 
         public BestillingController(IBestillingRepository db, ILogger<BestillingController> log)
         {
@@ -25,14 +25,19 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> LagBestilling(int avgangId, int antall)
         {
-            bool returOK = await _db.LagBestilling(avgangId, antall);
-
-            if (!returOK)
+            if (ModelState.IsValid)
             {
-                _log.LogInformation("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
-                return BadRequest("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
+                bool returOK = await _db.LagBestilling(avgangId, antall);
+
+                if (!returOK)
+                {
+                    _log.LogInformation("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
+                    return BadRequest("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
+                }
+                return Ok("Bestilling opprettet");
             }
-            return Ok("Bestilling opprettet");
+            _log.LogInformation("Feil input validering");
+            return BadRequest("Feil input validering");
         }
 
         public async Task<ActionResult> HentAlleBestillinger()

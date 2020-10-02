@@ -15,7 +15,7 @@ namespace Gruppeoppgave1.Controllers
     public class AvgangController : ControllerBase
     {
         private readonly IAvgangRepository _db;
-        private ILogger<AvgangController> _log;
+        private readonly ILogger<AvgangController> _log;
 
         public AvgangController(IAvgangRepository db, ILogger<AvgangController> log)
         {
@@ -43,7 +43,6 @@ namespace Gruppeoppgave1.Controllers
                 _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
                 return BadRequest("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
             }
-            _log.LogInformation("Avgang generert");
             return Ok("Avgang generert");
         }
 

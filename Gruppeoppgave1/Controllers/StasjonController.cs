@@ -14,7 +14,7 @@ namespace Gruppeoppgave1.Controllers
     public class StasjonController : ControllerBase
     {
         private readonly IStasjonRepository _db;
-        private ILogger<StasjonController> _log;
+        private readonly ILogger<StasjonController> _log;
         public StasjonController(IStasjonRepository db, ILogger<StasjonController> log)
         {
             _db = db;

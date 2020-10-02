@@ -125,10 +125,5 @@ namespace Gruppeoppgave1.DAL
                 return null;
             }
         }
-
-        public string Test(int stasjonFra, int stasjonTil)
-        {
-            return "return fra test: " + stasjonFra + " " + stasjonTil;
-        }
     }
 }
