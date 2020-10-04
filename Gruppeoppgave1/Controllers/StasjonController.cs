@@ -23,13 +23,13 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> HentAlleStasjoner()
         {
-            List<Stasjon> alleStasjoner = await _db.HentAlleStasjoner();
+            List<Stasjoner> alleStasjoner = await _db.HentAlleStasjoner();
             return Ok(alleStasjoner);
         }
 
         public async Task<ActionResult> HentEnStasjon(int id)
         {
-            Stasjon stasjon = await _db.HentEnStasjon(id);
+            Stasjoner stasjon = await _db.HentEnStasjon(id);
             if (stasjon == null)
             {
                 _log.LogInformation("Fant ikke stasjonen med ID: " + id);

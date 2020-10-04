@@ -10,7 +10,7 @@ namespace Gruppeoppgave1.DAL
     {
         Task<bool> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato);
         Task<bool> GenererAvganger(int stasjonFraId, int stasjonTilId, string dato);
-        Task<List<Avgang>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato);
+        Task<List<Avganger>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato);
 
     }
 }

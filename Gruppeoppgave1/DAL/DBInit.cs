@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Gruppeoppgave1.DAL;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,14 +27,23 @@ namespace Gruppeoppgave1.Models
                     "Sogndal", "Fagernes", "Lillehammer", "Trysil", "Førde", "Stryn" 
                 };
 
-                List<Stasjon> stasjoner = new List<Stasjon>();
+                List<Stasjoner> stasjoner = new List<Stasjoner>();
 
                 for(int i = 0; i < stasjonNavn.Length; i++)
                 {
-                    stasjoner.Add(new Stasjon { Navn = stasjonNavn[i] });
+                    stasjoner.Add(new Stasjoner { Navn = stasjonNavn[i] });
                 }
 
                 context.Stasjoner.AddRange(stasjoner);
+
+                var bruker = new Brukere();
+                bruker.Brukernavn = "Admin";
+                string passord = "Admin-123";
+                byte[] salt = BrukerRepository.LagSalt();
+                byte[] hash = BrukerRepository.LagHash(passord, salt);
+                bruker.Passord = hash;
+                bruker.Salt = salt;
+                context.Brukere.Add(bruker);
 
                context.SaveChanges();
             }

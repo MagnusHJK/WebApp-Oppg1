@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Gruppeoppgave1.DAL
 {
-    public interface IStasjonRepository
+    public interface IBrukerRepository
     {
-        Task<List<Stasjoner>> HentAlleStasjoner();
-        Task<Stasjoner> HentEnStasjon(int id);
+        Task<bool> LoggInn(Bruker bruker);
     }
 }

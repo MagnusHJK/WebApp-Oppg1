@@ -26,6 +26,15 @@ namespace Gruppeoppgave1
             services.AddScoped<IStasjonRepository, StasjonRepository>();
             services.AddScoped<IBestillingRepository, BestillingRepository>();
             services.AddScoped<IAvgangRepository, AvgangRepository>();
+            services.AddScoped<IBrukerRepository, BrukerRepository>();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".AdventureWorks.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(1800); // 30 minutter
+                options.Cookie.IsEssential = true;
+            });
+            services.AddDistributedMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,13 +44,14 @@ namespace Gruppeoppgave1
             {
                 app.UseDeveloperExceptionPage();
                 loggerFactory.AddFile("Logs/Avgang/AvgangLog.txt");
-                loggerFactory.AddFile("Logs//Bestilling/BestillingLog.txt");
+                loggerFactory.AddFile("Logs/Bestilling/BestillingLog.txt");
                 loggerFactory.AddFile("Logs/Stasjon/StasjonLog.txt");
                 DBInit.Initialize(app);
             }
 
             app.UseRouting();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

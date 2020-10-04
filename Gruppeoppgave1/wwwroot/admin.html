@@ -2,14 +2,16 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>NOR-WAY - Bestillingsliste</title>
+    <title>NOR-WAY - Admin</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="js/bestillingsliste.js"></script>
+    <script src="js/validering.js"></script>
+    <script src="js/admin.js"></script>
 </head>
 <body>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="index.html">NOR-WAY</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,10 +36,33 @@
     </nav>
 
     <div class="container">
-        <h1>Liste over bestillinger</h1>
-        <div id="bestillinger"></div>
+
+        <!--Stasjoner-->
+        <div class="container" style="border-top: 1px solid #ff0000;">
+            <h1>Stasjoner</h1>
+            <p>Her kan det endres på stasjoners navn</p>
+            <select name="stasjoner" class="stasjoner" id="endreStasjon" onchange="oppdaterTekstStasjon()"></select>
+
+            <label for="stasjonNyttNavn">Nytt navn:</label>
+            <input type="text" id="stasjonNyttNavn" value=""/>
+        </div>
+
+        <!--Avganger-->
+        <div class="container" style="border-top: 1px solid #ff0000;">
+            <h1>Avganger</h1>
+            <p>Her kan det endres på avganger. <br />
+            Velg fra og til stasjoner for å finne hvilken avgang</p>
+            <div id="feilAvganger" style="color: red"></div>
+            
+            <label for="avgangStasjonFra">Stasjon fra:</label>
+            <select class="stasjoner" id="avgangStasjonFra" onchange="endretAvgangerValg()"></select>
+
+            <label for="avgangStasjonTil">Stasjon til:</label>
+            <select class="stasjoner" id="avgangStasjonTil" onchange="endretAvgangerValg()"></select>
+        </div>
 
     </div>
+
 
 </body>
 </html>

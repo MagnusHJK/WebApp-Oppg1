@@ -42,7 +42,7 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> HentAlleBestillinger()
         {
-            List<Bestilling> alleBestillinger = await _db.HentAlleBestillinger();
+            List<Bestillinger> alleBestillinger = await _db.HentAlleBestillinger();
             return Ok(alleBestillinger);
         }
     }

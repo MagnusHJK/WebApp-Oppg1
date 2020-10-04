@@ -17,11 +17,11 @@ namespace Gruppeoppgave1.DAL
         }
 
         //Komplett array av stasjoner
-        public async Task<List<Stasjon>> HentAlleStasjoner()
+        public async Task<List<Stasjoner>> HentAlleStasjoner()
         {
             try
             {
-                List<Stasjon> alleStasjoner = await _db.Stasjoner.ToListAsync();
+                List<Stasjoner> alleStasjoner = await _db.Stasjoner.ToListAsync();
                 return alleStasjoner;
             }
             catch
@@ -30,11 +30,11 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
-        public async Task<Stasjon> HentEnStasjon(int id)
+        public async Task<Stasjoner> HentEnStasjon(int id)
         {
             try
             {
-                Stasjon enStasjon = await _db.Stasjoner.FindAsync(id);
+                Stasjoner enStasjon = await _db.Stasjoner.FindAsync(id);
                 await _db.SaveChangesAsync();
                 return enStasjon;
             }

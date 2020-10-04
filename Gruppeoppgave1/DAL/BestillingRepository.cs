@@ -20,9 +20,9 @@ namespace Gruppeoppgave1.DAL
         {
             try
             {
-                var nyBestillingRad = new Bestilling();
+                var nyBestillingRad = new Bestillinger();
 
-                var AvgangValg = _db.Avganger.Find(avgangId);
+                Avganger AvgangValg = _db.Avganger.Find(avgangId);
 
                 if (AvgangValg != null)
                 {
@@ -44,11 +44,11 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
-        public async Task<List<Bestilling>> HentAlleBestillinger()
+        public async Task<List<Bestillinger>> HentAlleBestillinger()
         {
             try
             {
-                List<Bestilling> alleBestillinger = await _db.Bestillinger.Select(b => new Bestilling
+                List<Bestillinger> alleBestillinger = await _db.Bestillinger.Select(b => new Bestillinger
                 {
                     Id = b.Id,
                     Avgang = b.Avgang,

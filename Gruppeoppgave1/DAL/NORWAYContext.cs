@@ -19,9 +19,9 @@ namespace Gruppeoppgave1.Models
         [Key]
         public int Id { get; set; }
         
-        virtual public Stasjon StasjonFra { get; set; }
+        virtual public Stasjoner StasjonFra { get; set; }
 
-        virtual public Stasjon StasjonTil { get; set; }
+        virtual public Stasjoner StasjonTil { get; set; }
 
         public DateTime Dato { get; set; }
 
@@ -33,9 +33,21 @@ namespace Gruppeoppgave1.Models
         [Key]
         public int Id { get; set; }
 
-        virtual public Avgang Avgang { get; set; }
+        virtual public Avganger Avgang { get; set; }
 
         public int Antall { get; set; }
+    }
+
+    public class Brukere
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public string Brukernavn { get; set; }
+
+        public byte[] Passord { get; set; }
+
+        public byte[] Salt { get; set; }
     }
 
     public class NORWAYContext : DbContext
@@ -45,9 +57,10 @@ namespace Gruppeoppgave1.Models
             Database.EnsureCreated();
         }
         
-        public DbSet<Stasjon> Stasjoner { get; set; }
-        public DbSet<Bestilling> Bestillinger { get; set; }
-        public DbSet<Avgang> Avganger { get; set; }
+        public DbSet<Stasjoner> Stasjoner { get; set; }
+        public DbSet<Bestillinger> Bestillinger { get; set; }
+        public DbSet<Avganger> Avganger { get; set; }
+        public DbSet<Brukere> Brukere { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

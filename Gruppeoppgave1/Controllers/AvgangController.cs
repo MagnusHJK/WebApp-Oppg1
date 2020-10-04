@@ -48,7 +48,7 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
-            List<Avgang> alleAvganger = await _db.HentAvganger(stasjonFraId, stasjonTilId, dato);
+            List<Avganger> alleAvganger = await _db.HentAvganger(stasjonFraId, stasjonTilId, dato);
             return Ok(alleAvganger);
         }
     }

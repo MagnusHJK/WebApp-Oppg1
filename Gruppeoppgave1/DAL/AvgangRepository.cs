@@ -24,7 +24,7 @@ namespace Gruppeoppgave1.DAL
             {
                 DateTime gittDato = DateTime.Parse(dato);
 
-                List<Avgang> alleAvganger = await _db.Avganger.ToListAsync();
+                List<Avganger> alleAvganger = await _db.Avganger.ToListAsync();
 
                 //Sjekker om en avgang har de riktige stasjonene og dato
                 if (alleAvganger.Any(a => a.StasjonFra.Id == stasjonFraId && a.StasjonTil.Id == stasjonTilId && a.Dato.Date == gittDato.Date))
@@ -45,10 +45,10 @@ namespace Gruppeoppgave1.DAL
         {
             try
             {
-                Stasjon stasjonFraValg = new Stasjon();
+                Stasjoner stasjonFraValg = new Stasjoner();
                 stasjonFraValg = _db.Stasjoner.Find(stasjonFraId);
 
-                Stasjon stasjonTilValg = new Stasjon();
+                Stasjoner stasjonTilValg = new Stasjoner();
                 stasjonTilValg = _db.Stasjoner.Find(stasjonTilId);
 
                 //Lager DateTime objekt
@@ -59,7 +59,7 @@ namespace Gruppeoppgave1.DAL
                     for (int i = 0; i < 24; i += 2)
                     {
                         //Ny avgang
-                        Avgang nyAvgangRad = new Avgang
+                        Avganger nyAvgangRad = new Avganger
                         {
                             StasjonFra = stasjonFraValg,
                             StasjonTil = stasjonTilValg,
@@ -85,11 +85,11 @@ namespace Gruppeoppgave1.DAL
 
         //Henter liste over avganger for spesifikk strekning på valgt dato
         //Hvis det er avganger for nåværende dag vil det kun hentes avganger som ikke er i fortiden.
-        public async Task<List<Avgang>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
+        public async Task<List<Avganger>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
             try
             {
-                List<Avgang> Avganger;
+                List<Avganger> Avganger;
 
                 //Henter dagens dato
                 DateTime lokalDato = DateTime.Now;
