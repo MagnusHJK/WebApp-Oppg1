@@ -1,5 +1,6 @@
 ﻿$(function () {
     hentAlleStasjoner();
+    oppdaterTekstStasjon();
 });
 
 //Henter stasjoner
@@ -18,8 +19,7 @@ function fyllInnStasjoner(stasjoner) {
 
 //Automatisk fyller inn stasjons navn utifra hva du velger
 function oppdaterTekstStasjon() {
-    var stasjonsNavn = $("#endreStasjon option:selected").text();
-
+    var stasjonsNavn = $("#endreStasjonSelect option:selected").text();
     $("#stasjonNyttNavn").val(stasjonsNavn);
 }
 
@@ -29,6 +29,6 @@ function endretAvgangerValg() {
         $("#feilAvganger").html("Stasjonene kan ikke være like!");
     } else {
         $("#feilAvganger").html("");
-        //henter avganger
+        //sjekker avganger og henter
     }
 }
