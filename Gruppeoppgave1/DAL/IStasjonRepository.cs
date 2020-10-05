@@ -10,5 +10,7 @@ namespace Gruppeoppgave1.DAL
     {
         Task<List<Stasjoner>> HentAlleStasjoner();
         Task<Stasjoner> HentEnStasjon(int id);
+        Task<bool> LagStasjon(Stasjoner stasjon);
+        Task<bool> EndreStasjon(Stasjoner stasjon);
     }
 }

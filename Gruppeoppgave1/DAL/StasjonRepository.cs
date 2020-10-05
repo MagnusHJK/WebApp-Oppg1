@@ -43,6 +43,47 @@ namespace Gruppeoppgave1.DAL
                 return null;
             }
         }
+
+        public async Task<bool> LagStasjon(Stasjoner stasjon)
+        {
+            try
+            {
+                Stasjoner nyStasjon = new Stasjoner
+                {
+                    Navn = stasjon.Navn
+                };
+                await _db.Stasjoner.AddAsync(nyStasjon);
+                await _db.SaveChangesAsync();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> EndreStasjon(Stasjoner stasjon)
+        {
+            System.Diagnostics.Debug.WriteLine("Repository: " + stasjon.Navn);
+            try
+            {
+                Stasjoner endreStasjon = _db.Stasjoner.FirstOrDefault(s => s.Id == stasjon.Id);
+                if(endreStasjon != null)
+                {
+                    endreStasjon.Navn = stasjon.Navn;
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
     }
 }
 

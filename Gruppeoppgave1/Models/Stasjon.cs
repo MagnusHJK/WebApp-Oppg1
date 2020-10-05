@@ -10,7 +10,7 @@ namespace Gruppeoppgave1.Models
     {
         public int Id { get; set; }
 
-        [RegularExpression(@"^[a-zA-ZæøåÆØÅ. \-]{2,40}$")]
+        [RegularExpression(@"^[a-zA-ZæøåÆØÅ. \-]{3,40}$")]
         public string Navn { get; set; }
     }
 }

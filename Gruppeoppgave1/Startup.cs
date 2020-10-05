@@ -46,6 +46,7 @@ namespace Gruppeoppgave1
                 loggerFactory.AddFile("Logs/Avgang/AvgangLog.txt");
                 loggerFactory.AddFile("Logs/Bestilling/BestillingLog.txt");
                 loggerFactory.AddFile("Logs/Stasjon/StasjonLog.txt");
+                loggerFactory.AddFile("Logs/Bruker/BrukerLog.txt");
                 DBInit.Initialize(app);
             }
 

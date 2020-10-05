@@ -10,6 +10,58 @@ function hentAlleStasjoner() {
     });
 }
 
+//Lag stasjoner
+function lagStasjon() {
+    const stasjonsNavnOK = validerStasjonsNavn($("#nyStasjonInput").val());
+    if (stasjonsNavnOK) {
+
+        const stasjon = {
+            navn: $("#nyStasjonInput").val()
+        }
+
+        const url = "Stasjon/LagStasjon";
+        $.get(url, stasjon, function (OK) {
+            if (OK) {
+                hentAlleStasjoner();
+                $("#vellykketStasjoner").html(stasjon.navn + " lagt til i stasjoner");
+            }
+            else {
+                $("#feilStasjoner").html("Feilet");
+            }
+        })
+            .fail(function () {
+                $("#feilStasjoner").html("Feilet på server - prøv igjen senere");
+            });
+
+    }
+}
+
+
+//Endre stasjoner
+function endreStasjon() {
+    const stasjonsNavnOK = validerStasjonsNavn($("#endreStasjonInput").val());
+    if (stasjonsNavnOK) {
+        var gamleNavn = $("#endreStasjonSelect option:selected").text();
+
+        const stasjon = {
+            id: $("#endreStasjonSelect").val(),
+            navn: $("#endreStasjonInput").val()
+        }
+
+        const url = "Stasjon/EndreStasjon";
+        $.get(url, stasjon, function (OK) {
+            if (OK) {
+                hentAlleStasjoner();
+                $("#vellykketStasjoner").html(gamleNavn + " ble endret til: " + stasjon.navn);
+            }
+        })
+            .fail(function () {
+            });
+
+    }
+}
+
+
 //Fyller inn stasjoner i valg
 function fyllInnStasjoner(stasjoner) {
     for (i = 0; i < stasjoner.length; i++) {
@@ -20,7 +72,7 @@ function fyllInnStasjoner(stasjoner) {
 //Automatisk fyller inn stasjons navn utifra hva du velger
 function oppdaterTekstStasjon() {
     var stasjonsNavn = $("#endreStasjonSelect option:selected").text();
-    $("#stasjonNyttNavn").val(stasjonsNavn);
+    $("#endreStasjonInput").val(stasjonsNavn);
 }
 
 //Sjekker om stasjonen til og fra er like, hvis ikke så blir avganene mellom disse hentet

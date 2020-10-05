@@ -7,8 +7,8 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="js/validering.js"></script>
     <script src="js/admin.js"></script>
+    <script src="js/valideringAdmin.js"></script>
 </head>
 <body>
 
@@ -40,6 +40,10 @@
         <!--Stasjoner-->
         <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #ff0000;">
             <h1>Stasjoner</h1>
+
+            <div id="feilStasjoner" style="color: red; font-size: 1.3em; text-align:center"></div>
+            <div id="vellykketStasjoner" style="color: green; font-size: 1.3em; text-align:center"></div>
+
             <b>Lag stasjoner</b>
 
             <div class="form-row">
@@ -48,7 +52,7 @@
                     <input type="text" class="form-control" id="nyStasjonInput" />
                 </div>
                 <div class="col">
-                    <input type="button" value="Lag" onclick="" class="btn btn-success" style="position: absolute; bottom: 0"/>
+                    <input type="button" value="Lag" onclick="lagStasjon()" class="btn btn-success" style="position: absolute; bottom: 0" />
                 </div>
 
             </div>
@@ -68,11 +72,11 @@
                     <select name="stasjoner" class="stasjoner form-control" id="endreStasjonSelect" onchange="oppdaterTekstStasjon()"></select>
                 </div>
                 <div class="col">
-                    <label for="stasjonNyttNavn">Nytt navn:</label>
-                    <input type="text" class="form-control" id="stasjonNyttNavn" value="" />
+                    <label for="endreStasjonInput">Nytt navn:</label>
+                    <input type="text" class="form-control" id="endreStasjonInput" value="" />
                 </div>
                 <div class="col">
-                    <input type="button" value="Endre" onclick="" class="btn btn-warning" style="position: absolute; bottom: 0"/>
+                    <input type="button" value="Endre" onclick="endreStasjon()" class="btn btn-warning" style="position: absolute; bottom: 0" />
                 </div>
             </div>
 
@@ -84,7 +88,7 @@
                     <select name="stasjoner" class="stasjoner form-control" id="slettStasjonSelect"></select>
                 </div>
                 <div class="col">
-                    <input type="button" value="Endre" onclick="" class="btn btn-danger" style="position: absolute; bottom: 0"/>
+                    <input type="button" value="Endre" onclick="" class="btn btn-danger" style="position: absolute; bottom: 0" />
                 </div>
             </div>
         </div>
@@ -92,6 +96,10 @@
         <!--Avganger-->
         <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #ff0000;">
             <h1>Avganger</h1>
+
+            <div id="feilAvganger" style="color: red; font-size: 1.3em; text-align:center"></div>
+            <div id="vellykketAvganger" style="color: green; font-size: 1.3em; text-align:center"></div>
+
             <p>
                 <b>Lag avganger</b> <br />
                 Velg fra, til stasjoner og dato<br />
@@ -105,10 +113,9 @@
                 <b>Endre avganger</b> <br />
                 Velg fra og til stasjoner for å finne hvilken avgang
             </p>
-            
-            <div id="feilAvganger" style="color: red; font-size: 1.3em"></div>
 
-            
+
+
             <div class="form-row">
                 <div class="col">
                     <label for="avgangStasjonFra">Stasjon fra:</label>
@@ -127,6 +134,9 @@
         <!--Bestillinger-->
 
         <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #ff0000;">
+
+            <div id="feilBestillinger" style="color: red; font-size: 1.3em; text-align:center"></div>
+            <div id="vellykketBestillinger" style="color: green; font-size: 1.3em; text-align:center"></div>
 
 
         </div>
