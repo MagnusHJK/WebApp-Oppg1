@@ -13,3 +13,18 @@ function validerStasjonsNavn(stasjonsNavn) {
         return true;
     }
 }
+
+function validerAvgang(dato, pris) {
+    const regexPris = /^[0-9]{ 1,5}$/
+    const okPris = regexPris.test(pris);
+    const datoOk = Date.parse(dato);
+
+    if (datoOk.isNaN || !okPris) {
+        $("#feilAvganger").html("Avgang ikke gyldig");
+        return false;
+    } else {
+        $("#feilStasjoner").html("");
+        return true;
+    }
+
+}

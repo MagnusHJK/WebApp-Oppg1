@@ -64,6 +64,8 @@ function endreStasjon() {
 
 //Fyller inn stasjoner i valg
 function fyllInnStasjoner(stasjoner) {
+    $(".stasjoner").html("");
+
     for (i = 0; i < stasjoner.length; i++) {
         $(".stasjoner").append($('<option></option>').val(stasjoner[i].id).html(stasjoner[i].navn));
     }
@@ -81,6 +83,42 @@ function endretAvgangerValg() {
         $("#feilAvganger").html("Stasjonene kan ikke være like!");
     } else {
         $("#feilAvganger").html("");
-        //sjekker avganger og henter
+        lagDatoAvganger();
     }
+}
+
+function lagDatoAvganger() {
+    //Dato settings
+    $("#datoValgAvganger").datepicker({
+        dateFormat: 'dd/mm/yy',
+        minDate: 0,
+        firstDay: 1,
+        onSelect: function (dateText, inst) {
+            //Henter ut dato og sørger for at den er på ISO8601 standard
+            var datoObj = $(this).datepicker('getDate');
+            var datoISO = datoObj.toISOString();
+            sjekkAvgang(datoISO);
+        }
+    });
+}
+
+function sjekkAvgang(dato) {
+    var stasjonFraId = $("#avgangStasjonFra option:selected").val();
+    var stasjonTilId = $("#avgangStasjonTil option:selected").val();
+
+    let url = "Avgang/SjekkAvganger";
+    let avgang = {
+        stasjonFraId: stasjonFraId,
+        stasjonTilId: stasjonTilId,
+        dato: dato
+    }
+
+    $.get(url, avgang, function (OK) {
+        $("#vellykketAvganger").html("Fant avganger! (Det er bare ikke implementert enda)");
+        //Hent avganger og formater
+    })
+        .fail(function () {
+            $("#feilAvganger").html("Fant ingen avganger for gitte parametere");
+        });
+
 }

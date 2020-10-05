@@ -65,7 +65,6 @@ namespace Gruppeoppgave1.DAL
 
         public async Task<bool> EndreStasjon(Stasjoner stasjon)
         {
-            System.Diagnostics.Debug.WriteLine("Repository: " + stasjon.Navn);
             try
             {
                 Stasjoner endreStasjon = _db.Stasjoner.FirstOrDefault(s => s.Id == stasjon.Id);

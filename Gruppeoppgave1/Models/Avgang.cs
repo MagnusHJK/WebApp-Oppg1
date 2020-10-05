@@ -16,7 +16,7 @@ namespace Gruppeoppgave1.Models
         
         public DateTime Dato { get; set; }
 
-        [RegularExpression(@"[0-9]{1,5}")]
+        [RegularExpression(@"^[0-9]{1,5}$")]
         public int Pris { get; set; }
     }
 }
