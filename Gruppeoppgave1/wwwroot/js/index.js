@@ -164,6 +164,7 @@ function lagAvreiseBoks() {
             var datoObj = $(this).datepicker('getDate');
             var datoISO = datoObj.toISOString();
 
+
             //Ved første tur
             sjekkAvganger(stasjonFra, stasjonTil, datoISO);
         }

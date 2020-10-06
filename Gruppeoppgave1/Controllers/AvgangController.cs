@@ -43,12 +43,15 @@ namespace Gruppeoppgave1.Controllers
                 _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
                 return BadRequest("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
             }
+            _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble generert");
             return Ok("Avgang generert");
         }
 
         public async Task<ActionResult> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
             List<Avganger> alleAvganger = await _db.HentAvganger(stasjonFraId, stasjonTilId, dato);
+            
+            _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble hentet");
             return Ok(alleAvganger);
         }
     }

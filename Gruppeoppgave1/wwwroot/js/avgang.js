@@ -39,11 +39,13 @@ function hentAvganger(avgang) {
 
 //Formaterer de hentede avgangene i table
 function formaterAvganger(avganger) {
+    const tidOptions = { hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric' };
+
     $("#avganger").show();
 
     var dato = new Date(avganger[0].dato);
 
-    let ut = "<h3>Avganger for " + dato.toDateString() + "</h3>" +
+    let ut = "<h3>Avganger for " + dato.toLocaleDateString('no-NB') + "</h3>" +
         "<table class='table table-hover'>" +
         "<tr>" +
         "<th>Avreise tidspunkt</th>" +
@@ -54,7 +56,7 @@ function formaterAvganger(avganger) {
         var datoAvgang = new Date(avgang.dato);
 
         ut += "<tr>" +
-            "<td>" + datoAvgang.toTimeString() + "</td>" +
+            "<td>" + datoAvgang.toLocaleTimeString(undefined, tidOptions) + "</td>" +
             "<td>" + avgang.pris + ",-</td>" +
             "<td><button class='btn btn-success' onclick = 'lagBillett(\"" + avgang.id + "\", \"" + datoAvgang.toISOString() + "\", \"" + avgang.pris + "\")' > Velg</button ></td > " +
             "</tr>";

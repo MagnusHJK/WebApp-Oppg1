@@ -97,6 +97,7 @@ function lagDatoAvganger() {
             //Henter ut dato og sørger for at den er på ISO8601 standard
             var datoObj = $(this).datepicker('getDate');
             var datoISO = datoObj.toISOString();
+
             sjekkAvgang(datoISO);
         }
     });
@@ -114,11 +115,65 @@ function sjekkAvgang(dato) {
     }
 
     $.get(url, avgang, function (OK) {
-        $("#vellykketAvganger").html("Fant avganger! (Det er bare ikke implementert enda)");
-        //Hent avganger og formater
+        hentAvganger(avgang);
     })
         .fail(function () {
-            $("#feilAvganger").html("Fant ingen avganger for gitte parametere");
+            $("#feilAvganger").html("Fant ingen avganger for gitte parametere.");
         });
+
+}
+
+//Henter avganger for gitt strekning og dato
+function hentAvganger(avgang) {
+    const url = "Avgang/HentAvganger";
+
+    $.get(url, avgang, function (avganger) {
+        formaterAvganger(avganger);
+    });
+}
+
+//Formaterer de hentede avgangene i table
+function formaterAvganger(avganger) {
+    //Bestemmer format for dato og tid
+    const datoOptions = {year: 'numeric', month: 'numeric', day: 'numeric'};
+    const tidOptions = {hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric'};
+
+    $("#avganger").show();
+
+    let ut = "<table class='table table-sm table-hover' id='avgangerTable'>" +
+        "<tr>" +
+        "<th>Dato (DD/MM/YYYY)</th>" +
+        "<th>Avreise tidspunkt (HH:MM:SS)</th>" +
+        "<th>Pris per billett</th>" +
+        "<th></th>" +
+        "<th></th>" +
+        "</tr>" +
+        "</table>";
+    $("#avganger").html(ut);
+    
+    for (let avgang of avganger) {
+        var datoAvgang = new Date(avgang.dato);
+
+        ut = "<tr>" +
+            "<td><input type='text' class='form-control' id='avgangDato" + avgang.id + "'/></td>" + 
+            "<td><input type='text' class='form-control' id='avgangTid" + avgang.id + "'/></td>" +
+            "<td><input type='text' class='form-control' id='avgangPris" + avgang.id + "'/></td>" +
+            "<td><button class='btn btn-warning' onclick='endreAvgang(" + avgang.id + ")'>Endre</button></td>" +
+            "<td><button class='btn btn-danger' onclick='slettAvgang(" + avgang.id + ")'>Slett</button></td>" +
+            "</tr>";
+        $('#avgangerTable tr:last').after(ut);
+
+        $("#avgangDato" + avgang.id).val(datoAvgang.toLocaleDateString(undefined, datoOptions));
+        $("#avgangTid" + avgang.id).val(datoAvgang.toLocaleTimeString(undefined, tidOptions));
+        $("#avgangPris" + avgang.id).val(avgang.pris);
+    }
+}
+
+//Tallet gitt fra Endre knappen avgjør hvilken stasjon som skal endres
+function endreAvgang() {
+
+}
+
+function slettAvgang() {
 
 }

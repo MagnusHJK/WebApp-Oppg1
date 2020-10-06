@@ -1,5 +1,9 @@
 ﻿//Lager "billett" som gir info om valgte avganger
 function lagBillett(avgangId, datoAvgang, pris) {
+    const datoOptions = {
+        year: 'numeric', month: 'numeric', day: 'numeric',
+        hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric'
+    };
     let ut = "";
     let knapper = "";
     var dato = new Date(datoAvgang);
@@ -16,7 +20,7 @@ function lagBillett(avgangId, datoAvgang, pris) {
 
         ut = "<h4>Avreise:</h4>" +
             "<b>Fra: " + stasjonFra.navn + " Til: " + stasjonTil.navn + "</b><br>" +
-            dato.toString() + "<br>" +
+            "Dato og tidspunkt: " + dato.toLocaleString(undefined, datoOptions) + "<br>" +
             antall + " billett(er) til " + pris + ",- per stk <br>";
         $("#avreise").html(ut);
 
@@ -33,7 +37,7 @@ function lagBillett(avgangId, datoAvgang, pris) {
 
         ut = "<h4>Retur:</h4>" +
             "<b>Fra: " + stasjonTil.navn + " Til: " + stasjonFra.navn + "</b><br>" +
-            dato.toString() + "<br>" +
+            "Dato og tidspunkt: " + dato.toLocaleString(undefined, datoOptions) + "<br>" +
             antall + " billett(er) til " + pris + ",- per stk";
         $("#retur").html(ut);
 

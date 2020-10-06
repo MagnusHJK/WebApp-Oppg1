@@ -20,7 +20,7 @@ function validerAvgang(dato, pris) {
     const datoOk = Date.parse(dato);
 
     if (datoOk.isNaN || !okPris) {
-        $("#feilAvganger").html("Avgang ikke gyldig");
+        $("#feilAvganger").html("Dato, tidspunkt eller pris ikke gyldig");
         return false;
     } else {
         $("#feilStasjoner").html("");

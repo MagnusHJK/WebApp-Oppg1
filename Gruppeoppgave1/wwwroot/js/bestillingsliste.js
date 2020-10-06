@@ -9,6 +9,9 @@ function hentAlleBestillinger() {
 }
 
 function formaterBestillinger(bestillinger) {
+    const datoOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    const tidOptions = { hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric' };
+
     let ut = "<table class='table table-striped'>" +
         "<tr>" +
         "<th>Fra</th>" +
@@ -25,8 +28,8 @@ function formaterBestillinger(bestillinger) {
         ut += "<tr>" +
             "<td>" + bestilling.avgang.stasjonFra.navn + "</td>" +
             "<td>" + bestilling.avgang.stasjonTil.navn + "</td>" +
-            "<td>" + dato.toDateString() + "</td>" +
-            "<td>" + dato.toTimeString() + "</td>" +
+            "<td>" + dato.toLocaleDateString(undefined, datoOptions) + "</td>" +
+            "<td>" + dato.toLocaleTimeString(undefined, tidOptions) + "</td>" +
             "<td>" + bestilling.antall + "</td>" +
             "<td>" + totalpris + ",- </td>" +
             "</tr>";
