@@ -42,7 +42,6 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> LagStasjon(Stasjoner stasjon)
         {
-            System.Diagnostics.Debug.WriteLine("Controller: " + stasjon.Navn);
             //Sjekker innlogget
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             { return Unauthorized(); }

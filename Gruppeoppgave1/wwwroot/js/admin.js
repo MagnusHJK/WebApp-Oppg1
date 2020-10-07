@@ -131,7 +131,7 @@ function lagAvgang() {
             pris: pris
         }
 
-        $.post(url, avgang, function (OK) {
+        $.post(url, avgang, function () {
             $("#vellykketAvganger").html("Avgang lagt til");
         })
             .fail(function () {
@@ -162,7 +162,7 @@ function sjekkAvgang() {
         stasjonFraId: stasjonFraId,
         stasjonTilId: stasjonTilId,
         dato: datoISO
-    }
+    };
 
     $.get(url, avgang, function (OK) {
         hentAvganger(avgang);
@@ -186,14 +186,14 @@ function hentAvganger(avgang) {
 function formaterAvganger(avganger) {
     //Bestemmer format for dato og tid
     const datoOptions = {year: 'numeric', month: 'numeric', day: 'numeric'};
-    const tidOptions = {hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric'};
+    const tidOptions = {hour12: false, hour: '2-digit', minute: '2-digit'};
 
     $("#avganger").show();
 
     let ut = "<table class='table table-sm table-hover' id='avgangerTable'>" +
         "<tr>" +
         "<th>Dato (DD/MM/YYYY)</th>" +
-        "<th>Avreise tidspunkt (HH:MM:SS)</th>" +
+        "<th>Avreise tidspunkt (HH:MM)</th>" +
         "<th>Pris per billett</th>" +
         "<th></th>" +
         "<th></th>" +
@@ -205,25 +205,54 @@ function formaterAvganger(avganger) {
         var datoAvgang = new Date(avgang.dato);
 
         ut = "<tr>" +
-            "<td><input type='text' class='form-control' id='avgangDato" + avgang.id + "'/></td>" + 
-            "<td><input type='text' class='form-control' id='avgangTid" + avgang.id + "'/></td>" +
-            "<td><input type='text' class='form-control' id='avgangPris" + avgang.id + "'/></td>" +
+            "<td><input type='text' class='form-control' id='datoValgEndreAvgang" + avgang.id + "'/></td>" + 
+            "<td><input type='text' class='form-control' id='tidspunktEndreAvgang" + avgang.id + "'/></td>" +
+            "<td><input type='text' class='form-control' id='prisEndreAvgang" + avgang.id + "'/></td>" +
             "<td><button class='btn btn-warning' onclick='endreAvgang(" + avgang.id + ")'>Endre</button></td>" +
             "<td><button class='btn btn-danger' onclick='slettAvgang(" + avgang.id + ")'>Slett</button></td>" +
             "</tr>";
         $('#avgangerTable tr:last').after(ut);
 
         //Fyller inn info om avgang i html input
-        $("#avgangDato" + avgang.id).val(datoAvgang.toLocaleDateString(undefined, datoOptions));
-        $("#avgangTid" + avgang.id).val(datoAvgang.toLocaleTimeString(undefined, tidOptions));
-        $("#avgangPris" + avgang.id).val(avgang.pris);
+        $("#datoValgEndreAvgang" + avgang.id).val(datoAvgang.toLocaleDateString(undefined, datoOptions));
+        $("#tidspunktEndreAvgang" + avgang.id).val(datoAvgang.toLocaleTimeString(undefined, tidOptions));
+        $("#prisEndreAvgang" + avgang.id).val(avgang.pris);
     }
 }
 
 //Tallet gitt fra Endre knappen avgjør hvilken stasjon som skal endres
 //Det som er skrevet i input per avgang er det som blir endret
-function endreAvgang() {
+function endreAvgang(avgangId) {
+    var dato = $("#datoValgEndreAvgang" + avgangId).val();
+    var tidspunkt = $("#tidspunktEndreAvgang" + avgangId).val();
+    var tidsArr = tidspunkt.split(':');
+    var pris = $("#prisEndreAvgang" + avgangId).val();
 
+    const avgangOK = validerAvgang(dato, tidspunkt, pris);
+
+    if (avgangOK) {
+        //Må bygge dato objektet manuelt siden new Date() tar inn dato string i MM/DD/YYYY format
+        var datoArr = dato.split("/");
+        var datoObj = new Date(+datoArr[2], datoArr[1] - 1, + datoArr[0]);
+        datoObj.setHours(tidsArr[0]);
+        datoObj.setMinutes(tidsArr[1]);
+        var datoISO = datoObj.toISOString();
+
+        let url = "Avgang/EndreAvgang";
+        let avgang = {
+            avgangId: avgangId,
+            datoTid: datoISO,
+            pris: pris
+        };
+
+        $.post(url, avgang, function () {
+            $("#vellykketAvganger").html("Avgang endret");
+        })
+            .fail(function () {
+                $("#feilAvganger").html("Avgang ble ikke endret");
+            });
+
+    }
 }
 
 function slettAvgang() {

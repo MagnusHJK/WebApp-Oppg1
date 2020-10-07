@@ -10,6 +10,8 @@ namespace Gruppeoppgave1.DAL
     {
         Task<bool> LagAvgang(int stasjonFraId, int stasjonTilId, string datoTid, int pris);
 
+        Task<bool> EndreAvgang(int avgangId, string datoTid, int pris);
+
         Task<bool> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato);
         Task<bool> GenererAvganger(int stasjonFraId, int stasjonTilId, string dato);
         Task<List<Avganger>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato);

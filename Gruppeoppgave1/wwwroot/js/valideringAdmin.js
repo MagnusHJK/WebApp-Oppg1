@@ -21,7 +21,6 @@ function validerTest() {
 }
 
 function validerAvgang(dato, tid, pris) {
-    alert("hello validering");
     const regexPris = /^[0-9]{1,5}$/;
     const regexTid = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$$/;
     const okPris = regexPris.test(pris);

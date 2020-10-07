@@ -43,6 +43,28 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
+        public async Task<bool> EndreAvgang(int avgangId, string datoTid, int pris)
+        {
+            try
+            {
+                DateTime gittDatoTid = DateTime.Parse(datoTid);
+                Avganger endreAvgang = await _db.Avganger.FirstOrDefaultAsync(a => a.Id == avgangId);
+
+                if(endreAvgang != null)
+                {
+                    endreAvgang.Dato = gittDatoTid;
+                    endreAvgang.Pris = pris;
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
 
         //Sjekker om avganger for reise mellom stasjonene eksisterer

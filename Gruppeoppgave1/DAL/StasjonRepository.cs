@@ -67,7 +67,7 @@ namespace Gruppeoppgave1.DAL
         {
             try
             {
-                Stasjoner endreStasjon = _db.Stasjoner.FirstOrDefault(s => s.Id == stasjon.Id);
+                Stasjoner endreStasjon = await _db.Stasjoner.FirstOrDefaultAsync(s => s.Id == stasjon.Id);
                 if(endreStasjon != null)
                 {
                     endreStasjon.Navn = stasjon.Navn;
