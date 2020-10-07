@@ -257,3 +257,6 @@
 2020-10-06T17:02:35.4619174+02:00 800000a0-0000-fc00-b63f-84710c7967bb [INF] Avgangen fra: 16 til: 8 på dato: 2020-10-09T22:00:00.000Z ble generert (0d34079d)
 2020-10-06T17:02:35.5306866+02:00 80000060-0001-fd00-b63f-84710c7967bb [INF] Avgangen fra: 16 til: 8 på dato: 2020-10-09T22:00:00.000Z ble hentet (d99d594c)
 2020-10-06T17:02:50.6317409+02:00 800000a0-0006-fa00-b63f-84710c7967bb [INF] Avgangen fra: 16 til: 8 på dato: 2020-10-09T22:00:00.000Z ble hentet (d99d594c)
+2020-10-06T21:57:25.0135113+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-10-06T21:57:25.0168978+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2020-10-06T21:57:25.0187087+02:00  [INF] Content root path: "D:\School\OsloMet\ITPE3200 - Webapplikasjoner\Oblig\Gruppeoppgave 1\Gruppeoppgave1\Gruppeoppgave1" (b5d60022)

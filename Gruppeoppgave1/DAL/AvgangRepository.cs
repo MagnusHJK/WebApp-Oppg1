@@ -17,6 +17,34 @@ namespace Gruppeoppgave1.DAL
             _db = db;
         }
 
+        public async Task<bool> LagAvgang(int stasjonFraId, int stasjonTilId, string datoTid, int pris)
+        {
+            try
+            {
+                DateTime gittDatoTid = DateTime.Parse(datoTid);
+                Stasjoner stasjonFra = await _db.Stasjoner.FindAsync(stasjonFraId);
+                Stasjoner stasjonTil = await _db.Stasjoner.FindAsync(stasjonTilId);
+
+                Avganger nyAvgang = new Avganger
+                {
+                    StasjonFra = stasjonFra,
+                    StasjonTil = stasjonTil,
+                    Dato = gittDatoTid,
+                    Pris = pris
+                };
+
+                await _db.Avganger.AddAsync(nyAvgang);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+
         //Sjekker om avganger for reise mellom stasjonene eksisterer
         public async Task<bool> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {

@@ -23,6 +23,18 @@ namespace Gruppeoppgave1.Controllers
             _log = log;
         }
 
+        public async Task<ActionResult> LagAvgang(int stasjonFraId, int stasjonTilId, string datoTid, int pris)
+        {
+            bool returOK = await _db.LagAvgang(stasjonFraId, stasjonTilId, datoTid, pris);
+
+            if (!returOK)
+            {
+                _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + datoTid + " ble ikke laget");
+                return NotFound("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + datoTid + " ble ikke laget");
+            }
+            return Ok("Avgang opprettet");
+        }
+
         public async Task<ActionResult> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
             bool returOK = await _db.SjekkAvganger(stasjonFraId, stasjonTilId, dato);

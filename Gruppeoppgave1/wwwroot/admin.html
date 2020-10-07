@@ -7,8 +7,8 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="js/admin.js"></script>
     <script src="js/valideringAdmin.js"></script>
+    <script src="js/admin.js"></script>
 </head>
 <body>
 
@@ -91,7 +91,7 @@
                     <select name="stasjoner" class="stasjoner form-control" id="slettStasjonSelect"></select>
                 </div>
                 <div class="col">
-                    <input type="button" value="Endre" onclick="" class="btn btn-danger" style="position: absolute; bottom: 0" />
+                    <input type="button" value="Slett" onclick="" class="btn btn-danger" style="position: absolute; bottom: 0" />
                 </div>
             </div>
         </div>
@@ -112,26 +112,71 @@
                 for hver x gitte time for hele den valgte dagen
             </p>
 
+            <div class="form-row">
+                <div class="col">
+                    <label for="lagAvgangStasjonFra">Stasjon fra:</label>
+                    <select class="stasjoner form-control" id="lagAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
+                </div>
+                <div class="col">
+                    <label for="lagAvgangStasjonTil">Stasjon til:</label>
+                    <select class="stasjoner form-control" id="lagAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
+                </div>
+                <div class="col">
+                    <label for="datoValgLagAvganger">Dato:</label>
+                    <input type="text" id="datoValgLagAvganger" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="tidspunktLagAvganger">Tidspunkt: (HH:MM)</label>
+                    <input type="text" id="tidspunktLagAvganger" class="form-control" />
+                </div>
+                <div class="col">
+                    <label for="prisLagAvganger">Pris:</label>
+                    <input type="text" id="prisLagAvganger" class="form-control" />
+                </div>
+                <div class="col">
+                    <input type="button" value="Lag" onclick="lagAvgang()" class="btn btn-success" style="position: absolute; bottom: 0" />
+                </div>
+            </div>
+           
+            
+    <!--Hvis vi eventuelt vil ha autogenerering for avganger
+                <br />
+
+                <div class="form-row">
+                    <div class="col">
+                        <label class="form-check-label" for="autogenererAvgang">Auto generer avganger:</label>
+                        <input class="form-check-input" type="checkbox" value="" id="autogenererAvgang">
+                    </div>
+                    <div class="col">
+                        <label for="timerAutogenerer">Ny avgang hver X time:</label>
+                        <input type="text" class="form-control" id="timerAutogenerer" />
+                    </div>
+                </div>
+                -->
+
             <br />
 
             <p>
-                <b>Endre og slette avganger</b> <br/>
+                <b>Endre og slette avganger</b> <br />
                 Velg fra og til stasjoner for å finne hvilken avgang du vil endre eller slette
             </p>
 
 
             <div class="form-row">
                 <div class="col">
-                    <label for="avgangStasjonFra">Stasjon fra:</label>
-                    <select class="stasjoner form-control" id="avgangStasjonFra" onchange="endretAvgangerValg()"></select>
+                    <label for="endreAvgangStasjonFra">Stasjon fra:</label>
+                    <select class="stasjoner form-control" id="endreAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
                 </div>
                 <div class="col">
-                    <label for="avgangStasjonTil">Stasjon til:</label>
-                    <select class="stasjoner form-control" id="avgangStasjonTil" onchange="endretAvgangerValg()"></select>
+                    <label for="endreAvgangStasjonTil">Stasjon til:</label>
+                    <select class="stasjoner form-control" id="endreAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
                 </div>
                 <div class="col">
-                    <label for="datoValgAvganger">Dato:</label>
-                    <input type="text" id="datoValgAvganger" class="form-control">
+                    <label for="datoValgEndreAvganger">Dato:</label>
+                    <input type="text" id="datoValgEndreAvganger" class="form-control">
+                </div>
+                <div class="col">
+                    <input type="button" value="Finn avganger" onclick="sjekkAvgang()" class="btn btn-primary" style="position: absolute; bottom: 0" />
                 </div>
             </div>
 
