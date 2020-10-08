@@ -83,6 +83,21 @@ namespace Gruppeoppgave1.DAL
             }
 
         }
+
+        public async Task<bool> SlettStasjon(int id)
+        {
+            try
+            {
+                Stasjoner slettStasjon = await _db.Stasjoner.FindAsync(id);
+                _db.Stasjoner.Remove(slettStasjon);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
 

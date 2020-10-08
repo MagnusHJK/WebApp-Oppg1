@@ -58,6 +58,21 @@ function endreStasjon() {
     }
 }
 
+function slettStasjon() {
+    const valgtStasjon = $("#slettStasjonSelect").val();
+    const url = "Stasjon/SlettStasjon?id=" + valgtStasjon;
+    console.log(valgtStasjon);
+    $.get(url, function (OK) {
+        if (OK) {
+            console.log("Stasjon slettet");
+            $("#vellykketStasjoner").html("Stasjon med id " + valgtStasjon + " ble fjernet");
+        } else {
+            console.log("Feil");
+            $("#feilStasjoner").html("Feilet på server - prøv igjen senere");
+        }
+    })
+}
+
 
 //Fyller inn stasjoner i valg
 function fyllInnStasjoner(stasjoner) {
