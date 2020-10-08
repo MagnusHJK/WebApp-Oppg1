@@ -81,5 +81,29 @@ namespace Gruppeoppgave1.Controllers
             _log.LogInformation("Feil i inputvalidering for endring av Stasjon");
             return BadRequest("Feil i inputvalidering for endring av Stasjon");
         }
+
+        public async Task<ActionResult> SlettStasjon(int id)
+        {
+            //Sjekker innlogget
+            if(string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+
+            if(ModelState.IsValid)
+            {
+                bool returOK = await _db.SlettStasjon(id);
+                if(!returOK)
+                {
+                    _log.LogInformation("Sletting av stasjon med ID: " + id + " feilet.");
+                    return Ok(false);
+                }
+                return Ok(true);
+            }
+            _log.LogInformation("Feil i sletting av Stasjon");
+            return BadRequest("Feil i sletting av Stasjon");
+
+            
+        }
     }
 }
