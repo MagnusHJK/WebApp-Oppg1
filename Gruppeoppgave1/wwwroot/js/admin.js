@@ -99,7 +99,7 @@ function endretAvgangerValg() {
 function datoValgLagAvganger() {
     //Dato settings
     $("#datoValgLagAvganger").datepicker({
-        dateFormat: 'dd/mm/yy',
+        dateFormat: 'dd.mm.yy',
         minDate: 0,
         firstDay: 1
     });
@@ -145,7 +145,7 @@ function lagAvgang() {
 function datoValgEndreAvganger() {
     //Dato settings
     $("#datoValgEndreAvganger").datepicker({
-        dateFormat: 'dd/mm/yy',
+        dateFormat: 'dd.mm.yy',
         minDate: 0,
         firstDay: 1
     });
@@ -192,7 +192,7 @@ function formaterAvganger(avganger) {
 
     let ut = "<table class='table table-sm table-hover' id='avgangerTable'>" +
         "<tr>" +
-        "<th>Dato (DD/MM/YYYY)</th>" +
+        "<th>Dato (DD.MM.YYYY)</th>" +
         "<th>Avreise tidspunkt (HH:MM)</th>" +
         "<th>Pris per billett</th>" +
         "<th></th>" +
@@ -214,8 +214,8 @@ function formaterAvganger(avganger) {
         $('#avgangerTable tr:last').after(ut);
 
         //Fyller inn info om avgang i html input
-        $("#datoValgEndreAvgang" + avgang.id).val(datoAvgang.toLocaleDateString(undefined, datoOptions));
-        $("#tidspunktEndreAvgang" + avgang.id).val(datoAvgang.toLocaleTimeString(undefined, tidOptions));
+        $("#datoValgEndreAvgang" + avgang.id).val(datoAvgang.toLocaleDateString("no-NO", datoOptions));
+        $("#tidspunktEndreAvgang" + avgang.id).val(datoAvgang.toLocaleTimeString("no-NO", tidOptions));
         $("#prisEndreAvgang" + avgang.id).val(avgang.pris);
     }
 }
@@ -223,6 +223,7 @@ function formaterAvganger(avganger) {
 //Tallet gitt fra Endre knappen avgjør hvilken stasjon som skal endres
 //Det som er skrevet i input per avgang er det som blir endret
 function endreAvgang(avgangId) {
+    //Henter ut dato og pris, deler opp tiden i timer og minutter
     var dato = $("#datoValgEndreAvgang" + avgangId).val();
     var tidspunkt = $("#tidspunktEndreAvgang" + avgangId).val();
     var tidsArr = tidspunkt.split(':');
@@ -231,8 +232,8 @@ function endreAvgang(avgangId) {
     const avgangOK = validerAvgang(dato, tidspunkt, pris);
 
     if (avgangOK) {
-        //Må bygge dato objektet manuelt siden new Date() tar inn dato string i MM/DD/YYYY format
-        var datoArr = dato.split("/");
+        //Må bygge dato objektet manuelt siden new Date() tar inn dato string i MM/DD/YYYY format...
+        var datoArr = dato.split(".");
         var datoObj = new Date(+datoArr[2], datoArr[1] - 1, + datoArr[0]);
         datoObj.setHours(tidsArr[0]);
         datoObj.setMinutes(tidsArr[1]);

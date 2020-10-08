@@ -43,10 +43,7 @@ namespace Gruppeoppgave1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                loggerFactory.AddFile("Logs/Avgang/AvgangLog.txt");
-                loggerFactory.AddFile("Logs/Bestilling/BestillingLog.txt");
-                loggerFactory.AddFile("Logs/Stasjon/StasjonLog.txt");
-                loggerFactory.AddFile("Logs/Bruker/BrukerLog.txt");
+                loggerFactory.AddFile("Logs/NorwayLog.txt");
                 DBInit.Initialize(app);
             }
 
