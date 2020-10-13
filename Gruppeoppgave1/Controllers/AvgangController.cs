@@ -55,6 +55,21 @@ namespace Gruppeoppgave1.Controllers
             return Ok("Avgangen ble endret");
         }
 
+        public async Task<ActionResult> SlettAvgang(int avgangId)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            { return Unauthorized(); }
+
+            bool returOK = await _db.SlettAvgang(avgangId);
+
+            if (!returOK)
+            {
+                _log.LogInformation("Avgangen med ID: " + avgangId + " ble ikke slettet");
+                return BadRequest("Avgangen med ID: " + avgangId + " ble ikke slettet");
+            }
+            return Ok("Avgangen ble slettet");
+        }
+
         public async Task<ActionResult> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
             bool returOK = await _db.SjekkAvganger(stasjonFraId, stasjonTilId, dato);

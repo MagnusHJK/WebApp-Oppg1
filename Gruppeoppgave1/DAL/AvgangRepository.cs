@@ -66,6 +66,21 @@ namespace Gruppeoppgave1.DAL
         }
 
 
+        public async Task<bool> SlettAvgang(int avgangId)
+        {
+            try
+            {
+                Avganger slettAvgang = await _db.Avganger.FindAsync(avgangId);
+                _db.Avganger.Remove(slettAvgang);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
         //Sjekker om avganger for reise mellom stasjonene eksisterer
         public async Task<bool> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato)

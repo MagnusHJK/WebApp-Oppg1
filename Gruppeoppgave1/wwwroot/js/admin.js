@@ -61,16 +61,14 @@ function endreStasjon() {
 function slettStasjon() {
     const valgtStasjon = $("#slettStasjonSelect").val();
     const url = "Stasjon/SlettStasjon?id=" + valgtStasjon;
-    console.log(valgtStasjon);
+
     $.get(url, function (OK) {
         if (OK) {
-            console.log("Stasjon slettet");
             $("#vellykketStasjoner").html("Stasjon med id " + valgtStasjon + " ble fjernet");
         } else {
-            console.log("Feil");
             $("#feilStasjoner").html("Feilet på server - prøv igjen senere");
         }
-    })
+    });
 }
 
 
@@ -271,6 +269,57 @@ function endreAvgang(avgangId) {
     }
 }
 
-function slettAvgang() {
 
+function slettAvgang(avgangId) {
+    const url = "Avgang/SlettAvgang"
+
+    $.get(url, avgangId, function (OK) {
+        $("#vellykketAvganger").html("Avgang ble slettet");
+    })
+        .fail(function (){
+            $("#feilAvganger").html("Avgang ble ikke slettet");
+        });
+}
+
+//Henter alle bestillinger, ingen sjekk eller filtrering først
+function hentAlleBestillinger() {
+    const url = "Bestilling/HentAlleBestillinger";
+
+    $.get(url, function (bestillinger) {
+        formaterBestillinger(bestillinger);
+    });
+}
+
+function formaterBestillinger(bestillinger) {
+    //Bestemmer format for dato og tid
+    const datoOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    const tidOptions = { hour12: false, hour: '2-digit', minute: '2-digit' };
+
+    $("#bestillinger").show();
+
+    let ut = "<table class='table table-sm table-hover' id='bestillingTable'>" +
+        "<tr>" +
+        "<th>Avgang</th>" +
+        "<th>Antall</th>" +
+        "<th></th>" +
+        "<th></th>" +
+        "</tr>" +
+        "</table>";
+    $("#bestillinger").html(ut);
+
+    for (let bestilling of bestillinger) {
+        var datoBestilling = new Date(bestilling.avgang.dato);
+
+        ut = "<tr>" +
+            "<td><input type='select' class='form-control' id='avgangValgEndreBestilling" + bestilling.id + "'/></td>" +
+            "<td><input type='text' class='form-control' id='antallEndreBestilling" + bestilling.id + "'/></td>" +
+            "<td><button class='btn btn-warning' onclick='endreBestilling(" + bestilling.id + ")'>Endre</button></td>" +
+            "<td><button class='btn btn-danger' onclick='slettBestilling(" + bestilling.id + ")'>Slett</button></td>" +
+            "</tr>";
+        $('#bestillingTable tr:last').after(ut);
+
+        //Fyller inn info om bestilling i html input
+        $("#avgangValgEndreBestilling" + bestilling.id).val(bestilling.avgang);
+        $("#antallEndreBestilling" + avgang.id).val(bestilling.antall);
+    }
 }

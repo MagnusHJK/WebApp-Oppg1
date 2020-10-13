@@ -18,5 +18,10 @@ namespace Gruppeoppgave1.Models
 
         [RegularExpression(@"^[0-9]{1,5}$")]
         public int Pris { get; set; }
+
+        public override string ToString()
+        {
+            return Id + ": " + StasjonFra.Navn + " -> " + StasjonTil.Navn + " " + Dato.ToLocalTime();
+        }
     }
 }

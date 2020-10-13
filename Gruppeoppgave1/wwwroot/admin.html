@@ -68,6 +68,7 @@
                 Merk at det bare er navnet som endre, ID'en i databasen vil være den samme og <br />
                 derfor beholde alle tidligere relasjoner.
             </p>
+
             <div class="form-row">
                 <div class="col">
                     <label for="endreStasjonSelect">Stasjon å endre:</label>
@@ -194,8 +195,30 @@
 
         <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #ff0000;">
 
+            <h1>Bestillinger</h1>
+
             <div id="feilBestillinger" style="color: red; font-size: 1.3em; text-align:center"></div>
             <div id="vellykketBestillinger" style="color: green; font-size: 1.3em; text-align:center"></div>
+
+            <br />
+
+            <p>
+                <b>Lag bestilligner</b> <br />
+                Opprett bestillinger raskt her
+            </p>
+
+            <br />
+
+            <p>
+                <b>Endre og slette bestilligner</b> <br />
+                Trykk på knappen under for å hente bestillinger fra backend.
+                Avganger kan endres i en singel dropdown med oversikt over alle mulige avganger, hvis <br />
+                dette blir for rotete anbefales det å bare opprette en helt ny bestilling slik at du får mer kontroll og oversikt.
+            </p>
+
+            <div class="form-row">
+                <input type="button" value="Hent bestilligner" onclick="hentAlleBestillinger()" class="btn btn-primary" />
+            </div>
 
             <br />
 
