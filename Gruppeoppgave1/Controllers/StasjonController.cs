@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Gruppeoppgave1.DAL;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Castle.Core.Internal;
 
 namespace Gruppeoppgave1.Controllers
 {
@@ -26,6 +27,11 @@ namespace Gruppeoppgave1.Controllers
         public async Task<ActionResult> HentAlleStasjoner()
         {
             List<Stasjoner> alleStasjoner = await _db.HentAlleStasjoner();
+            if (alleStasjoner.IsNullOrEmpty())
+            {
+                return NotFound("Fant ingen stasjoner");
+            }
+
             return Ok(alleStasjoner);
         }
 
@@ -35,7 +41,7 @@ namespace Gruppeoppgave1.Controllers
             if (stasjon == null)
             {
                 _log.LogInformation("Fant ikke stasjonen med ID: " + id);
-                return NotFound("Fant ikke stasjonen med ID: " + id);
+                return NotFound("Fant ikke stasjonen");
             }
             return Ok(stasjon);
         }
@@ -44,7 +50,7 @@ namespace Gruppeoppgave1.Controllers
         {
             //Sjekker innlogget
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            { return Unauthorized(); }
+            { return Unauthorized("Ikke innlogget"); }
 
             if (ModelState.IsValid)
             {
@@ -66,7 +72,7 @@ namespace Gruppeoppgave1.Controllers
             System.Diagnostics.Debug.WriteLine("Controller: " + stasjon.Navn);
             //Sjekker innlogget
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            { return Unauthorized(); }
+            { return Unauthorized("Ikke innlogget"); }
 
             if (ModelState.IsValid)
             {
@@ -87,7 +93,7 @@ namespace Gruppeoppgave1.Controllers
             //Sjekker innlogget
             if(string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke innlogget");
             }
 
             if(ModelState.IsValid)
@@ -102,8 +108,6 @@ namespace Gruppeoppgave1.Controllers
             }
             _log.LogInformation("Feil i sletting av Stasjon");
             return BadRequest("Feil i sletting av Stasjon");
-
-            
         }
     }
 }
