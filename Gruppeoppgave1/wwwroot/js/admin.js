@@ -281,13 +281,60 @@ function slettAvgang(avgangId) {
         });
 }
 
+
+function lagBestilling() {
+    let url = "Bestilling/LagBestilling";
+    let antallBestillinger = $("#lagBestillingAntall").val();
+    let avgang = $("#lagBestillingAvgang").val();
+
+    const antallOK = validerAntall(antallBestillinger);
+
+    if (antallOK) {
+        let bestilling = {
+            avgangId = avgang,
+            antall = antallBestillinger
+        };
+
+        $.get(url, bestilling, function () {
+            $("#vellykketBestillinger").html("Bestilling opprettet");
+        })
+            .fail(function () {
+                $("#feilBestillinger").html("Kunne ikke opprette bestilling");
+            });
+    }
+}
+
+function endreBestilling(bestillingId) {
+    const url = "Bestilling/EndreBestilling";
+    var avgangsId = $("#avgangValgEndreBestilling" + bestillingId).val();
+    var antall = $("#antallEndreBestilling" + bestillingId).val();
+    var antallOK = validerAntall(antall);
+
+    if (antallOK) {
+        var bestilling = {
+            nyAvgangId: avgangsId,
+            nyttAntall: antall
+        };
+
+        $.get(url, bestilling, function () {
+            $("#vellykketBestillinger").html("Bestilling endret");
+        })
+            .fail(function () {
+                $("#feilBestillinger").html("Kunne ikke endre bestilling");
+            });
+    }
+}
+
 //Henter alle bestillinger, ingen sjekk eller filtrering først
 function hentAlleBestillinger() {
     const url = "Bestilling/HentAlleBestillinger";
 
     $.get(url, function (bestillinger) {
         formaterBestillinger(bestillinger);
-    });
+    })
+        .fail(function () {
+            $("#feilBestillinger").html("Ingen bestillinger ble funnet");
+        })
 }
 
 function formaterBestillinger(bestillinger) {
@@ -308,10 +355,9 @@ function formaterBestillinger(bestillinger) {
     $("#bestillinger").html(ut);
 
     for (let bestilling of bestillinger) {
-        var datoBestilling = new Date(bestilling.avgang.dato);
 
         ut = "<tr>" +
-            "<td><input type='select' class='form-control' id='avgangValgEndreBestilling" + bestilling.id + "'/></td>" +
+            "<td><select class='avganger form-control' id='avgangValgEndreBestilling" + bestilling.id + "'></select></td>" +
             "<td><input type='text' class='form-control' id='antallEndreBestilling" + bestilling.id + "'/></td>" +
             "<td><button class='btn btn-warning' onclick='endreBestilling(" + bestilling.id + ")'>Endre</button></td>" +
             "<td><button class='btn btn-danger' onclick='slettBestilling(" + bestilling.id + ")'>Slett</button></td>" +
@@ -319,7 +365,60 @@ function formaterBestillinger(bestillinger) {
         $('#bestillingTable tr:last').after(ut);
 
         //Fyller inn info om bestilling i html input
-        $("#avgangValgEndreBestilling" + bestilling.id).val(bestilling.avgang);
-        $("#antallEndreBestilling" + avgang.id).val(bestilling.antall);
+        $("#avgangValgEndreBestilling" + bestilling.id).append($('<option></option>').val(bestilling.avgang.id).html('Hello'));
+        $("#antallEndreBestilling" + bestilling.id).val(bestilling.antall);
+
+        
+        var datoISO = bestilling.avgang.dato.toISOString();
+        let avgang = {
+            stasjonFraId: bestilling.avgang.stasjonFra.id,
+            stasjonTilId: bestilling.avgang.stasjonTil.id,
+            dato: datoISO
+        };
+        
+        //Henter alle avganger og senere formaterer de i selecten for avganger
+        test();
+        hentAvgangerForBestillinger(avgang);
+    }
+}
+
+function test() {
+    alert("test");
+}
+
+function hentAvgangerForBestillinger(avgang) {
+    alert("Hello");
+
+    $.ajax({
+        method: 'get',
+        url: "Avgang/HentAvganger",
+        data: avgang,
+        async: false
+    })
+        .done(function (avganger) {
+            fyllInnAvganger(avganger);
+        });
+
+    /*
+    $.get(url, avgang, function (avganger) {
+        fyllInnAvganger(avganger);
+    })
+        .fail(function () {
+            $("#feilAvganger").html("Ingen Avganger ble funnet");
+        });
+        */
+}
+
+
+//Fyller inn stasjoner i valg
+function fyllInnAvganger(avganger) {
+    $(".avganger").html("");
+
+    $(".avganger").append($('<option></option>').val('').html(''));
+
+    alert("Hello 2");
+
+    for (let avgang of avganger) {
+        $(".avganger").append($('<option></option>').val(avgang.id).html(avgang.id + ": " + avgang.stasjonFra.navn + " -> " + avgang.stasjonTil.navn + " " + avgang.dato));
     }
 }

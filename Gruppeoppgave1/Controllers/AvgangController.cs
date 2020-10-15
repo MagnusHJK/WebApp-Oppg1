@@ -9,6 +9,7 @@ using Gruppeoppgave1.DAL;
 using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Castle.Core.Internal;
 
 namespace Gruppeoppgave1.Controllers
 {
@@ -96,9 +97,27 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
         {
-            List<Avganger> alleAvganger = await _db.HentAvganger(stasjonFraId, stasjonTilId, dato);
-            
+            List<Avganger> avganger = await _db.HentAvganger(stasjonFraId, stasjonTilId, dato);
+
+            if (avganger.IsNullOrEmpty())
+            {
+                _log.LogInformation("Avganger fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
+                return NotFound("Avganger fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
+            }
             _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble hentet");
+            return Ok(avganger);
+        }
+
+        public async Task<ActionResult> HentAlleAvganger()
+        {
+            List<Avganger> alleAvganger = await _db.HentAlleAvganger();
+
+            if (alleAvganger.IsNullOrEmpty())
+            {
+                _log.LogInformation("Fant ingen avganger");
+                return NotFound("Fant ingen avganger");
+            }
+            _log.LogInformation("Alle avganger hentet");
             return Ok(alleAvganger);
         }
     }

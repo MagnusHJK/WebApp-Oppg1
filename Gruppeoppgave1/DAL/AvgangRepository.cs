@@ -48,12 +48,12 @@ namespace Gruppeoppgave1.DAL
             try
             {
                 DateTime gittDatoTid = DateTime.Parse(datoTid);
-                Avganger endreAvgang = await _db.Avganger.FirstOrDefaultAsync(a => a.Id == avgangId);
+                Avganger endretAvgang = await _db.Avganger.FirstOrDefaultAsync(a => a.Id == avgangId);
 
-                if(endreAvgang != null)
+                if(endretAvgang != null)
                 {
-                    endreAvgang.Dato = gittDatoTid;
-                    endreAvgang.Pris = pris;
+                    endretAvgang.Dato = gittDatoTid;
+                    endretAvgang.Pris = pris;
                     await _db.SaveChangesAsync();
                     return true;
                 }
@@ -184,6 +184,19 @@ namespace Gruppeoppgave1.DAL
                 }
 
                 return Avganger;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<Avganger>> HentAlleAvganger()
+        {
+            try
+            {
+                List <Avganger> alleStasjoner = await _db.Avganger.ToListAsync();
+                return alleStasjoner;
             }
             catch
             {

@@ -1,4 +1,5 @@
-﻿using Gruppeoppgave1.Models;
+﻿using Castle.Core.Internal;
+using Gruppeoppgave1.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,50 @@ namespace Gruppeoppgave1.DAL
                 {
                     return false;
                 }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall)
+        {
+            try
+            {
+                Bestillinger endretBestilling = await _db.Bestillinger.FirstOrDefaultAsync(b => b.Id == bestillingId);
+
+                if (endretBestilling != null)
+                {
+                    Avganger nyAvgang = await _db.Avganger.FirstOrDefaultAsync(a => a.Id == nyAvgangId);
+
+                    if(nyAvgang != null)
+                    {
+                        endretBestilling.Avgang = nyAvgang;
+                        endretBestilling.Antall = nyttAntall;
+                        await _db.SaveChangesAsync();
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+        public async Task<bool> SlettBestilling(int bestillingId)
+        {
+            try
+            {
+                Bestillinger slettetBestilling = await _db.Bestillinger.FirstOrDefaultAsync(b => b.Id == bestillingId);
+                _db.Bestillinger.Remove(slettetBestilling);
+                await _db.SaveChangesAsync();
+                return true;
             }
             catch
             {

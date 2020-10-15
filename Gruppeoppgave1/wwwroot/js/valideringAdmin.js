@@ -35,3 +35,18 @@ function validerAvgang(dato, tid, pris) {
         return true;
     }
 }
+
+//For antall resende ved bestilling
+function validerAntall(antall) {
+    const regexAntall = /^[0-9]{1,2}$/
+
+    const okAntall = regexAntall.test(antall);
+
+    if (!okAntall) {
+        $("#feilBestillinger").html("Antall er ikke gyldig, maks to sifrede tall");
+        return false;
+    } else {
+        $("#feilBestillinger").html("");
+        return true;
+    }
+}
