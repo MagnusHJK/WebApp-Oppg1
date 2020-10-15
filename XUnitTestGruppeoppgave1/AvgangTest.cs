@@ -53,7 +53,7 @@ namespace XUnitTestGruppeoppgave1
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn;
+            mockSession[_loggetInn] = _ikkeLoggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             avgangController.ControllerContext.HttpContext = mockHttpContext.Object;
 
@@ -94,7 +94,7 @@ namespace XUnitTestGruppeoppgave1
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn;
+            mockSession[_loggetInn] = _ikkeLoggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             avgangController.ControllerContext.HttpContext = mockHttpContext.Object;
 
@@ -134,7 +134,7 @@ namespace XUnitTestGruppeoppgave1
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn;
+            mockSession[_loggetInn] = _ikkeLoggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             avgangController.ControllerContext.HttpContext = mockHttpContext.Object;
 
