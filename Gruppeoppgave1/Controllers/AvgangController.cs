@@ -29,46 +29,46 @@ namespace Gruppeoppgave1.Controllers
         public async Task<ActionResult> LagAvgang(int stasjonFraId, int stasjonTilId, string datoTid, int pris)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            { return Unauthorized(); }
+            { return Unauthorized("Ikke innlogget"); }
 
             bool returOK = await _db.LagAvgang(stasjonFraId, stasjonTilId, datoTid, pris);
 
             if (!returOK)
             {
                 _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + datoTid + " ble ikke laget");
-                return NotFound("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + datoTid + " ble ikke laget");
+                return NotFound("Avgangen ble ikke laget");
             }
-            return Ok("Avgang opprettet");
+            return Ok(true);
         }
 
         public async Task<ActionResult> EndreAvgang(int avgangId, string datoTid, int pris)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            { return Unauthorized(); }
+            { return Unauthorized("Ikke innlogget"); }
 
             bool returOK = await _db.EndreAvgang(avgangId, datoTid, pris);
 
             if (!returOK)
             {
                 _log.LogInformation("Avgangen med ID: " + avgangId + " ble ikke endret");
-                return BadRequest("Avgangen med ID: " + avgangId + " ble ikke endret");
+                return BadRequest("Avgangen ikke endret");
             }
-            return Ok("Avgangen ble endret");
+            return Ok(true);
         }
 
         public async Task<ActionResult> SlettAvgang(int avgangId)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            { return Unauthorized(); }
+            { return Unauthorized("Ikke innlogget"); }
 
             bool returOK = await _db.SlettAvgang(avgangId);
 
             if (!returOK)
             {
                 _log.LogInformation("Avgangen med ID: " + avgangId + " ble ikke slettet");
-                return BadRequest("Avgangen med ID: " + avgangId + " ble ikke slettet");
+                return BadRequest("Avgangen ble ikke slettet");
             }
-            return Ok("Avgangen ble slettet");
+            return Ok(true);
         }
 
         public async Task<ActionResult> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato)
@@ -78,9 +78,9 @@ namespace Gruppeoppgave1.Controllers
             if (!returOK)
             {
                 _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
-                return NotFound("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
+                return NotFound("Avgangen eksisterer ikke");
             }
-            return Ok("Avgang funnet");
+            return Ok(true);
         }
 
         public async Task<ActionResult> GenererAvganger(int stasjonFraId, int stasjonTilId, string dato)
@@ -89,10 +89,10 @@ namespace Gruppeoppgave1.Controllers
             if (!returOK)
             {
                 _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
-                return BadRequest("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
+                return BadRequest("Avgangen ble ikke generert");
             }
             _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble generert");
-            return Ok("Avgang generert");
+            return Ok(true);
         }
 
         public async Task<ActionResult> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
@@ -102,7 +102,7 @@ namespace Gruppeoppgave1.Controllers
             if (avganger.IsNullOrEmpty())
             {
                 _log.LogInformation("Avganger fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
-                return NotFound("Avganger fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
+                return NotFound("Avganger ble ikke hentet");
             }
             _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble hentet");
             return Ok(avganger);
