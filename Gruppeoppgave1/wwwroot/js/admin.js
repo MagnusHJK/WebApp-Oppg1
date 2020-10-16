@@ -58,6 +58,8 @@ function endreStasjon() {
     }
 }
 
+
+// Slette stasjoner
 function slettStasjon() {
     const valgtStasjon = $("#slettStasjonSelect").val();
     const url = "Stasjon/SlettStasjon?id=" + valgtStasjon;
