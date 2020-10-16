@@ -291,8 +291,8 @@ function lagBestilling() {
 
     if (antallOK) {
         let bestilling = {
-            avgangId = avgang,
-            antall = antallBestillinger
+            avgangId: avgang,
+            antall: antallBestillinger
         };
 
         $.get(url, bestilling, function () {
