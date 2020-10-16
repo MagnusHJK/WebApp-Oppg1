@@ -68,6 +68,7 @@ function slettStasjon() {
         if (OK) {
             var stasjonNavn = $("#slettStasjonSelect option:selected").text();
             $("#vellykketStasjoner").html("Stasjonen " + stasjonNavn + " ble fjernet");
+            hentAlleStasjoner();
         } else {
             $("#feilStasjoner").html("Feilet på server - prøv igjen senere");
         }

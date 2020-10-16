@@ -30,3 +30,8 @@
 2020-10-16T14:12:30.0917374+02:00  [INF] Hosting environment: "Development" (c3307c92)
 2020-10-16T14:12:30.0950810+02:00  [INF] Content root path: "C:\Users\jakob\Source\Repos\WebApp-Oppg2\Gruppeoppgave1" (b5d60022)
 2020-10-16T14:12:41.6992775+02:00 80000070-0003-ff00-b63f-84710c7967bb [INF] Stasjon ved navn Hamar ble opprettet (b4532720)
+2020-10-16T15:36:28.1414933+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-10-16T15:36:28.1513071+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2020-10-16T15:36:28.1524801+02:00  [INF] Content root path: "D:\School\OsloMet\ITPE3200 - Webapplikasjoner\Oblig\Gruppeoppgave 1\Gruppeoppgave1\Gruppeoppgave1" (b5d60022)
+2020-10-16T15:36:34.5572935+02:00 80000008-0005-f900-b63f-84710c7967bb [INF] Innlogging feilet for Admin (769f7bfe)
+2020-10-16T15:36:45.5514412+02:00 80000006-0003-ff00-b63f-84710c7967bb [INF] Stasjon ved navn Fredrikstad ble opprettet (0fdc730e)
