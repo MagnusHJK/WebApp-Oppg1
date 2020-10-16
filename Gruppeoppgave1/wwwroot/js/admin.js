@@ -1,5 +1,6 @@
 ﻿$(function () {
     hentAlleStasjoner();
+    hentAlleAvganger();
 });
 
 //Henter stasjoner
@@ -265,6 +266,7 @@ function endreAvgang(avgangId) {
 
         $.post(url, avgang, function () {
             $("#vellykketAvganger").html("Avgang endret");
+            hentAlleAvganger();
         })
             .fail(function () {
                 $("#feilAvganger").html("Avgang ble ikke endret");
@@ -279,6 +281,7 @@ function slettAvgang(avgangId) {
 
     $.get(url, avgangId, function (OK) {
         $("#vellykketAvganger").html("Avgang ble slettet");
+        hentAlleAvganger();
     })
         .fail(function (){
             $("#feilAvganger").html("Avgang ble ikke slettet");
@@ -316,6 +319,7 @@ function endreBestilling(bestillingId) {
 
     if (antallOK) {
         var bestilling = {
+            bestillingId: bestillingId,
             nyAvgangId: avgangsId,
             nyttAntall: antall
         };
@@ -359,6 +363,7 @@ function formaterBestillinger(bestillinger) {
     $("#bestillinger").html(ut);
 
     for (let bestilling of bestillinger) {
+        var datoAvgang = new Date(bestilling.avgang.dato);
 
         ut = "<tr>" +
             "<td><select class='avganger form-control' id='avgangValgEndreBestilling" + bestilling.id + "'></select></td>" +
@@ -369,60 +374,35 @@ function formaterBestillinger(bestillinger) {
         $('#bestillingTable tr:last').after(ut);
 
         //Fyller inn info om bestilling i html input
-        $("#avgangValgEndreBestilling" + bestilling.id).append($('<option></option>').val(bestilling.avgang.id).html('Hello'));
-        $("#antallEndreBestilling" + bestilling.id).val(bestilling.antall);
+        var bestillingsTekst = bestilling.avgang.id + ": " + bestilling.avgang.stasjonFra.navn + " -> " + bestilling.avgang.stasjonTil.navn + " " +
+                               datoAvgang.toLocaleDateString("no-NO", datoOptions) + " " + datoAvgang.toLocaleTimeString("no-NO", tidOptions);
 
-        
-        var datoISO = bestilling.avgang.dato.toISOString();
-        let avgang = {
-            stasjonFraId: bestilling.avgang.stasjonFra.id,
-            stasjonTilId: bestilling.avgang.stasjonTil.id,
-            dato: datoISO
-        };
-        
-        //Henter alle avganger og senere formaterer de i selecten for avganger
-        test();
-        hentAvgangerForBestillinger(avgang);
+        $("#avgangValgEndreBestilling" + bestilling.id).append($('<option></option>').val(bestilling.avgang.id).html("Nåværende: " + bestillingsTekst));
+        $("#antallEndreBestilling" + bestilling.id).val(bestilling.antall);    
     }
+    hentAlleAvganger();
 }
 
-function test() {
-    alert("test");
-}
+function hentAlleAvganger() {
+    const url = "Avgang/HentAlleAvganger";
 
-function hentAvgangerForBestillinger(avgang) {
-    alert("Hello");
-
-    $.ajax({
-        method: 'get',
-        url: "Avgang/HentAvganger",
-        data: avgang,
-        async: false
-    })
-        .done(function (avganger) {
-            fyllInnAvganger(avganger);
-        });
-
-    /*
-    $.get(url, avgang, function (avganger) {
+    $.get(url, function (avganger) {
         fyllInnAvganger(avganger);
-    })
-        .fail(function () {
-            $("#feilAvganger").html("Ingen Avganger ble funnet");
-        });
-        */
+    });
 }
 
 
 //Fyller inn stasjoner i valg
 function fyllInnAvganger(avganger) {
-    $(".avganger").html("");
-
-    $(".avganger").append($('<option></option>').val('').html(''));
-
-    alert("Hello 2");
+    const datoOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    const tidOptions = { hour12: false, hour: '2-digit', minute: '2-digit' };
 
     for (let avgang of avganger) {
-        $(".avganger").append($('<option></option>').val(avgang.id).html(avgang.id + ": " + avgang.stasjonFra.navn + " -> " + avgang.stasjonTil.navn + " " + avgang.dato));
+        var datoAvgang = new Date(avgang.dato);
+
+        var avgangsTekst = avgang.id + ": " + avgang.stasjonFra.navn + " -> " + avgang.stasjonTil.navn + " " +
+                               datoAvgang.toLocaleDateString("no-NO", datoOptions) + " " + datoAvgang.toLocaleTimeString("no-NO", tidOptions);
+
+        $(".avganger").append($('<option></option>').val(avgang.id).html(avgangsTekst));
     }
 }
