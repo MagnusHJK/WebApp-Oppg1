@@ -78,9 +78,21 @@ function bestillingAjax(bestilling) {
     })
         .done(function () {
             sannhet = true;
+            //forbindBillettTilBruker(bestilling);
         })
         .fail(function () {
             sannhet = false;
         });
     return sannhet;
 }
+
+//Binder billetter til innlogget bruker, hvis ingen bruker er logget inn
+//opprettes en gjestebruker
+/*
+function forbindBillettTilBruker(bestilling) {
+    const url = "Bruker/LeggTilBillett";
+
+    //Sjekk/finn innlogget bruker
+    //Legg billett til bruker
+}
+*/

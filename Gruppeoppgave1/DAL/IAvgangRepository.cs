@@ -19,6 +19,5 @@ namespace Gruppeoppgave1.DAL
         Task<List<Avganger>> HentAvganger(int stasjonFraId, int stasjonTilId, string dato);
 
         Task<List<Avganger>> HentAlleAvganger();
-
     }
 }
