@@ -58,13 +58,16 @@ function endreStasjon() {
     }
 }
 
+
+// Slette stasjoner
 function slettStasjon() {
     const valgtStasjon = $("#slettStasjonSelect").val();
     const url = "Stasjon/SlettStasjon?id=" + valgtStasjon;
 
     $.get(url, function (OK) {
         if (OK) {
-            $("#vellykketStasjoner").html("Stasjon med id " + valgtStasjon + " ble fjernet");
+            var stasjonNavn = $("#slettStasjonSelect option:selected").text();
+            $("#vellykketStasjoner").html("Stasjonen " + stasjonNavn + " ble fjernet");
         } else {
             $("#feilStasjoner").html("Feilet på server - prøv igjen senere");
         }
@@ -291,8 +294,8 @@ function lagBestilling() {
 
     if (antallOK) {
         let bestilling = {
-            avgangId = avgang,
-            antall = antallBestillinger
+            avgangId: avgang,
+            antall: antallBestillinger
         };
 
         $.get(url, bestilling, function () {

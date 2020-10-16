@@ -1,7 +1,6 @@
 ﻿//Validering for all input brukt i adminpanel
 
 function validerStasjonsNavn(stasjonsNavn) {
-    alert(hello);
     const regex = /^[a-zA-ZæøåÆØÅ. \-]{2,40}$/;
     const ok = regex.test(stasjonsNavn);
 
