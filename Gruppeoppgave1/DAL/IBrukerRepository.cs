@@ -9,5 +9,6 @@ namespace Gruppeoppgave1.DAL
     public interface IBrukerRepository
     {
         Task<bool> LoggInn(Bruker bruker);
+        void LoggInn();
     }
 }

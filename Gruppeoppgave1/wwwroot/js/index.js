@@ -1,24 +1,21 @@
 ﻿$(function () {
     hentAlleStasjoner();
-    step = 0;
+    sessionStorage.clear();
 });
 
 //vet dette er dumt men...
-var stasjonFra;
-var stasjonTil;
-var avgangerId = [];
-var step;
+var stasjonTilVar;
+var stasjonFraVar;
 
 function hentAlleStasjoner() {
     $.get("Stasjon/HentAlleStasjoner", function (stasjoner) {
         stasjonerAutocomplete(stasjoner);
     });
 }
-
 //Autocompleter søk på stasjoner
 function stasjonerAutocomplete(stasjoner) {
     $(".stasjonerAutocomplete").autocomplete({
-        minLength: 1,
+        minLength: 2,
         source: function (request, response) {
             response($.map(stasjoner, function (obj, key) {
 
@@ -44,168 +41,191 @@ function stasjonerAutocomplete(stasjoner) {
         //ui.item er objektet valgt i dropdown, den har to attributter. Label som er teksten(navn) og value som er indeks i db
         select: function (event, ui) {
             var stasjon = ui.item.obj;
-
-            //Ser hvilken retning som var valgt
-            //IF STEP: 0 (Ingen valgt tatt)
-            if (step == 0) {
-                step = 1;
-                stasjonFra = stasjon;
-                lagDestinasjonsBoks(stasjon);
-            }
-            //IF STEP: 2 (Stasjon til valgt)
-            else if (step == 2) {
-                step = 3;
-                stasjonTil = stasjon;
-                lagDestinasjonsBoks(stasjon);
-            }
+            stasjonsValg(stasjon);
             return false; 
         }
     });
 }
 
-function lagDestinasjonsBoks(stasjon) {
-    var ut = "";
-    //Destinasjon fra
-    //IF STEP: 1 (Stasjon fra valgt)
-    if (step == 1) {
-        step = 2;
+//Velger stasjoner og lagrer hvilken stasjon som er valgt som til eller fra
+function stasjonsValg(stasjon) {
+    var step = sessionStorage.getItem("step");
 
-        $("#fraSøk").hide("slow");
-        ut = '<b style="font-size:3em;">Fra: </b>' +
-            '<b style="font-size:2.5em;" id="stasjonFraNavn">' + stasjon.navn + '</b><br/>' +
-            '<button class="btn btn-warning" onclick="endreStasjon(0)">Endre</button></br>';
-
-        $("#fraBoks").html(ut);
-        $("#fraBoks").show("slow");
+    //Det er første stasjons valg
+    if (step == null || step == 1) {
+        sessionStorage.setItem("step", 2);
+        stasjonFra = stasjon;
         $("#tilSøk").show("slow");
+        lagDestinasjonsBoksFra(stasjon);
     }
-    //Destinasjon til
-    //IF STEP: 3 (Stasjon til valgt, og beskrivelse kommer opp)
-    else if (step == 3) {
-        step = 4;
-
-        $("#tilSøk").hide("slow");
-        ut = '<b style="font-size:3em;">Til: </b>' +
-            '<b style="font-size:2.5em;"id="stasjonTilNavn">' + stasjon.navn + '</b><br/>' +
-            '<button class="btn btn-warning onclick="endreStasjon(2)">Endre</button></br>';
-
-        $("#tilBoks").html(ut);
-        $("#tilBoks").show("slow");
+    //Andre valg
+    else {
+        sessionStorage.setItem("step", 2);
+        stasjonTil = stasjon;
+        lagDestinasjonsBoksTil(stasjon);
     }
+}
+
+
+//Lager bokser etter at man har valg en stasjon enten fra eller til
+function lagDestinasjonsBoksFra(stasjon) {
+    $("#fraSøk").hide("slow");
+    var ut = "";
+
+    ut += '<b style="font-size:3em;">Fra: </b>' +
+          '<b style="font-size:2.5em;" id="stasjonFraNavn">' + stasjon.navn + '</b>' +
+          '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
+          'onclick="endreStasjon(1)">Endre</button></br>';
+
+    stasjonFraVar = stasjon.navn;
+
+    $("#fraBoks").html(ut);
+    $("#fraBoks").show("slow");
 
     //Hvis både til og fra stasjon er valgt vil de neste instillingene komme opp
-    //IF STEP: 4 (Begge stasjoner valgt)
-    if (step == 4) {
-        step = 5;
-        //Sjekker kjapt om stasjonene er identiske
-        if (stasjonFra.id === stasjonTil.id) {
-            $("#feil").html("Stasjonene kan ikke være like!");
-        } else {
-            $("#feil").html("");
-            lagAvreiseBoks();
-        }
-    }
-}
-
-//Hvis bruker trykker på gul endre knapp.
-//nyStep sier hvilket steg vi skal gå tilbake til
-function endreStasjon(nyStep) {
-    //Fjerner tekst fra tidligere, og gjemmer ting som skal velges senere i prosessen
-    $(".stasjonerAutocomplete").val("");
-    $("#bestillingsBoks").hide();
-    $("#reiseTekst").html("Når vil du reise?");
-    $("#reiseValg").show();
-    $("#datoValg").datepicker("setDate", null);
-    $("#avreise").html("");
-    $("#retur").html("");
-    $("#knapper").html("");
-
-    step = nyStep;
-
-    //Step 0: ingen valg tatt
-    if (step == 0) {
-        $("#fraSøk").show("slow");
-        $("#fraBoks").hide();
-        $("#tilBoks").html("");
-    }
-    //Step 2: Til stasjon skal velges
-    else if (step == 2) {
-        $("#tilSøk").show("slow");
-        $("#tilBoks").hide();
+    if (($("#tilBoks").is(":visible")) && ($("#fraBoks").is(":visible"))) {
+        lagBestillingBoks();
     }
 }
 
 
-//Boks for dato og billett valg for første reise
-function lagAvreiseBoks() {
+function lagDestinasjonsBoksTil(stasjon) {
+    $("#tilSøk").hide("slow");
+    var ut = "";
+
+    ut += '<b style="font-size:3em;">Til: </b>' +
+          '<b style="font-size:2.5em;"id="stasjonTilNavn">' + stasjon.navn + '</b>' +
+          '<button class="btn btn-danger" style="display:flex;justify-content:flex-end;align-items:center"' +
+          'onclick="endreStasjon(2)">Endre</button></br>';
+
+    stasjonTilVar = stasjon.navn;
+
+    $("#tilBoks").html(ut);
+    $("#tilBoks").show("slow");
+
+    //Hvis både til og fra stasjon er valgt vil de neste instillingene komme opp
+    if (($("#tilBoks").is(":visible")) && ($("#fraBoks").is(":visible"))) {
+        lagBestillingBoks();
+    }
+}
+
+//Boks for dato og billett valg
+function lagBestillingBoks() {
+    var dato;
+    var tidspunkt;
     $("#bestillingsBoks").show("slow");
-    $("#avreiseValg").show();
-
-    //Genererer dropdown for valg av antall billetter
-    for (i = 1; i <= 10; i++) {
-        $("#antallBilletter").append($('<option></option>').val(i).html(i));
-    }
-
-    //Hvis dato valg allerede er initializert må vi sørge for at den bruke avreise og ikke retur innstillinger
-    $("#datoValg").datepicker("option", "minDate", 0);
-    $("#datoValg").datepicker("option", "onSelect", function () {
-        var datoObj = $(this).datepicker('getDate');
-        var datoISO = datoObj.toISOString();
-
-        sjekkAvganger(stasjonFra, stasjonTil, datoISO);
-    });
-    //Dato settings
-    $("#datoValg").datepicker({
-        dateFormat: 'dd/mm/yy',
+    $("#datovalg").datepicker({
         minDate: 0,
         firstDay: 1,
         onSelect: function (dateText, inst) {
-            //Henter ut dato og sørger for at den er på ISO8601 standard
-            var datoObj = $(this).datepicker('getDate');
-            var datoISO = datoObj.toISOString();
-
-
-            //Ved første tur
-            sjekkAvganger(stasjonFra, stasjonTil, datoISO);
+            dato = dateText;
+            //Ligger her midlertidig slik at den ikke alltid blir "triggered"
+            hentAvganger();
         }
     });
+
+    //lagBestilling(stasjonFraId, stasjonTilId, dato, tidspunkt);
 }
 
-//Boks for dato og billett valg for retur
-function lagReturBoks(dato) {
-    if (dato == null) {
-        dato = 0;
-    }
-
-    //Endrer dato valg til å håndtere retur (Sørger for at den ikke kan bli satt før avreise dato)
-    $("#datoValg").datepicker("option", "minDate", new Date(dato));
-    $("#datoValg").datepicker("option", "onSelect", function () {
-        var datoObj = $(this).datepicker('getDate');
-        var datoISO = datoObj.toISOString();
-
-        sjekkAvganger(stasjonTil, stasjonFra, datoISO);
+//VIL BLI BYTTET UT
+//genererer avganger i js, alle avganger er bare oppdiktet utifra stasjoner, dato og tid.
+function genererAvganger() {
+    var dato = "05/05/2005";
+    var tidspunkt = "12:30";
+    var splittetTid = tidspunkt.split(":");
+    var ut = "Avganger fra " + stasjonFra.navn + ", til " + stasjonTil.navn + " på dato " + dato;
+    var today = new Date();
+    $("#bestillingsBoks").show("slow");
+    $("#datovalg").datepicker({
+        minDate: today,
+        dateFormat: 'dd/mm/yy'
     });
 }
 
-//Hvis det trykkes på gul endre knapp under avreise og retur valg
-function endreAvganger() {
-    $("#avreise").html("");
-    $("#retur").html("");
-    $("#knapper").html("");
-    $("#reiseTekst").html("Når vil du reise?");
-    avgangerId = [];
+//Når alle valg er utført lager vi en bestilling og pusher til database etter inputvalidering
 
-    step = 5;
-    $("#reiseValg").show("slow");
-    lagAvreiseBoks();
+$(document).ready(function () {
+    var ut = "";
+    var sjekk = true;
+    $("#btnlagre").click(function () {
+        console.log("hei");
+        if ($("#datovalg").val() == "") {
+            ut += "Det er nødvendig å velge en dato. <br/>";
+            sjekk = false;
+        }
+
+        if ($("#tidspunkt").val() == "") {
+            ut += "Det må velges et tidspunkt. <br/>";
+            sjekk = false;
+        }
+        $("#feil").html(ut);
+        ut = "";
+
+        if (sjekk === true) {
+            visOrdre();
+        }
+    });
+});
+
+function visOrder() {
+
+    var time = splittetTid[0];
+    var minutt = splittetTid[1];
+
+    for (i = time; i < 24; i++) {
+        ut += "Tid: "+ i +"</br>";
+    }
+
+    $("#avganger").html(ut);
+}
+
+//Henter avganger fra backend
+function hentAvganger(stasjonFraId, stasjonTilId, dato, tidspunkt) {
+    const url = "Stasjoner/HentAvganger";
+    $.get(url, function (avganger) {
+
+    });
 }
 
 
-//Etter avreise er valgt, skal retur velges
-function lagRetur(dato) {
-    $("#avreiseValg").hide();
-    $("#reiseTekst").html("Når vil du returnere?");
-    $("#reiseValg").show();
 
-    lagReturBoks(dato);
+//Når alle valg er utført lager vi en bestilling og pusher til database
+function lagBestilling() {
+    var fraStasjon = stasjonFraVar;
+    var tilStasjon = stasjonTilVar;
+
+
+    const bestilling = {
+        stasjonFra: fraStasjon,
+        stasjonTil: tilStasjon,
+        dato: $("#datovalg").val(),
+        tidspunkt: $("#tidspunkt").val()
+    }
+    const url = "Bestilling/Bestill";
+    $.post(url, bestilling, function (OK) {
+        if (OK) {
+            window.location.href = 'bestillingsliste.html';
+        }
+        else {
+            $("#feil").html("Feil i db - prøv igjen senere");
+        }
+    });
+};
+
+
+//Hvis bruker trykker på rød endre knapp.
+//Retning er enten "fra" eller "til"
+function endreStasjon(retning) {
+    //Fjerner tekst fra tidligere
+    $(".stasjonerAutocomplete").val("");
+
+    if (retning == 1) {
+        $("#fraSøk").show("slow");
+        $("#fraBoks").hide();
+        sessionStorage.setItem("step", 1);
+    } else{
+        $("#tilSøk").show("slow");
+        $("#tilBoks").hide();
+        sessionStorage.setItem("step", 2);
+    }
 }
