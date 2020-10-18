@@ -26,16 +26,16 @@ namespace Gruppeoppgave1.Controllers
         }
 
 
-        public async Task<ActionResult> LagBestilling(int avgangId, int antall)
+        public async Task<ActionResult> LagBestilling(int avgangId, int antall, int brukerId)
         {
             if (ModelState.IsValid)
             {
-                bool returOK = await _db.LagBestilling(avgangId, antall);
+                bool returOK = await _db.LagBestilling(avgangId, antall, brukerId);
 
                 if (!returOK)
                 {
                     _log.LogInformation("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
-                    return BadRequest("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
+                    return BadRequest("Bestilling ble ikke opprettet");
                 }
                 return Ok("Bestilling opprettet");
             }
@@ -71,6 +71,18 @@ namespace Gruppeoppgave1.Controllers
                 return BadRequest("Bestilling med ID: " + bestillingId + " ble ikke slettet");
             }
             return Ok("Bestillig slettet");
+        }
+
+        public async Task<ActionResult> HentBestillinger(int brukerId)
+        {
+            List<Bestillinger> bestillinger = await _db.HentBestillinger(brukerId);
+
+            if (bestillinger.IsNullOrEmpty())
+            {
+                _log.LogInformation("Liste av bestillinger for bruker " + brukerId + " , men den var tom eller null");
+                return BadRequest("Ingen bestillinger funnet");
+            }
+            return Ok(bestillinger);
         }
 
         public async Task<ActionResult> HentAlleBestillinger()

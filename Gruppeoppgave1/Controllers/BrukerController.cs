@@ -45,6 +45,18 @@ namespace Gruppeoppgave1.Controllers
             HttpContext.Session.SetString(_loggetInn, "");
         }
 
+        public async Task<ActionResult> LagGjesteBruker()
+        {
+            Brukere returBruker = await _db.LagGjesteBruker();
+            if (returBruker == null)
+            {
+                _log.LogInformation("Oppretting av gjestebruker feilet");
+                return BadRequest("Oppretting av gjestebruker feilet");
+            }
+            _log.LogInformation("Gjestebruker opprettet");
+            return Ok(returBruker);
+        }
+
         public void TestSession()
         {
             //Slik testes det om noen er logget inn

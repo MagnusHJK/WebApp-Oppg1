@@ -58,5 +58,59 @@ namespace Gruppeoppgave1.DAL
                 return false;
             }
         }
+
+        //Gjeste brukerer sitt passord er tilfeldig, etter som de bare er midlertidige entiteter
+        //Uten mulighet til å "logge inn".
+        public async Task<Brukere> LagGjesteBruker()
+        {
+            try
+            {
+                Random rnd = new Random();
+                int tilfeldig = rnd.Next();
+
+                string passord = "Gjest" + tilfeldig;
+                byte[] salt = BrukerRepository.LagSalt();
+                byte[] hash = BrukerRepository.LagHash(passord, salt);
+
+                Brukere gjesteBruker = new Brukere
+                {
+                    Brukernavn = "Gjest",
+                    Passord = hash,
+                    Salt = salt
+
+                };
+                System.Diagnostics.Debug.WriteLine(gjesteBruker.Brukernavn + " " + gjesteBruker.Passord);
+
+                await _db.Brukere.AddAsync(gjesteBruker);
+                await _db.SaveChangesAsync();
+
+                return gjesteBruker;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        //Endrer brukernavn, ofte brukt for å koble en epost addresse til en gjestebruker
+        //Da kan man fin
+        public async Task<bool> EndreBrukernavn(Bruker bruker)
+        {
+            try
+            {
+                Brukere funnetBruker = await _db.Brukere.FirstOrDefaultAsync(b => b.Brukernavn == bruker.Brukernavn);
+                if(funnetBruker != null)
+                {
+                    funnetBruker.Brukernavn = bruker.Brukernavn;
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace Gruppeoppgave1.Controllers
             return Ok(stasjon);
         }
 
-        public async Task<ActionResult> LagStasjon(Stasjoner stasjon)
+        public async Task<ActionResult> LagStasjon(Stasjon stasjon)
         {
             //Sjekker innlogget
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
@@ -67,7 +67,7 @@ namespace Gruppeoppgave1.Controllers
             return BadRequest("Feil i inputvalidering for oppretting av Stasjon");
         }
 
-        public async Task<ActionResult> EndreStasjon(Stasjoner stasjon)
+        public async Task<ActionResult> EndreStasjon(Stasjon stasjon)
         {
             System.Diagnostics.Debug.WriteLine("Controller: " + stasjon.Navn);
             //Sjekker innlogget

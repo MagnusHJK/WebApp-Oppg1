@@ -26,7 +26,7 @@ function lagBillett(avgangId, datoAvgang, pris) {
 
         knapper = "<button class='btn btn-warning' id='endreAvganger' onclick='endreAvganger()'>Endre</button>  " +
                   "<button class='btn btn-secondary' id='returKnapp' onclick='lagRetur(\"" + datoAvgang + "\")'>Jeg ønsker retur billett</button>  " +
-                  "<button class='btn btn-success' id='bestillKnapp' onclick='lagBestilling()'>Bestill</button>";
+                  "<button class='btn btn-success' id='bestillKnapp' onclick='lagGjesteBruker()'>Bestill</button>";
 
         $("#knapper").html(knapper);
     }
@@ -45,21 +45,33 @@ function lagBillett(avgangId, datoAvgang, pris) {
     }
 }
 
+
+function lagGjesteBruker() {
+    const url = "Bruker/LagGjesteBruker";
+
+    $.get(url, function (gjesteBruker) {
+        lagBestilling(gjesteBruker);
+    });
+}
+
+
 //Når alle valg er utført lager vi selve bestillingen til backend
-function lagBestilling() {
+function lagBestilling(gjesteBruker) {
+
     var antall = $("#antallBilletter").val();
     var sannhet = false;
 
     for (var i = 0; i < avgangerId.length; i++) {
         const bestilling = {
             avgangId: avgangerId[i],
-            antall: antall
+            antall: antall,
+            brukerId: gjesteBruker.id
         }
         sannhet = bestillingAjax(bestilling);
     }
     //Separat sannhet som avgjør, ettersom det er i loop.
     if (sannhet) {
-        window.location.href = 'bestillingsliste.html';
+        window.location.href = 'betalling.html?bruker=' + gjesteBruker.id;
     } else {
         $("#feil").html("Feil i db - prøv igjen senere");
     }
@@ -78,7 +90,6 @@ function bestillingAjax(bestilling) {
     })
         .done(function () {
             sannhet = true;
-            //forbindBillettTilBruker(bestilling);
         })
         .fail(function () {
             sannhet = false;
@@ -86,13 +97,3 @@ function bestillingAjax(bestilling) {
     return sannhet;
 }
 
-//Binder billetter til innlogget bruker, hvis ingen bruker er logget inn
-//opprettes en gjestebruker
-/*
-function forbindBillettTilBruker(bestilling) {
-    const url = "Bruker/LeggTilBillett";
-
-    //Sjekk/finn innlogget bruker
-    //Legg billett til bruker
-}
-*/

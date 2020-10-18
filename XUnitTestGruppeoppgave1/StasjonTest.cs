@@ -98,7 +98,7 @@ namespace XUnitTestGruppeoppgave1
         public async Task LagStasjonTrueInnlogget()
         {
 
-            mockRep.Setup(s => s.LagStasjon(It.IsAny<Stasjoner>())).ReturnsAsync(true);
+            mockRep.Setup(s => s.LagStasjon(It.IsAny<Stasjon>())).ReturnsAsync(true);
 
             var stasjonController = new StasjonController(mockRep.Object, mockLog.Object);
 
@@ -107,7 +107,7 @@ namespace XUnitTestGruppeoppgave1
             stasjonController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             //Act
-            var resultat = await stasjonController.LagStasjon(It.IsAny<Stasjoner>()) as OkObjectResult;
+            var resultat = await stasjonController.LagStasjon(It.IsAny<Stasjon>()) as OkObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -117,7 +117,7 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task LagStasjonIkkeInnlogget()
         {
-            mockRep.Setup(s => s.LagStasjon(It.IsAny<Stasjoner>())).ReturnsAsync(true);
+            mockRep.Setup(s => s.LagStasjon(It.IsAny<Stasjon>())).ReturnsAsync(true);
 
             var stasjonController = new StasjonController(mockRep.Object, mockLog.Object);
 
@@ -126,7 +126,7 @@ namespace XUnitTestGruppeoppgave1
             stasjonController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             //Act
-            var resultat = await stasjonController.LagStasjon(It.IsAny<Stasjoner>()) as UnauthorizedObjectResult;
+            var resultat = await stasjonController.LagStasjon(It.IsAny<Stasjon>()) as UnauthorizedObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
@@ -136,7 +136,7 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task EndreStasjonInnlogget()
         {
-            mockRep.Setup(s => s.EndreStasjon(It.IsAny<Stasjoner>())).ReturnsAsync(true);
+            mockRep.Setup(s => s.EndreStasjon(It.IsAny<Stasjon>())).ReturnsAsync(true);
 
             var stasjonController = new StasjonController(mockRep.Object, mockLog.Object);
 
@@ -145,7 +145,7 @@ namespace XUnitTestGruppeoppgave1
             stasjonController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             //Act
-            var resultat = await stasjonController.EndreStasjon(It.IsAny<Stasjoner>()) as OkObjectResult;
+            var resultat = await stasjonController.EndreStasjon(It.IsAny<Stasjon>()) as OkObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -156,7 +156,7 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task EndreStasjonIkkeInnlogget()
         {
-            mockRep.Setup(s => s.EndreStasjon(It.IsAny<Stasjoner>())).ReturnsAsync(true);
+            mockRep.Setup(s => s.EndreStasjon(It.IsAny<Stasjon>())).ReturnsAsync(true);
 
             var stasjonController = new StasjonController(mockRep.Object, mockLog.Object);
 
@@ -165,7 +165,7 @@ namespace XUnitTestGruppeoppgave1
             stasjonController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             //Act
-            var resultat = await stasjonController.EndreStasjon(It.IsAny<Stasjoner>()) as UnauthorizedObjectResult;
+            var resultat = await stasjonController.EndreStasjon(It.IsAny<Stasjon>()) as UnauthorizedObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);

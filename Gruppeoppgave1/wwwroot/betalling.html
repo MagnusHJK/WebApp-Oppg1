@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>NOR-WAY - Admin</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="js/betalling.js"></script>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">NOR-WAY</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="stasjonsliste.html">Stasjonsliste</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="bestillingsliste.html">Bestillingsliste</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logginn.html">Logg inn</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="melding"></div>
+
+        <div class="container" id="bestillinger">
+
+        </div>
+
+        <br />
+
+        <div class="container">
+
+            <div class="form-row">
+                <div class="col">
+                    <label for="email">Email:</label>
+                    <select class="form-control" id="lagBestillingAvgang"></select>
+                </div>
+                <div class="col">
+                    <label for="ting">Ting</label>
+                    <input type="text" class="form-control" id="ting">
+                </div>
+                <div class="col">
+                    <input type="button" value="Betal" onclick="" class="btn btn-success" style="position: absolute; bottom: 0" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>

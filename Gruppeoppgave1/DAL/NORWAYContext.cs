@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gruppeoppgave1.Models
+namespace Gruppeoppgave1.DAL
 {
     public class Stasjoner
     {
@@ -36,6 +36,8 @@ namespace Gruppeoppgave1.Models
         virtual public Avganger Avgang { get; set; }
 
         public int Antall { get; set; }
+
+        virtual public Brukere Bruker { get; set; }
     }
 
     public class Brukere

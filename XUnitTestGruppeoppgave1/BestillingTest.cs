@@ -30,12 +30,12 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task LagBestillingTrue()
         {
-            mockRep.Setup(s => s.LagBestilling(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(true);
+            mockRep.Setup(s => s.LagBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(true);
 
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
 
             //Act
-            var resultat = await BestillingController.LagBestilling(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
+            var resultat = await BestillingController.LagBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -45,12 +45,12 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task LagBestillingFalse()
         {
-            mockRep.Setup(s => s.LagBestilling(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(false);
+            mockRep.Setup(s => s.LagBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(false);
 
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
 
             //Act
-            var resultat = await BestillingController.LagBestilling(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
+            var resultat = await BestillingController.LagBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);

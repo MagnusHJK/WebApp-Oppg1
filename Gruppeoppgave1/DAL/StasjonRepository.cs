@@ -44,7 +44,7 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
-        public async Task<bool> LagStasjon(Stasjoner stasjon)
+        public async Task<bool> LagStasjon(Stasjon stasjon)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
-        public async Task<bool> EndreStasjon(Stasjoner stasjon)
+        public async Task<bool> EndreStasjon(Stasjon stasjon)
         {
             try
             {

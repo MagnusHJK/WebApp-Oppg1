@@ -17,18 +17,20 @@ namespace Gruppeoppgave1.DAL
             _db = db;
         }
 
-        public async Task<bool> LagBestilling(int avgangId, int antall)
+        public async Task<bool> LagBestilling(int avgangId, int antall, int brukerId)
         {
             try
             {
                 var nyBestillingRad = new Bestillinger();
 
-                Avganger AvgangValg = _db.Avganger.Find(avgangId);
+                Avganger ValgtAvgang = await _db.Avganger.FindAsync(avgangId);
+                Brukere ValgtBruker = await _db.Brukere.FindAsync(brukerId);
 
-                if (AvgangValg != null)
+                if (ValgtAvgang != null)
                 {
-                    nyBestillingRad.Avgang = AvgangValg;
+                    nyBestillingRad.Avgang = ValgtAvgang;
                     nyBestillingRad.Antall = antall;
+                    nyBestillingRad.Bruker = ValgtBruker;
 
                     _db.Bestillinger.Add(nyBestillingRad);
                     await _db.SaveChangesAsync();
@@ -86,6 +88,20 @@ namespace Gruppeoppgave1.DAL
             catch
             {
                 return false;
+            }
+        }
+
+        //Henter bestillinger for gitt bruker
+        public async Task<List<Bestillinger>> HentBestillinger(int brukerId)
+        {
+            try
+            {
+                List<Bestillinger> bestillinger = await _db.Bestillinger.Where(b => b.Bruker.Id == brukerId).ToListAsync();
+                return bestillinger;
+            }
+            catch
+            {
+                return null;
             }
         }
 
