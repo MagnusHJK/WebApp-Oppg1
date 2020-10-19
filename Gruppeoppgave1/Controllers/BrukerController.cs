@@ -30,7 +30,7 @@ namespace Gruppeoppgave1.Controllers
                 bool returnOK = await _db.LoggInn(bruker);
                 if (!returnOK)
                 {
-                    _log.LogInformation("Innlogging feilet for " + bruker.Brukernavn);
+                    _log.LogInformation("Innlogging feilet for");
                     HttpContext.Session.SetString(_loggetInn, "");
                     return Ok(false);
                 }

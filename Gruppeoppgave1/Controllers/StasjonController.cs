@@ -40,7 +40,7 @@ namespace Gruppeoppgave1.Controllers
             Stasjoner stasjon = await _db.HentEnStasjon(id);
             if (stasjon == null)
             {
-                _log.LogInformation("Fant ikke stasjonen med ID: " + id);
+                _log.LogInformation("Fant ikke stasjonen");
                 return NotFound("Fant ikke stasjonen");
             }
             return Ok(stasjon);
@@ -57,11 +57,11 @@ namespace Gruppeoppgave1.Controllers
                 bool returOK = await _db.LagStasjon(stasjon);
                 if (!returOK)
                 {
-                    _log.LogInformation("Oppretting av stasjon feilet: " + stasjon.Navn);
+                    _log.LogInformation("Oppretting av stasjon feilet");
                     return Ok(false);
                 }
-                _log.LogInformation("Stasjon ved navn " + stasjon.Navn + " ble opprettet");
-                return Ok(true);
+                _log.LogInformation("Stasjon opprettet");
+                return Ok("Stasjon opprettet");
             }
             _log.LogInformation("Feil i inputvalidering for oppretting av Stasjon");
             return BadRequest("Feil i inputvalidering for oppretting av Stasjon");
@@ -69,7 +69,6 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> EndreStasjon(Stasjon stasjon)
         {
-            System.Diagnostics.Debug.WriteLine("Controller: " + stasjon.Navn);
             //Sjekker innlogget
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             { return Unauthorized("Ikke innlogget"); }
@@ -79,7 +78,7 @@ namespace Gruppeoppgave1.Controllers
                 bool returOK = await _db.EndreStasjon(stasjon);
                 if (!returOK)
                 {
-                    _log.LogInformation("Endring av stasjon feilet: " + stasjon.Navn);
+                    _log.LogInformation("Endring av stasjonen feilet");
                     return Ok(false);
                 }
                 return Ok(true);
@@ -101,7 +100,7 @@ namespace Gruppeoppgave1.Controllers
                 bool returOK = await _db.SlettStasjon(id);
                 if(!returOK)
                 {
-                    _log.LogInformation("Sletting av stasjon med ID: " + id + " feilet.");
+                    _log.LogInformation("Sletting av stasjon feilet");
                     return Ok(false);
                 }
                 return Ok(true);

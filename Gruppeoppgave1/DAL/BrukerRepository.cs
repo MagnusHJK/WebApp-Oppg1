@@ -92,7 +92,6 @@ namespace Gruppeoppgave1.DAL
                     Salt = salt
 
                 };
-                System.Diagnostics.Debug.WriteLine(gjesteBruker.Brukernavn + " " + gjesteBruker.Passord);
 
                 await _db.Brukere.AddAsync(gjesteBruker);
                 await _db.SaveChangesAsync();

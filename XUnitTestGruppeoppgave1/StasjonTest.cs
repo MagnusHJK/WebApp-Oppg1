@@ -28,7 +28,15 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task HentAlleTrue()
         {
-            mockRep.Setup(s => s.HentAlleStasjoner()).ReturnsAsync(It.IsAny<List<Stasjoner>>());
+            var stasjon1 = new Stasjoner { Id = 1, Navn = "Fredrikstad"};
+            var stasjon2 = new Stasjoner { Id = 2, Navn = "Moss"};
+            var stasjonsListe = new List<Stasjoner>
+            {
+                stasjon1,
+                stasjon2
+            };
+
+            mockRep.Setup(s => s.HentAlleStasjoner()).ReturnsAsync(stasjonsListe);
 
             var stasjonController = new StasjonController(mockRep.Object, mockLog.Object);
 
@@ -37,7 +45,7 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal<List<Stasjoner>>((List<Stasjoner>)resultat.Value, stasjonsListe);
         }
 
         [Fact]
@@ -97,7 +105,6 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task LagStasjonTrueInnlogget()
         {
-
             mockRep.Setup(s => s.LagStasjon(It.IsAny<Stasjon>())).ReturnsAsync(true);
 
             var stasjonController = new StasjonController(mockRep.Object, mockLog.Object);
@@ -108,10 +115,11 @@ namespace XUnitTestGruppeoppgave1
 
             //Act
             var resultat = await stasjonController.LagStasjon(It.IsAny<Stasjon>()) as OkObjectResult;
+            System.Diagnostics.Debug.WriteLine(resultat);
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Stasjon opprettet", resultat.Value);
         }
 
         [Fact]

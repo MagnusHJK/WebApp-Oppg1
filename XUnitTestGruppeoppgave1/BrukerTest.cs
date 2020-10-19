@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Gruppeoppgave1.Controllers;
 using Gruppeoppgave1.DAL;
 using Gruppeoppgave1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -15,8 +16,14 @@ namespace XUnitTestGruppeoppgave1
 {
     public class BrukerTest
     {
+        private const string _loggetInn = "loggetInn";
+        private const string _ikkeLoggetInn = "";
+
         private readonly Mock<IBrukerRepository> mockRep = new Mock<IBrukerRepository>();
         private readonly Mock<ILogger<BrukerController>> mockLog = new Mock<ILogger<BrukerController>>();
+
+        private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
+        private readonly MockHttpSession mockSession = new MockHttpSession();
 
         [Fact]
         public async Task LoggInnTrue()
@@ -25,6 +32,10 @@ namespace XUnitTestGruppeoppgave1
 
             var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
 
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
             var resultat = await BrukerController.LoggInn(It.IsAny<Bruker>()) as OkObjectResult;
 
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -32,16 +43,41 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task LoggInnFalse()
+        public async Task LoggInnInputFalse()
         {
             mockRep.Setup(s => s.LoggInn(It.IsAny<Bruker>())).ReturnsAsync(false);
 
             var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
 
+            BrukerController.ModelState.AddModelError("Brukernavn", "Feil i inputvalidering på server");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resultat = await BrukerController.LoggInn(It.IsAny<Bruker>()) as BadRequestObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering på server for innlogging", resultat.Value);
+        }
+
+        [Fact]
+        public async Task LoggInnFeilPassordEllerBruker()
+        {
+            mockRep.Setup(k => k.LoggInn(It.IsAny<Bruker>())).ReturnsAsync(false);
+
+            var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
             var resultat = await BrukerController.LoggInn(It.IsAny<Bruker>()) as OkObjectResult;
 
-            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
-            Assert.Equal("Innlogging feilet", resultat.Value);
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.False((bool)resultat.Value);
         }
     }
 }
