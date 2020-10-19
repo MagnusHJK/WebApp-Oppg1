@@ -35,7 +35,7 @@ namespace Gruppeoppgave1.Controllers
 
             if (!returOK)
             {
-                _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + datoTid + " ble ikke laget");
+                _log.LogInformation("Avgangen ble ikke laget");
                 return NotFound("Avgangen ble ikke laget");
             }
             return Ok(true);
@@ -50,7 +50,7 @@ namespace Gruppeoppgave1.Controllers
 
             if (!returOK)
             {
-                _log.LogInformation("Avgangen med ID: " + avgangId + " ble ikke endret");
+                _log.LogInformation("Avgangen ikke endret");
                 return BadRequest("Avgangen ikke endret");
             }
             return Ok(true);
@@ -65,7 +65,7 @@ namespace Gruppeoppgave1.Controllers
 
             if (!returOK)
             {
-                _log.LogInformation("Avgangen med ID: " + avgangId + " ble ikke slettet");
+                _log.LogInformation("Avgangen ble ikke slettet");
                 return BadRequest("Avgangen ble ikke slettet");
             }
             return Ok(true);
@@ -77,7 +77,7 @@ namespace Gruppeoppgave1.Controllers
 
             if (!returOK)
             {
-                _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
+                _log.LogInformation("Avgangen eksisterer ikke");
                 return NotFound("Avgangen eksisterer ikke");
             }
             return Ok(true);
@@ -88,7 +88,7 @@ namespace Gruppeoppgave1.Controllers
             bool returOK = await _db.GenererAvganger(stasjonFraId, stasjonTilId, dato);
             if (!returOK)
             {
-                _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
+                _log.LogInformation("Avganger ble ikke generert");
                 return BadRequest("Avganger ble ikke generert");
             }
             _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble generert");
@@ -101,7 +101,7 @@ namespace Gruppeoppgave1.Controllers
 
             if (avganger.IsNullOrEmpty())
             {
-                _log.LogInformation("Avganger fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " eksisterer ikke");
+                _log.LogInformation("Avganger ble ikke hentet");
                 return NotFound("Avganger ble ikke hentet");
             }
             _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble hentet");

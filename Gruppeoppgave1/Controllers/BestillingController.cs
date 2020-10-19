@@ -79,7 +79,7 @@ namespace Gruppeoppgave1.Controllers
 
             if (bestillinger.IsNullOrEmpty())
             {
-                _log.LogInformation("Liste av bestillinger for bruker " + brukerId + " , men den var tom eller null");
+                _log.LogInformation("Ingen bestillinger funnet");
                 return BadRequest("Ingen bestillinger funnet");
             }
             return Ok(bestillinger);
