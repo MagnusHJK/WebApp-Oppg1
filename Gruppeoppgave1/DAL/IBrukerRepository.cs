@@ -10,7 +10,8 @@ namespace Gruppeoppgave1.DAL
     {
         Task<bool> LoggInn(Bruker bruker);
 
+        Task<List<Brukere>> HentAlleBrukere();
+
         Task<Brukere> LagGjesteBruker();
-        //void LoggInn();
     }
 }

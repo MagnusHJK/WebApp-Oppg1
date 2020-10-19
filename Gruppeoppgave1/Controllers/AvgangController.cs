@@ -89,7 +89,7 @@ namespace Gruppeoppgave1.Controllers
             if (!returOK)
             {
                 _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble ikke generert");
-                return BadRequest("Avgangen ble ikke generert");
+                return BadRequest("Avganger ble ikke generert");
             }
             _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble generert");
             return Ok(true);

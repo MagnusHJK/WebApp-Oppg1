@@ -47,7 +47,7 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
-        public async Task<bool> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall)
+        public async Task<bool> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall, int nyBrukerId)
         {
             try
             {
@@ -56,11 +56,13 @@ namespace Gruppeoppgave1.DAL
                 if (endretBestilling != null)
                 {
                     Avganger nyAvgang = await _db.Avganger.FirstOrDefaultAsync(a => a.Id == nyAvgangId);
+                    Brukere nyBruker = await _db.Brukere.FirstOrDefaultAsync(b => b.Id == nyBrukerId);
 
-                    if(nyAvgang != null)
+                    if(nyAvgang != null && nyBruker != null)
                     {
                         endretBestilling.Avgang = nyAvgang;
                         endretBestilling.Antall = nyttAntall;
+                        endretBestilling.Bruker = nyBruker;
                         await _db.SaveChangesAsync();
                         return true;
                     }

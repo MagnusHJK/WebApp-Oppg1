@@ -3,6 +3,18 @@
     hentAlleAvganger();
 });
 
+//Gir en tilbakemelding utifra hvordan det gikk på backend, forsvinner etter 15 sek
+function statusMelding(tekst, sannhet, entitet ) {
+    if (sannhet) {
+        $("#vellykket" + entitet).html(tekst);
+        $("#vellykket" + entitet).fadeIn('fast').delay(15000).fadeOut('slow');
+    } else {
+        $("#feil" + entitet).html(tekst);
+        $("#feil" + entitet).fadeIn('fast').delay(15000).fadeOut('slow');
+    }
+}
+
+
 //Henter stasjoner
 function hentAlleStasjoner() {
     $.get("Stasjon/HentAlleStasjoner", function (stasjoner) {
@@ -23,14 +35,14 @@ function lagStasjon() {
         $.get(url, stasjon, function (OK) {
             if (OK) {
                 hentAlleStasjoner();
-                $("#vellykketStasjoner").html(stasjon.navn + " lagt til i stasjoner");
+                statusMelding("Stasjon lagt til", true, "Stasjoner");
             }
             else {
-                $("#feilStasjoner").html("Feilet");
+                statusMelding("Stasjon feilet å legges til", false, "Stasjoner");
             }
         })
             .fail(function () {
-                $("#feilStasjoner").html("Feilet på server - prøv igjen senere");
+                statusMelding("Feilet på server - prøv igjen senere", false, "Stasjoner");
             });
     }
 }
@@ -51,10 +63,11 @@ function endreStasjon() {
         $.get(url, stasjon, function (OK) {
             if (OK) {
                 hentAlleStasjoner();
-                $("#vellykketStasjoner").html(gamleNavn + " ble endret til: " + stasjon.navn);
+                statusMelding("Stasjonsnavn ble endret", true, "Stasjoner");
             }
         })
             .fail(function () {
+                statusMelding("Feilet på server - prøv igjen senere", false, "Stasjoner");
             });
     }
 }
@@ -67,11 +80,10 @@ function slettStasjon() {
 
     $.get(url, function (OK) {
         if (OK) {
-            var stasjonNavn = $("#slettStasjonSelect option:selected").text();
-            $("#vellykketStasjoner").html("Stasjonen " + stasjonNavn + " ble fjernet");
+            statusMelding("Stasjon ble fjernet", true, "Stasjoner");
             hentAlleStasjoner();
         } else {
-            $("#feilStasjoner").html("Feilet på server - prøv igjen senere");
+            statusMelding("Feilet på server - prøv igjen senere", false, "Stasjoner");
         }
     });
 }
@@ -140,7 +152,7 @@ function lagAvgang() {
 
         var datoISO = datoObj.toISOString();
 
-        let url = "Avgang/LagAvgang";
+        const url = "Avgang/LagAvgang";
 
         let avgang = {
             stasjonFraId: stasjonFraId,
@@ -150,10 +162,11 @@ function lagAvgang() {
         }
 
         $.post(url, avgang, function () {
-            $("#vellykketAvganger").html("Avgang lagt til");
+            statusMelding("Avgang ble lagt til", true, "Avganger");
+            hentAlleAvganger();
         })
             .fail(function () {
-                $("#feilAvganger").html("Avgang ble ikke opprettet");
+                statusMelding("Feilet på server - prøv igjen senere", false, "Avganger");
             });
     }
 }
@@ -187,7 +200,7 @@ function sjekkAvgang() {
     })
         .fail(function () {
             $("#avganger").html("");
-            $("#feilAvganger").html("Fant ingen avganger for gitte parametere.");
+            statusMelding("Fant ingen avganger for gitte parametere.", false, "Avganger");
         });
 }
 
@@ -265,11 +278,11 @@ function endreAvgang(avgangId) {
         };
 
         $.post(url, avgang, function () {
-            $("#vellykketAvganger").html("Avgang endret");
+            statusMelding("Avgang endret", true, "Avganger");
             hentAlleAvganger();
         })
             .fail(function () {
-                $("#feilAvganger").html("Avgang ble ikke endret");
+                statusMelding("Avgang ble ikke endret", false, "Avganger");
             });
 
     }
@@ -280,17 +293,29 @@ function slettAvgang(avgangId) {
     const url = "Avgang/SlettAvgang"
 
     $.get(url, avgangId, function (OK) {
-        $("#vellykketAvganger").html("Avgang ble slettet");
-        hentAlleAvganger();
+        if (OK) {
+            statusMelding("Avgang ble slettet", true, "Avganger");
+            hentAlleAvganger();
+        } else {
+            statusMelding("Avgang ble ikke slettet", false, "Avganger");
+        }
     })
         .fail(function (){
-            $("#feilAvganger").html("Avgang ble ikke slettet");
+            statusMelding("Feilet på server - prøv igjen senere", false, "Avganger");
         });
 }
 
+function lagGjesteBruker() {
+    const url = "Bruker/LagGjesteBruker";
 
-function lagBestilling() {
-    let url = "Bestilling/LagBestilling";
+    $.get(url, function (gjesteBruker) {
+        lagBestilling(gjesteBruker);
+    });
+}
+
+//Fiks så gjestebruker opprettes
+function lagBestilling(gjesteBruker) {
+    const url = "Bestilling/LagBestilling";
     let antallBestillinger = $("#lagBestillingAntall").val();
     let avgang = $("#lagBestillingAvgang").val();
 
@@ -299,36 +324,41 @@ function lagBestilling() {
     if (antallOK) {
         let bestilling = {
             avgangId: avgang,
-            antall: antallBestillinger
+            antall: antallBestillinger,
+            brukerId: gjesteBruker.id
         };
 
         $.get(url, bestilling, function () {
-            $("#vellykketBestillinger").html("Bestilling opprettet");
+            statusMelding("Bestilling opprettet", true, "Bestillinger");
         })
             .fail(function () {
-                $("#feilBestillinger").html("Kunne ikke opprette bestilling");
+                statusMelding("Feilet på server - prøv igjen senere", false, "Bestillinger");
             });
     }
 }
 
+//Fiks så gjestebruker kan endres på
 function endreBestilling(bestillingId) {
     const url = "Bestilling/EndreBestilling";
     var avgangsId = $("#avgangValgEndreBestilling" + bestillingId).val();
     var antall = $("#antallEndreBestilling" + bestillingId).val();
+    var brukerId = $("brukerEndreBestilling" + bestillingId).val();
+
     var antallOK = validerAntall(antall);
 
     if (antallOK) {
         var bestilling = {
             bestillingId: bestillingId,
             nyAvgangId: avgangsId,
-            nyttAntall: antall
+            nyttAntall: antall,
+            nyBrukerId: brukerId
         };
 
         $.get(url, bestilling, function () {
-            $("#vellykketBestillinger").html("Bestilling endret");
+            statusMelding("Bestilling endret", true, "Bestillinger");
         })
             .fail(function () {
-                $("#feilBestillinger").html("Kunne ikke endre bestilling");
+                statusMelding("Feilet på server - prøv igjen senere", false, "Bestillinger");
             });
     }
 }
@@ -341,8 +371,8 @@ function hentAlleBestillinger() {
         formaterBestillinger(bestillinger);
     })
         .fail(function () {
-            $("#feilBestillinger").html("Ingen bestillinger ble funnet");
-        })
+            statusMelding("Feilet på server - prøv igjen senere", false, "Bestillinger");
+        });
 }
 
 function formaterBestillinger(bestillinger) {
@@ -356,6 +386,7 @@ function formaterBestillinger(bestillinger) {
         "<tr>" +
         "<th>Avgang</th>" +
         "<th>Antall</th>" +
+        "<th>Bruker</th>" +
         "<th></th>" +
         "<th></th>" +
         "</tr>" +
@@ -368,6 +399,7 @@ function formaterBestillinger(bestillinger) {
         ut = "<tr>" +
             "<td><select class='avganger form-control' id='avgangValgEndreBestilling" + bestilling.id + "'></select></td>" +
             "<td><input type='text' class='form-control' id='antallEndreBestilling" + bestilling.id + "'/></td>" +
+            "<td><select class='brukere form-control' id='brukerEndreBestilling" + bestilling.id + "'></select></td>" +
             "<td><button class='btn btn-warning' onclick='endreBestilling(" + bestilling.id + ")'>Endre</button></td>" +
             "<td><button class='btn btn-danger' onclick='slettBestilling(" + bestilling.id + ")'>Slett</button></td>" +
             "</tr>";
@@ -381,6 +413,7 @@ function formaterBestillinger(bestillinger) {
         $("#antallEndreBestilling" + bestilling.id).val(bestilling.antall);    
     }
     hentAlleAvganger();
+    hentAlleBrukere();
 }
 
 function hentAlleAvganger() {
@@ -392,10 +425,13 @@ function hentAlleAvganger() {
 }
 
 
-//Fyller inn stasjoner i valg
+//Fyller inn avganger i valg
 function fyllInnAvganger(avganger) {
     const datoOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
     const tidOptions = { hour12: false, hour: '2-digit', minute: '2-digit' };
+
+    $(".avganger").html("");
+    $(".avganger").append($('<option></option>').val("").html(""));
 
     for (let avgang of avganger) {
         var datoAvgang = new Date(avgang.dato);
@@ -404,5 +440,22 @@ function fyllInnAvganger(avganger) {
                                datoAvgang.toLocaleDateString("no-NO", datoOptions) + " " + datoAvgang.toLocaleTimeString("no-NO", tidOptions);
 
         $(".avganger").append($('<option></option>').val(avgang.id).html(avgangsTekst));
+    }
+}
+
+function hentAlleBrukere() {
+    const url = "Bruker/HentAlleBrukere";
+
+    $.get(url, function (brukere) {
+        fyllInnBrukere(brukere);
+    });
+}
+
+//Fyller inn brukere i alle dropdowns
+function fyllInnBrukere(brukere) {
+
+
+    for (let bruker of brukere) {
+        $(".brukere").append($('<option></option>').val(bruker.id).html(bruker.id + ": " + bruker.brukernavn));
     }
 }

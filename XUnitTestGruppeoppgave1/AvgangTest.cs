@@ -199,20 +199,20 @@ namespace XUnitTestGruppeoppgave1
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            var resultat = await avgangController.GenererAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString()) as NotFoundObjectResult;
+            var resultat = await avgangController.GenererAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString()) as BadRequestObjectResult;
 
             //Assert
-            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
-            Assert.Equal("Avgangen eksisterer ikke", resultat.Value);
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Avganger ble ikke generert", resultat.Value);
         }
 
         [Fact]
         public async Task HentAvgangerTrue()
         {
             //Arrange
-            DateTime dato = new DateTime(2020, 10, 10);
-            var stasjon1 = new Stasjoner { Id = 1, Navn = "Fredrikstad" };
-            var stasjon2 = new Stasjoner { Id = 2, Navn = "Bærum" };
+            DateTime dato = new DateTime(2021, 10, 10);
+            var stasjon1 = new Stasjoner { Id = 15, Navn = "Seljestad" };
+            var stasjon2 = new Stasjoner { Id = 16, Navn = "Oslo" };
             var avgang1 = new Avganger { Id = 1, StasjonFra = stasjon1, StasjonTil = stasjon2, Dato = dato, Pris = 200 };
             var avgangerListe = new List<Avganger>();
             avgangerListe.Add(avgang1);
@@ -221,7 +221,7 @@ namespace XUnitTestGruppeoppgave1
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            var resultat = await avgangController.HentAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString()) as OkObjectResult;
+            var resultat = await avgangController.HentAvganger(avgang1.StasjonFra.Id, avgang1.StasjonTil.Id, dato.ToString()) as OkObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -232,9 +232,9 @@ namespace XUnitTestGruppeoppgave1
         public async Task HentAvgangerFalse()
         {
             //Arrange
-            DateTime dato = new DateTime(2020, 10, 10);
-            var stasjon1 = new Stasjoner { Id = 1, Navn = "Fredrikstad" };
-            var stasjon2 = new Stasjoner { Id = 2, Navn = "Bærum" };
+            DateTime dato = new DateTime(2021, 10, 10);
+            var stasjon1 = new Stasjoner { Id = 15, Navn = "Seljestad" };
+            var stasjon2 = new Stasjoner { Id = 16, Navn = "Oslo" };
             var avgang1 = new Avganger { Id = 1, StasjonFra = stasjon1, StasjonTil = stasjon2, Dato = dato, Pris = 200 };
             var avgangerListe = new List<Avganger>();
             avgangerListe.Add(avgang1);
@@ -285,7 +285,7 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
-            Assert.Equal("Fant ingen avganger", resultat.Value);
+            Assert.Equal("Avganger ble ikke hentet", resultat.Value);
         }
 
     }

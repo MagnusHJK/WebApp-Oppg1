@@ -1,4 +1,5 @@
-﻿using Gruppeoppgave1.DAL;
+﻿using Castle.Core.Internal;
+using Gruppeoppgave1.DAL;
 using Gruppeoppgave1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,25 @@ namespace Gruppeoppgave1.Controllers
         {
             HttpContext.Session.SetString(_loggetInn, "");
         }
+
+        public async Task<ActionResult> HentAlleBrukere()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+
+            List<Brukere> alleBrukere = await _db.HentAlleBrukere();
+
+            if (alleBrukere.IsNullOrEmpty())
+            {
+                _log.LogInformation("Liste av brukere hentet, men den var tom eller null");
+                return BadRequest("Ingen brukere funnet");
+            }
+
+            return Ok(alleBrukere);
+        }
+
 
         public async Task<ActionResult> LagGjesteBruker()
         {

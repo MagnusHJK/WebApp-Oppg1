@@ -43,12 +43,12 @@ namespace Gruppeoppgave1.Controllers
             return BadRequest("Feil input validering");
         }
 
-        public async Task<ActionResult> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall)
+        public async Task<ActionResult> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall, int nyBrukerId)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             { return Unauthorized(); }
 
-            bool returOK = await _db.EndreBestilling(bestillingId, nyAvgangId, nyttAntall);
+            bool returOK = await _db.EndreBestilling(bestillingId, nyAvgangId, nyttAntall, nyBrukerId);
 
             if (!returOK)
             {

@@ -60,7 +60,7 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task EndreBestillingTrue()
         {
-            mockRep.Setup(s => s.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(true);
+            mockRep.Setup(s => s.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(true);
 
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
 
@@ -69,7 +69,7 @@ namespace XUnitTestGruppeoppgave1
             BestillingController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             //Act
-            var resultat = await BestillingController.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
+            var resultat = await BestillingController.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -79,7 +79,7 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task EndreBestillingFalse()
         {
-            mockRep.Setup(s => s.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(false);
+            mockRep.Setup(s => s.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(false);
 
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
 
@@ -88,7 +88,7 @@ namespace XUnitTestGruppeoppgave1
             BestillingController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             //Act
-            var resultat = await BestillingController.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as UnauthorizedObjectResult;
+            var resultat = await BestillingController.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as UnauthorizedObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);

@@ -59,6 +59,19 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
+        public async Task<List<Brukere>> HentAlleBrukere()
+        {
+            try
+            {
+                List<Brukere> alleBrukere = await _db.Brukere.ToListAsync();
+                return alleBrukere;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         //Gjeste brukerer sitt passord er tilfeldig, etter som de bare er midlertidige entiteter
         //Uten mulighet til å "logge inn".
         public async Task<Brukere> LagGjesteBruker()
