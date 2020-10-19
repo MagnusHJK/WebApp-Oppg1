@@ -39,7 +39,7 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Bestilling opprettet", resultat.Value);
         }
 
         [Fact]
@@ -50,15 +50,15 @@ namespace XUnitTestGruppeoppgave1
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
 
             //Act
-            var resultat = await BestillingController.LagBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
+            var resultat = await BestillingController.LagBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()) as BadRequestObjectResult;
 
             //Assert
-            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
-            Assert.Equal("Bestilling Feilet", resultat.Value);
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Bestilling ble ikke opprettet", resultat.Value);
         }
 
         [Fact]
-        public async Task EndreBestillingTrue()
+        public async Task EndreBestillingInnloggetTrue()
         {
             mockRep.Setup(s => s.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(true);
 
@@ -73,17 +73,17 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Bestilling endret", resultat.Value);
         }
 
         [Fact]
-        public async Task EndreBestillingFalse()
+        public async Task EndreBestillingIkkeInnlogget()
         {
             mockRep.Setup(s => s.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(false);
 
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn;
+            mockSession[_loggetInn] = _ikkeLoggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             BestillingController.ControllerContext.HttpContext = mockHttpContext.Object;
 
@@ -96,7 +96,7 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-    public async Task SlettBestillingTrue()
+    public async Task SlettBestillingInnloggetTrue()
         {
             mockRep.Setup(s => s.SlettBestilling(It.IsAny<int>())).ReturnsAsync(true);
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
@@ -109,11 +109,11 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Bestillig slettet", resultat.Value);
         }
 
         [Fact]
-        public async Task SlettBestillingFalse()
+        public async Task SlettBestillingIkkeInnloggetFalse()
         {
             mockRep.Setup(s => s.SlettBestilling(It.IsAny<int>())).ReturnsAsync(false);
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);

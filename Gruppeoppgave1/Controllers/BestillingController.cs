@@ -34,7 +34,7 @@ namespace Gruppeoppgave1.Controllers
 
                 if (!returOK)
                 {
-                    _log.LogInformation("Bestilling for avgang: " + avgangId + " ble ikke opprettet");
+                    _log.LogInformation("Bestilling ble ikke opprettet");
                     return BadRequest("Bestilling ble ikke opprettet");
                 }
                 return Ok("Bestilling opprettet");
@@ -46,14 +46,14 @@ namespace Gruppeoppgave1.Controllers
         public async Task<ActionResult> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall, int nyBrukerId)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            { return Unauthorized(); }
+            { return Unauthorized("Ikke innlogget"); }
 
             bool returOK = await _db.EndreBestilling(bestillingId, nyAvgangId, nyttAntall, nyBrukerId);
 
             if (!returOK)
             {
-                _log.LogInformation("Bestilling med ID: " + bestillingId + " ble ikke endret");
-                return BadRequest("Bestilling med ID: " + bestillingId + " ble ikke endret");
+                _log.LogInformation("Bestilling ble ikke endret");
+                return BadRequest("Bestilling ble ikke endret");
             }
             return Ok("Bestilling endret");
         }
@@ -61,14 +61,14 @@ namespace Gruppeoppgave1.Controllers
         public async Task<ActionResult> SlettBestilling(int bestillingId)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            { return Unauthorized(); }
+            { return Unauthorized("Ikke innlogget"); }
 
             bool returOK = await _db.SlettBestilling(bestillingId);
 
             if (!returOK)
             {
-                _log.LogInformation("Bestilling med ID: " + bestillingId + " ble ikke slettet");
-                return BadRequest("Bestilling med ID: " + bestillingId + " ble ikke slettet");
+                _log.LogInformation("Bestilling ble ikke slettet");
+                return BadRequest("Bestilling ble ikke slettet");
             }
             return Ok("Bestillig slettet");
         }
