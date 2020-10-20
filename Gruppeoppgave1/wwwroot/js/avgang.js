@@ -46,7 +46,7 @@ function formaterAvganger(avganger) {
     var dato = new Date(avganger[0].dato);
 
     let ut = "<h3>Avganger for " + dato.toLocaleDateString('no-NB') + "</h3>" +
-        "<table class='table table-hover'>" +
+        "<table class='table table-hover table-sm'>" +
         "<tr>" +
         "<th>Avreise tidspunkt</th>" +
         "<th>Pris per billett</th>" +

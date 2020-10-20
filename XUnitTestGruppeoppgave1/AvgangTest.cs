@@ -25,7 +25,7 @@ namespace XUnitTestGruppeoppgave1
         private readonly MockHttpSession mockSession = new MockHttpSession();
 
         [Fact]
-        public async Task LagAvgangInnlogget()
+        public async Task LagAvgangInnloggetOK()
         {
             DateTime dato = new DateTime(2020,10,10);
 
@@ -42,8 +42,30 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Avgangen ble laget", resultat.Value);
         }
+
+        [Fact]
+        public async Task LagAvgangInnloggetIkkeOK()
+        {
+            DateTime dato = new DateTime(2020, 10, 10);
+
+            mockRep.Setup(s => s.LagAvgang(It.IsAny<int>(), It.IsAny<int>(), dato.ToString(), It.IsAny<int>())).ReturnsAsync(false);
+
+            var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            //Act
+            var resultat = await avgangController.LagAvgang(It.IsAny<int>(), It.IsAny<int>(), dato.ToString(), It.IsAny<int>()) as BadRequestObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Avgangen ble ikke laget", resultat.Value);
+        }
+
 
         [Fact]
         public async Task LagAvgangIkkeInnlogget()
@@ -66,7 +88,7 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task EndreAvgangInnlogget()
+        public async Task EndreAvgangInnloggetOK()
         {
             DateTime dato = new DateTime(2020, 10, 10);
             mockRep.Setup(s => s.EndreAvgang(It.IsAny<int>(), dato.ToString(), It.IsAny<int>())).ReturnsAsync(true);
@@ -82,8 +104,27 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Avgangen ble endret", resultat.Value);
+        }
 
+        [Fact]
+        public async Task EndreAvgangInnloggetIkkeOK()
+        {
+            DateTime dato = new DateTime(2020, 10, 10);
+            mockRep.Setup(s => s.EndreAvgang(It.IsAny<int>(), dato.ToString(), It.IsAny<int>())).ReturnsAsync(false);
+
+            var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            //Act
+            var resultat = await avgangController.EndreAvgang(It.IsAny<int>(), dato.ToString(), It.IsAny<int>()) as BadRequestObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Avgangen ikke endret", resultat.Value);
         }
 
         [Fact]
@@ -104,11 +145,10 @@ namespace XUnitTestGruppeoppgave1
             //Assert
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
             Assert.Equal("Ikke innlogget", resultat.Value);
-
         }
 
         [Fact]
-        public async Task SlettAvgangInnlogget()
+        public async Task SlettAvgangInnloggetOK()
         {
             mockRep.Setup(s => s.SlettAvgang(It.IsAny<int>())).ReturnsAsync(true);
 
@@ -123,9 +163,28 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
-
+            Assert.Equal("Avgang slettet", resultat.Value);
         }
+
+        [Fact]
+        public async Task SlettAvgangInnloggetIkkeOK()
+        {
+            mockRep.Setup(s => s.SlettAvgang(It.IsAny<int>())).ReturnsAsync(false);
+
+            var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            //Act
+            var resultat = await avgangController.SlettAvgang(It.IsAny<int>()) as BadRequestObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Avgangen ble ikke slettet", resultat.Value);
+        }
+
 
         [Fact]
         public async Task SlettAvgangIkkeInnlogget()
@@ -147,7 +206,7 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task SjekkAvgangerTrue()
+        public async Task SjekkAvgangerOK()
         {
             DateTime dato = new DateTime(2020, 10, 10);
             mockRep.Setup(a => a.SjekkAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString())).ReturnsAsync(true);
@@ -158,11 +217,11 @@ namespace XUnitTestGruppeoppgave1
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Avganger eksisterer", resultat.Value);
         }
 
         [Fact]
-        public async Task SjekkAvgangerFalse()
+        public async Task SjekkAvgangerIkkeOK()
         {
             DateTime dato = new DateTime(2020, 10, 10);
             mockRep.Setup(a => a.SjekkAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString())).ReturnsAsync(false);
@@ -177,22 +236,23 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task GenererAvgangerTrue()
+        public async Task GenererAvgangerOK()
         {
             DateTime dato = new DateTime(2020, 10, 10);
-            mockRep.Setup(a => a.SjekkAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString())).ReturnsAsync(true);
+            mockRep.Setup(a => a.GenererAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString())).ReturnsAsync(true);
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            var resultat = await avgangController.SjekkAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString()) as OkObjectResult;
+            //Act
+            var resultat = await avgangController.GenererAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString()) as OkObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal(true, resultat.Value);
+            Assert.Equal("Avganger generert", resultat.Value);
         }
 
         [Fact]
-        public async Task GenererAvgangerFalse()
+        public async Task GenererAvgangerIkkeOK()
         {
             DateTime dato = new DateTime(2020, 10, 10);
             mockRep.Setup(a => a.GenererAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString())).ReturnsAsync(false);
@@ -207,7 +267,7 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task HentAvgangerTrue()
+        public async Task HentAvgangerOK()
         {
             //Arrange
             DateTime dato = new DateTime(2021, 10, 10);
@@ -229,15 +289,17 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task HentAvgangerFalse()
+        public async Task HentAvgangerIkkeOK()
         {
             //Arrange
             DateTime dato = new DateTime(2021, 10, 10);
             var stasjon1 = new Stasjoner { Id = 15, Navn = "Seljestad" };
             var stasjon2 = new Stasjoner { Id = 16, Navn = "Oslo" };
             var avgang1 = new Avganger { Id = 1, StasjonFra = stasjon1, StasjonTil = stasjon2, Dato = dato, Pris = 200 };
-            var avgangerListe = new List<Avganger>();
-            avgangerListe.Add(avgang1);
+            var avgangerListe = new List<Avganger>
+            {
+                avgang1
+            };
 
             mockRep.Setup(a => a.HentAvganger(avgang1.StasjonFra.Id, avgang1.StasjonTil.Id, avgang1.Dato.ToString())).ReturnsAsync(avgangerListe);
 
@@ -252,15 +314,17 @@ namespace XUnitTestGruppeoppgave1
 
 
         [Fact]
-        public async Task HentAlleAvgangerTrue()
+        public async Task HentAlleAvgangerOK()
         {
             //Arrange
             DateTime dato = new DateTime(2020, 10, 10);
             var stasjon1 = new Stasjoner { Id = 1, Navn = "Fredrikstad" };
             var stasjon2 = new Stasjoner { Id = 2, Navn = "Bærum" };
             var avgang1 = new Avganger { Id = 1, StasjonFra = stasjon1, StasjonTil = stasjon2, Dato = dato, Pris = 200 };
-            var avgangerListe = new List<Avganger>();
-            avgangerListe.Add(avgang1);
+            var avgangerListe = new List<Avganger>
+            {
+                avgang1
+            };
 
             mockRep.Setup(a => a.HentAlleAvganger()).ReturnsAsync(avgangerListe);
 
@@ -274,7 +338,7 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task HentAlleAvgangerFalse()
+        public async Task HentAlleAvgangerIkkeOK()
         {
             DateTime dato = new DateTime(2020, 10, 10);
             mockRep.Setup(a => a.HentAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString())).ReturnsAsync(It.IsAny<List<Avganger>>());

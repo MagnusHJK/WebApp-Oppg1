@@ -36,9 +36,9 @@ namespace Gruppeoppgave1.Controllers
             if (!returOK)
             {
                 _log.LogInformation("Avgangen ble ikke laget");
-                return NotFound("Avgangen ble ikke laget");
+                return BadRequest("Avgangen ble ikke laget");
             }
-            return Ok(true);
+            return Ok("Avgangen ble laget");
         }
 
         public async Task<ActionResult> EndreAvgang(int avgangId, string datoTid, int pris)
@@ -53,7 +53,7 @@ namespace Gruppeoppgave1.Controllers
                 _log.LogInformation("Avgangen ikke endret");
                 return BadRequest("Avgangen ikke endret");
             }
-            return Ok(true);
+            return Ok("Avgangen ble endret");
         }
 
         public async Task<ActionResult> SlettAvgang(int avgangId)
@@ -68,7 +68,7 @@ namespace Gruppeoppgave1.Controllers
                 _log.LogInformation("Avgangen ble ikke slettet");
                 return BadRequest("Avgangen ble ikke slettet");
             }
-            return Ok(true);
+            return Ok("Avgang slettet");
         }
 
         public async Task<ActionResult> SjekkAvganger(int stasjonFraId, int stasjonTilId, string dato)
@@ -80,7 +80,7 @@ namespace Gruppeoppgave1.Controllers
                 _log.LogInformation("Avgangen eksisterer ikke");
                 return NotFound("Avgangen eksisterer ikke");
             }
-            return Ok(true);
+            return Ok("Avganger eksisterer");
         }
 
         public async Task<ActionResult> GenererAvganger(int stasjonFraId, int stasjonTilId, string dato)
@@ -91,8 +91,8 @@ namespace Gruppeoppgave1.Controllers
                 _log.LogInformation("Avganger ble ikke generert");
                 return BadRequest("Avganger ble ikke generert");
             }
-            _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble generert");
-            return Ok(true);
+            _log.LogInformation("Avganger generert");
+            return Ok("Avganger generert");
         }
 
         public async Task<ActionResult> HentAvganger(int stasjonFraId, int stasjonTilId, string dato)
@@ -104,7 +104,7 @@ namespace Gruppeoppgave1.Controllers
                 _log.LogInformation("Avganger ble ikke hentet");
                 return NotFound("Avganger ble ikke hentet");
             }
-            _log.LogInformation("Avgangen fra: " + stasjonFraId + " til: " + stasjonTilId + " på dato: " + dato + " ble hentet");
+            _log.LogInformation("Avganger ble hentet");
             return Ok(avganger);
         }
 

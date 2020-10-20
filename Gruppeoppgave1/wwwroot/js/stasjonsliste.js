@@ -10,7 +10,7 @@ function hentAlleStasjoner() {
 
 
 function formaterStasjoner(stasjoner) {
-    let ut = "<table class='table table-striped'>" +
+    let ut = "<table class='table table-striped table-sm'>" +
         "<tr>" +
         "<th>Navn</th>" +
         "</tr>";

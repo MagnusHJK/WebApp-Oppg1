@@ -80,7 +80,7 @@ namespace Gruppeoppgave1.Controllers
             if (bestillinger.IsNullOrEmpty())
             {
                 _log.LogInformation("Ingen bestillinger funnet");
-                return BadRequest("Ingen bestillinger funnet");
+                return NotFound("Ingen bestillinger funnet");
             }
             return Ok(bestillinger);
         }
@@ -92,7 +92,7 @@ namespace Gruppeoppgave1.Controllers
             if (alleBestillinger.IsNullOrEmpty())
             {
                 _log.LogInformation("Liste av bestillinger hentet, men den var tom eller null");
-                return BadRequest("Ingen bestillinger funnet");
+                return NotFound("Ingen bestillinger funnet");
             }
 
             return Ok(alleBestillinger);

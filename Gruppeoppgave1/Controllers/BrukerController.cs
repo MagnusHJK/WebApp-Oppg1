@@ -50,7 +50,7 @@ namespace Gruppeoppgave1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke innlogget");
             }
 
             List<Brukere> alleBrukere = await _db.HentAlleBrukere();
@@ -58,7 +58,7 @@ namespace Gruppeoppgave1.Controllers
             if (alleBrukere.IsNullOrEmpty())
             {
                 _log.LogInformation("Liste av brukere hentet, men den var tom eller null");
-                return BadRequest("Ingen brukere funnet");
+                return NotFound("Ingen brukere funnet");
             }
 
             return Ok(alleBrukere);
@@ -75,17 +75,6 @@ namespace Gruppeoppgave1.Controllers
             }
             _log.LogInformation("Gjestebruker opprettet");
             return Ok(returBruker);
-        }
-
-        public void TestSession()
-        {
-            //Slik testes det om noen er logget inn
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn))){
-                //Hva som skal bli returnert hvis man ikke er logget inn
-                //Gir en error kode 401, som skal bli sjekket for i alle .fail() på ajax kall i javascript
-                //return Unauthorized();
-            }
-            //Så under kommer all annen kode
         }
     }
 }

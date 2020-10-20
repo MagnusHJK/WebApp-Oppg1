@@ -58,7 +58,7 @@ namespace Gruppeoppgave1.Controllers
                 if (!returOK)
                 {
                     _log.LogInformation("Oppretting av stasjon feilet");
-                    return Ok(false);
+                    return BadRequest("Oppretting av stasjon feilet");
                 }
                 _log.LogInformation("Stasjon opprettet");
                 return Ok("Stasjon opprettet");
@@ -79,9 +79,9 @@ namespace Gruppeoppgave1.Controllers
                 if (!returOK)
                 {
                     _log.LogInformation("Endring av stasjonen feilet");
-                    return Ok(false);
+                    return BadRequest("Endring av stasjonen feilet");
                 }
-                return Ok(true);
+                return Ok("Stasjon endret");
             }
             _log.LogInformation("Feil i inputvalidering for endring av Stasjon");
             return BadRequest("Feil i inputvalidering for endring av Stasjon");
@@ -101,9 +101,9 @@ namespace Gruppeoppgave1.Controllers
                 if(!returOK)
                 {
                     _log.LogInformation("Sletting av stasjon feilet");
-                    return Ok(false);
+                    return BadRequest("Sletting av stasjon feilet");
                 }
-                return Ok(true);
+                return Ok("Stasjon slettet");
             }
             _log.LogInformation("Feil i sletting av Stasjon");
             return BadRequest("Feil i sletting av Stasjon");
