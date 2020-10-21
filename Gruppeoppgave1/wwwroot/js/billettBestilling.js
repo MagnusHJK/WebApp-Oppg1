@@ -71,7 +71,7 @@ function lagBestilling(gjesteBruker) {
     }
     //Separat sannhet som avgjør, ettersom det er i loop.
     if (sannhet) {
-        window.location.href = 'betalling.html?bruker=' + gjesteBruker.id;
+        window.location.href = 'betaling.html?bruker=' + gjesteBruker.id;
     } else {
         $("#feil").html("Feil i db - prøv igjen senere");
     }

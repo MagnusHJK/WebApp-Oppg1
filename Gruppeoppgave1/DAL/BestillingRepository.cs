@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace Gruppeoppgave1.DAL
@@ -44,6 +45,54 @@ namespace Gruppeoppgave1.DAL
             catch
             {
                 return false;
+            }
+        }
+
+        //Sender en email med alle bestillingene til en bruker til gitt mail
+        public async Task<bool> SendBestillingMail(string tilMail, int brukerId)
+        {
+            List<Bestillinger> bestillinger = await HentBestillinger(brukerId);
+            string mailBody = "";
+
+            foreach(Bestillinger bestilling in bestillinger)
+            {
+                mailBody += "<h2>" + bestilling.Antall + " billett(er) for strekningen: </h2><br/>" + 
+                            bestilling.Avgang.StasjonFra.Navn + " -> " + bestilling.Avgang.StasjonTil.Navn + " " + bestilling.Avgang.Dato.ToString("dddd, dd MMMM yyyy HH:mm:ss") + "<br/>" +
+                            "Total pris " + (bestilling.Avgang.Pris * bestilling.Antall) + " ,- <br/>";
+            }
+
+            using(MailMessage emailMessage = new MailMessage())
+            {
+                var fraAddresse = new MailAddress("NORWAY.ITPE3200@gmail.com", "NOR-WAY");
+                var fraPassord = "*c*S%vX6PSXr6mw9tjy!tstfF";
+
+                var tilAddresse = new MailAddress(tilMail);
+               
+
+                emailMessage.To.Add(tilAddresse);
+                emailMessage.From = fraAddresse;
+                emailMessage.Subject = "NOR-WAY - Dine bestillinger";
+                emailMessage.Body = mailBody;
+                emailMessage.Priority = MailPriority.Normal;
+                emailMessage.IsBodyHtml = true;
+
+                using (SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    try
+                    {
+                        MailClient.EnableSsl = true;
+                        MailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        MailClient.UseDefaultCredentials = false;
+                        MailClient.Credentials = new System.Net.NetworkCredential(fraAddresse.Address, fraPassord);
+                        MailClient.Timeout = 20000;
+                        MailClient.Send(emailMessage);
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
             }
         }
 

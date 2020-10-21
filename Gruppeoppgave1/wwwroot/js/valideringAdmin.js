@@ -1,15 +1,28 @@
 ﻿//Validering for all input brukt i adminpanel
 
+//Gir en tilbakemelding, forsvinner etter 15 sek
+function statusMelding(tekst, sannhet) {
+    if (sannhet) {
+        $("#statusMeldingOK").html(tekst);
+        $("#statusMeldingOK").fadeIn('fast').delay(15000).fadeOut('slow');
+    } else {
+        $("#statusMeldingFeil").html(tekst);
+        $("#statusMeldingFeil").fadeIn('fast').delay(15000).fadeOut('slow');
+    }
+}
+
+
+
 function validerStasjonsNavn(stasjonsNavn) {
     const regex = /^[a-zA-ZæøåÆØÅ. \-]{2,40}$/;
     const ok = regex.test(stasjonsNavn);
 
     if (!ok) {
-        $("#feilStasjoner").html("Stasjonsnavnet er ikke gyldig");
+        statusMelding("Stasjonsnavnet er ikke gyldig", false);
         return false;
     }
     else {
-        $("#feilStasjoner").html("");
+        $("#statusMeldingFeil").html("");
         return true;
     }
 }
@@ -27,10 +40,10 @@ function validerAvgang(dato, tid, pris) {
     const datoOk = Date.parse(dato);
 
     if (datoOk.isNaN || !okPris || !okTid) {
-        $("#feilAvganger").html("Dato, tidspunkt eller pris ikke gyldig");
+        statusMelding("Dato, tidspunkt eller pris ikke gyldig", false);
         return false;
     } else {
-        $("#feilStasjoner").html("");
+        $("#statusMeldingFeil").html("");
         return true;
     }
 }
@@ -42,10 +55,10 @@ function validerAntall(antall) {
     const okAntall = regexAntall.test(antall);
 
     if (!okAntall) {
-        $("#feilBestillinger").html("Antall er ikke gyldig, maks to sifrede tall");
+        statusMelding("Antall er ikke gyldig, maks to sifrede tall", false);
         return false;
     } else {
-        $("#feilBestillinger").html("");
+        $("#statusMeldingFeil").html("");
         return true;
     }
 }

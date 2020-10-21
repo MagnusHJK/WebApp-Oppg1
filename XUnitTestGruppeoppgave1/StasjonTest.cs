@@ -157,7 +157,6 @@ namespace XUnitTestGruppeoppgave1
 
             //Act
             var resultat = await stasjonController.LagStasjon(It.IsAny<Stasjon>()) as BadRequestObjectResult;
-            System.Diagnostics.Debug.WriteLine(resultat);
 
             //Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);

@@ -1,16 +1,19 @@
 ﻿$(function () {
     hentAlleStasjoner();
     hentAlleAvganger();
+    $("#accordion").accordion({
+        heightStyle: "content"
+    });
 });
 
 //Gir en tilbakemelding utifra hvordan det gikk på backend, forsvinner etter 15 sek
-function statusMelding(tekst, sannhet, entitet ) {
+function statusMelding(tekst, sannhet) {
     if (sannhet) {
-        $("#vellykket" + entitet).html(tekst);
-        $("#vellykket" + entitet).fadeIn('fast').delay(15000).fadeOut('slow');
+        $("#statusMeldingOK").html(tekst);
+        $("#statusMeldingOK").fadeIn('fast').delay(15000).fadeOut('slow');
     } else {
-        $("#feil" + entitet).html(tekst);
-        $("#feil" + entitet).fadeIn('fast').delay(15000).fadeOut('slow');
+        $("#statusMeldingFeil").html(tekst);
+        $("#statusMeldingFeil").fadeIn('fast').delay(15000).fadeOut('slow');
     }
 }
 
@@ -35,14 +38,14 @@ function lagStasjon() {
         $.get(url, stasjon, function (OK) {
             if (OK) {
                 hentAlleStasjoner();
-                statusMelding("Stasjon lagt til", true, "Stasjoner");
+                statusMelding("Stasjon lagt til", true);
             }
             else {
-                statusMelding("Stasjon feilet å legges til", false, "Stasjoner");
+                statusMelding("Stasjon feilet å legges til", false);
             }
         })
             .fail(function () {
-                statusMelding("Feilet på server - prøv igjen senere", false, "Stasjoner");
+                statusMelding("Feilet på server - prøv igjen senere", false);
             });
     }
 }
@@ -63,11 +66,11 @@ function endreStasjon() {
         $.get(url, stasjon, function (OK) {
             if (OK) {
                 hentAlleStasjoner();
-                statusMelding("Stasjonsnavn ble endret", true, "Stasjoner");
+                statusMelding("Stasjonsnavn ble endret", true);
             }
         })
             .fail(function () {
-                statusMelding("Feilet på server - prøv igjen senere", false, "Stasjoner");
+                statusMelding("Feilet på server - prøv igjen senere", false);
             });
     }
 }
@@ -80,10 +83,10 @@ function slettStasjon() {
 
     $.get(url, function (OK) {
         if (OK) {
-            statusMelding("Stasjon ble fjernet", true, "Stasjoner");
+            statusMelding("Stasjon ble fjernet", true);
             hentAlleStasjoner();
         } else {
-            statusMelding("Feilet på server - prøv igjen senere", false, "Stasjoner");
+            statusMelding("Feilet på server - prøv igjen senere", false);
         }
     });
 }
@@ -162,11 +165,11 @@ function lagAvgang() {
         }
 
         $.post(url, avgang, function () {
-            statusMelding("Avgang ble lagt til", true, "Avganger");
+            statusMelding("Avgang ble lagt til", true);
             hentAlleAvganger();
         })
             .fail(function () {
-                statusMelding("Feilet på server - prøv igjen senere", false, "Avganger");
+                statusMelding("Feilet på server - prøv igjen senere", false);
             });
     }
 }
@@ -200,7 +203,7 @@ function sjekkAvgang() {
     })
         .fail(function () {
             $("#avganger").html("");
-            statusMelding("Fant ingen avganger for gitte parametere.", false, "Avganger");
+            statusMelding("Fant ingen avganger for gitte parametere.", false);
         });
 }
 
@@ -278,11 +281,11 @@ function endreAvgang(avgangId) {
         };
 
         $.post(url, avgang, function () {
-            statusMelding("Avgang endret", true, "Avganger");
+            statusMelding("Avgang endret", true);
             hentAlleAvganger();
         })
             .fail(function () {
-                statusMelding("Avgang ble ikke endret", false, "Avganger");
+                statusMelding("Avgang ble ikke endret", false);
             });
 
     }
@@ -294,14 +297,14 @@ function slettAvgang(avgangId) {
 
     $.get(url, avgangId, function (OK) {
         if (OK) {
-            statusMelding("Avgang ble slettet", true, "Avganger");
+            statusMelding("Avgang ble slettet", true);
             hentAlleAvganger();
         } else {
-            statusMelding("Avgang ble ikke slettet", false, "Avganger");
+            statusMelding("Avgang ble ikke slettet", false);
         }
     })
         .fail(function (){
-            statusMelding("Feilet på server - prøv igjen senere", false, "Avganger");
+            statusMelding("Feilet på server - prøv igjen senere", false);
         });
 }
 
@@ -329,10 +332,10 @@ function lagBestilling(gjesteBruker) {
         };
 
         $.get(url, bestilling, function () {
-            statusMelding("Bestilling opprettet", true, "Bestillinger");
+            statusMelding("Bestilling opprettet", true);
         })
             .fail(function () {
-                statusMelding("Feilet på server - prøv igjen senere", false, "Bestillinger");
+                statusMelding("Feilet på server - prøv igjen senere", false);
             });
     }
 }
@@ -355,10 +358,10 @@ function endreBestilling(bestillingId) {
         };
 
         $.get(url, bestilling, function () {
-            statusMelding("Bestilling endret", true, "Bestillinger");
+            statusMelding("Bestilling endret", true);
         })
             .fail(function () {
-                statusMelding("Feilet på server - prøv igjen senere", false, "Bestillinger");
+                statusMelding("Feilet på server - prøv igjen senere", false);
             });
     }
 }
@@ -371,7 +374,7 @@ function hentAlleBestillinger() {
         formaterBestillinger(bestillinger);
     })
         .fail(function () {
-            statusMelding("Feilet på server - prøv igjen senere", false, "Bestillinger");
+            statusMelding("Feilet på server - prøv igjen senere", false);
         });
 }
 

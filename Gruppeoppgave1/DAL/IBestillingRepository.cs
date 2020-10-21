@@ -10,6 +10,8 @@ namespace Gruppeoppgave1.DAL
     {
         Task<bool> LagBestilling(int avgangId, int antall, int brukerId);
 
+        Task<bool> SendBestillingMail(string tilMail, int brukerId);
+
         Task<bool> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall, int nyBrukerId);
 
         Task<bool> SlettBestilling(int bestillingId);

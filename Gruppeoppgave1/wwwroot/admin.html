@@ -36,214 +36,202 @@
     </nav>
 
     <div class="container">
+        <h1>Adminpanel</h1>
+        <p>Velkommen! Her kan alle entiteter i databasen endres</p>
 
-        <!--Stasjoner-->
-        <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #ff0000;">
+        <div id="statusMeldingFeil" style="color: red; font-size: 1.3em; text-align:center"></div>
+        <div id="statusMeldingOK" style="color: green; font-size: 1.3em; text-align:center"></div>
+
+        <br />
+
+        <div id="accordion">
+            <!--Stasjoner-->
             <h1>Stasjoner</h1>
-
-            <div id="feilStasjoner" style="color: red; font-size: 1.3em; text-align:center"></div>
-            <div id="vellykketStasjoner" style="color: green; font-size: 1.3em; text-align:center"></div>
-            
-            <br />
-
-            <b>Lag stasjoner</b>
-
-            <div class="form-row">
-                <div class="col">
-                    <label for="nyStasjonInput">Stasjons navn:</label>
-                    <input type="text" class="form-control" id="nyStasjonInput" />
-                </div>
-                <div class="col">
-                    <input type="button" value="Lag" onclick="lagStasjon()" class="btn btn-success" style="position: absolute; bottom: 0" />
-                </div>
-
-            </div>
-
-
-            <br />
-
-
-            <p>
-                <b>Endre stasjoner</b><br />
-                Merk at det bare er navnet som endre, ID'en i databasen vil være den samme og <br />
-                derfor beholde alle tidligere relasjoner.
-            </p>
-
-            <div class="form-row">
-                <div class="col">
-                    <label for="endreStasjonSelect">Stasjon å endre:</label>
-                    <select name="stasjoner" class="stasjoner form-control" id="endreStasjonSelect" onchange="oppdaterTekstStasjon()"></select>
-                </div>
-                <div class="col">
-                    <label for="endreStasjonInput">Nytt navn:</label>
-                    <input type="text" class="form-control" id="endreStasjonInput"/>
-                </div>
-                <div class="col">
-                    <input type="button" value="Endre" onclick="endreStasjon()" class="btn btn-warning" style="position: absolute; bottom: 0" />
-                </div>
-            </div>
-            
-            <br />
-
-            <b>Slett stasjoner</b>
-            <div class="form-row">
-                <div class="col">
-                    <label for="slettStasjonSelect">Stasjon å slette:</label>
-                    <select name="stasjoner" class="stasjoner form-control" id="slettStasjonSelect"></select>
-                </div>
-                <div class="col">
-                    <input type="button" value="Slett" onclick="slettStasjon()" class="btn btn-danger" style="position: absolute; bottom: 0" />
-                </div>
-            </div>
-        </div>
-
-        <!--Avganger-->
-        <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #ff0000;">
-            <h1>Avganger</h1>
-
-            <div id="feilAvganger" style="color: red; font-size: 1.3em; text-align:center"></div>
-            <div id="vellykketAvganger" style="color: green; font-size: 1.3em; text-align:center"></div>
-
-            <br />
-
-            <p>
-                <b>Lag avganger</b> <br />
-                Velg fra, til stasjoner og dato<br />
-                Det kan enten opprettes en og en avgang, eller så kan du velge å auto generere avganger <br />
-                for hver x gitte time for hele den valgte dagen
-            </p>
-
-            <div class="form-row">
-                <div class="col">
-                    <label for="lagAvgangStasjonFra">Stasjon fra:</label>
-                    <select class="stasjoner form-control" id="lagAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
-                </div>
-                <div class="col">
-                    <label for="lagAvgangStasjonTil">Stasjon til:</label>
-                    <select class="stasjoner form-control" id="lagAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
-                </div>
-                <div class="col">
-                    <label for="datoValgLagAvganger">Dato:</label>
-                    <input type="text" id="datoValgLagAvganger" class="form-control">
-                </div>
-                <div class="col">
-                    <label for="tidspunktLagAvganger">Tidspunkt: (HH:MM)</label>
-                    <input type="text" id="tidspunktLagAvganger" class="form-control" />
-                </div>
-                <div class="col">
-                    <label for="prisLagAvganger">Pris:</label>
-                    <input type="text" id="prisLagAvganger" class="form-control" />
-                </div>
-                <div class="col">
-                    <input type="button" value="Lag" onclick="lagAvgang()" class="btn btn-success" style="position: absolute; bottom: 0" />
-                </div>
-            </div>
-           
-            
-    <!--Hvis vi eventuelt vil ha autogenerering for avganger
-                <br />
+            <div class="container" style="padding-bottom: 10px;">
+                <b>Lag stasjoner</b>
 
                 <div class="form-row">
                     <div class="col">
-                        <label class="form-check-label" for="autogenererAvgang">Auto generer avganger:</label>
-                        <input class="form-check-input" type="checkbox" value="" id="autogenererAvgang">
+                        <label for="nyStasjonInput">Stasjons navn:</label>
+                        <input type="text" class="form-control" id="nyStasjonInput" />
                     </div>
                     <div class="col">
-                        <label for="timerAutogenerer">Ny avgang hver X time:</label>
-                        <input type="text" class="form-control" id="timerAutogenerer" />
+                        <input type="button" value="Lag" onclick="lagStasjon()" class="btn btn-success" style="position: absolute; bottom: 0" />
+                    </div>
+
+                </div>
+
+
+                <br />
+
+
+                <p>
+                    <b>Endre stasjoner</b><br />
+                    Merk at det bare er navnet som endre, ID'en i databasen vil være den samme og <br />
+                    derfor beholde alle tidligere relasjoner.
+                </p>
+
+                <div class="form-row">
+                    <div class="col">
+                        <label for="endreStasjonSelect">Stasjon å endre:</label>
+                        <select name="stasjoner" class="stasjoner form-control" id="endreStasjonSelect" onchange="oppdaterTekstStasjon()"></select>
+                    </div>
+                    <div class="col">
+                        <label for="endreStasjonInput">Nytt navn:</label>
+                        <input type="text" class="form-control" id="endreStasjonInput" />
+                    </div>
+                    <div class="col">
+                        <input type="button" value="Endre" onclick="endreStasjon()" class="btn btn-warning" style="position: absolute; bottom: 0" />
                     </div>
                 </div>
-                -->
 
+                <br />
+
+                <b>Slett stasjoner</b>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="slettStasjonSelect">Stasjon å slette:</label>
+                        <select name="stasjoner" class="stasjoner form-control" id="slettStasjonSelect"></select>
+                    </div>
+                    <div class="col">
+                        <input type="button" value="Slett" onclick="slettStasjon()" class="btn btn-danger" style="position: absolute; bottom: 0" />
+                    </div>
+                </div>
+            </div>
+
+            <!--Avganger-->
+            <h1>Avganger</h1>
+            <div class="container" style="padding-bottom: 10px;">
+                <p>
+                    <b>Lag avganger</b> <br />
+                    Velg fra, til stasjoner og dato<br />
+                    Det kan enten opprettes en og en avgang, eller så kan du velge å auto generere avganger <br />
+                    for hver x gitte time for hele den valgte dagen
+                </p>
+
+                <div class="form-row">
+                    <div class="col">
+                        <label for="lagAvgangStasjonFra">Stasjon fra:</label>
+                        <select class="stasjoner form-control" id="lagAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
+                    </div>
+                    <div class="col">
+                        <label for="lagAvgangStasjonTil">Stasjon til:</label>
+                        <select class="stasjoner form-control" id="lagAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
+                    </div>
+                    <div class="col">
+                        <label for="datoValgLagAvganger">Dato:</label>
+                        <input type="text" id="datoValgLagAvganger" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label for="tidspunktLagAvganger">Tidspunkt: (HH:MM)</label>
+                        <input type="text" id="tidspunktLagAvganger" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <label for="prisLagAvganger">Pris:</label>
+                        <input type="text" id="prisLagAvganger" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <input type="button" value="Lag" onclick="lagAvgang()" class="btn btn-success" style="position: absolute; bottom: 0" />
+                    </div>
+                </div>
+
+
+                <!--Hvis vi eventuelt vil ha autogenerering for avganger
             <br />
-
-            <p>
-                <b>Endre og slette avganger</b> <br />
-                Velg fra og til stasjoner for å finne hvilken avgang du vil endre eller slette
-            </p>
-
 
             <div class="form-row">
                 <div class="col">
-                    <label for="endreAvgangStasjonFra">Stasjon fra:</label>
-                    <select class="stasjoner form-control" id="endreAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
+                    <label class="form-check-label" for="autogenererAvgang">Auto generer avganger:</label>
+                    <input class="form-check-input" type="checkbox" value="" id="autogenererAvgang">
                 </div>
                 <div class="col">
-                    <label for="endreAvgangStasjonTil">Stasjon til:</label>
-                    <select class="stasjoner form-control" id="endreAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
-                </div>
-                <div class="col">
-                    <label for="datoValgEndreAvganger">Dato:</label>
-                    <input type="text" id="datoValgEndreAvganger" class="form-control">
-                </div>
-                <div class="col">
-                    <input type="button" value="Finn avganger" onclick="sjekkAvgang()" class="btn btn-primary" style="position: absolute; bottom: 0" />
+                    <label for="timerAutogenerer">Ny avgang hver X time:</label>
+                    <input type="text" class="form-control" id="timerAutogenerer" />
                 </div>
             </div>
+            -->
 
-            <br />
+                <br />
 
-            <div class="container" id="avganger">
+                <p>
+                    <b>Endre og slette avganger</b> <br />
+                    Velg fra og til stasjoner for å finne hvilken avgang du vil endre eller slette
+                </p>
+
+
+                <div class="form-row">
+                    <div class="col">
+                        <label for="endreAvgangStasjonFra">Stasjon fra:</label>
+                        <select class="stasjoner form-control" id="endreAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
+                    </div>
+                    <div class="col">
+                        <label for="endreAvgangStasjonTil">Stasjon til:</label>
+                        <select class="stasjoner form-control" id="endreAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
+                    </div>
+                    <div class="col">
+                        <label for="datoValgEndreAvganger">Dato:</label>
+                        <input type="text" id="datoValgEndreAvganger" class="form-control">
+                    </div>
+                    <div class="col">
+                        <input type="button" value="Finn avganger" onclick="sjekkAvgang()" class="btn btn-primary" style="position: absolute; bottom: 0" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="container" id="avganger">
+
+                </div>
+
+                <br />
 
             </div>
 
-            <br />
-
-        </div>
-
-        <!--Bestillinger-->
-
-        <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #ff0000;">
-
+            <!--Bestillinger-->
             <h1>Bestillinger</h1>
+            <div class="container" style="padding-bottom: 10px;">
+                <p>
+                    <b>Lag bestilligner</b> <br />
+                    Opprett bestillinger raskt her
+                </p>
 
-            <div id="feilBestillinger" style="color: red; font-size: 1.3em; text-align:center"></div>
-            <div id="vellykketBestillinger" style="color: green; font-size: 1.3em; text-align:center"></div>
-
-            <br />
-
-            <p>
-                <b>Lag bestilligner</b> <br />
-                Opprett bestillinger raskt her
-            </p>
-
-            <div class="form-row">
-                <div class="col">
-                    <label for="lagBestillingAvgang">Avgang:</label>
-                    <select class="avganger form-control" id="lagBestillingAvgang"></select>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="lagBestillingAvgang">Avgang:</label>
+                        <select class="avganger form-control" id="lagBestillingAvgang"></select>
+                    </div>
+                    <div class="col">
+                        <label for="lagBestillingAntall">Antall reisende:</label>
+                        <input type="text" class="form-control" id="lagBestillingAntall">
+                    </div>
+                    <div class="col">
+                        <input type="button" value="Lag" onclick="lagGjesteBruker()" class="btn btn-success" style="position: absolute; bottom: 0" />
+                    </div>
                 </div>
-                <div class="col">
-                    <label for="lagBestillingAntall">Antall reisende:</label>
-                    <input type="text" class="form-control" id="lagBestillingAntall" >
+
+                <br />
+
+                <p>
+                    <b>Endre og slette bestilligner</b> <br />
+                    Trykk på knappen under for å hente bestillinger fra backend.
+                    Avganger kan endres i en singel dropdown med oversikt over alle mulige avganger, hvis <br />
+                    dette blir for rotete anbefales det å bare opprette en helt ny bestilling slik at du får mer kontroll og oversikt.
+                </p>
+
+                <div class="form-row">
+                    <input type="button" value="Hent bestilligner" onclick="hentAlleBestillinger()" class="btn btn-primary" />
                 </div>
-                <div class="col">
-                    <input type="button" value="Lag" onclick="lagGjesteBruker()" class="btn btn-success" style="position: absolute; bottom: 0" />
+
+                <br />
+
+                <div class="container" id="bestillinger">
+
                 </div>
-            </div>
-
-            <br />
-
-            <p>
-                <b>Endre og slette bestilligner</b> <br />
-                Trykk på knappen under for å hente bestillinger fra backend.
-                Avganger kan endres i en singel dropdown med oversikt over alle mulige avganger, hvis <br />
-                dette blir for rotete anbefales det å bare opprette en helt ny bestilling slik at du får mer kontroll og oversikt.
-            </p>
-
-            <div class="form-row">
-                <input type="button" value="Hent bestilligner" onclick="hentAlleBestillinger()" class="btn btn-primary" />
-            </div>
-
-            <br />
-
-            <div class="container" id="bestillinger">
 
             </div>
 
         </div>
-
     </div>
-
 
 </body>
 </html>

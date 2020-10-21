@@ -42,6 +42,20 @@ namespace Gruppeoppgave1.Controllers
             _log.LogInformation("Feil input validering");
             return BadRequest("Feil input validering");
         }
+        public async Task<ActionResult> SendBestillingMail(string tilMail, int brukerId)
+        {
+            bool returOK = await _db.SendBestillingMail(tilMail, brukerId);
+
+            if (!returOK)
+            {
+                _log.LogInformation("Mail om bestilling ble ikke sendt");
+                return BadRequest("Mail om bestilling ble ikke sendt");
+            }
+            return Ok("Mail sendt");
+        }
+
+
+
 
         public async Task<ActionResult> EndreBestilling(int bestillingId, int nyAvgangId, int nyttAntall, int nyBrukerId)
         {
