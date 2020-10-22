@@ -46,6 +46,19 @@ namespace Gruppeoppgave1.Controllers
             HttpContext.Session.SetString(_loggetInn, "");
         }
 
+        public ActionResult SjekkInnlogget()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized("Ikke innlogget");
+            }
+            else
+            {
+                return Ok("Admin innlogget");
+            }
+
+        }
+
         public async Task<ActionResult> HentAlleBrukere()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))

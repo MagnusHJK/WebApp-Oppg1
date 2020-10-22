@@ -10,10 +10,10 @@
 function statusMelding(tekst, sannhet) {
     if (sannhet) {
         $("#statusMeldingOK").html(tekst);
-        $("#statusMeldingOK").fadeIn('fast').delay(15000).fadeOut('slow');
+        $("#statusMeldingOK").fadeIn('fast').delay(10000).fadeOut('slow');
     } else {
         $("#statusMeldingFeil").html(tekst);
-        $("#statusMeldingFeil").fadeIn('fast').delay(15000).fadeOut('slow');
+        $("#statusMeldingFeil").fadeIn('fast').delay(10000).fadeOut('slow');
     }
 }
 
@@ -109,22 +109,27 @@ function oppdaterTekstStasjon() {
     $("#endreStasjonInput").val(stasjonsNavn);
 }
 
-//Sjekker om stasjonen til og fra er like, hvis ikke så blir avganene mellom disse hentet
-function endretAvgangerValg() {
-    if ($("#endreAvgangStasjonFra option:selected").val() == $("#endreAvgangStasjonTil option:selected").val()) {
-        $("#feilAvganger").html("Stasjonene kan ikke være like!");
-    }
-    else {
-        $("#feilAvganger").html("");
-        datoValgEndreAvganger();
-    }
-
+//Sjekker om stasjonen til og fra er like for Lag avganger delen
+function lagAvgangerValg() {
     if ($("#lagAvgangStasjonFra option:selected").val() == $("#lagAvgangStasjonTil option:selected").val()) {
-        $("#feilAvganger").html("Stasjonene kan ikke være like!");
+        statusMelding("Kan ikke lage avganger mellom like stasjoner!", false);
+        $("#buttonLagAvgang").prop('disabled', true);
     }
     else {
-        $("#feilAvganger").html("");
         datoValgLagAvganger();
+        $("#buttonLagAvgang").prop('disabled', false);
+    }
+}
+
+//Sjekker om stasjonen til og fra er like for Endre avganger delen
+function endreAvgangerValg() {
+    if ($("#endreAvgangStasjonFra option:selected").val() == $("#endreAvgangStasjonTil option:selected").val()) {
+        statusMelding("Kan ikke hente avganger mellom like stasjoner!", false);
+        $("#buttonEndreAvgang").prop('disabled', true);
+    }
+    else {
+        datoValgEndreAvganger();
+        $("#buttonEndreAvgang").prop('disabled', false);
     }
 }
 

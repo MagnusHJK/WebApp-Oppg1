@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="js/valideringAdmin.js"></script>
     <script src="js/admin.js"></script>
+    <script src="js/loggUt.js"></script>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="index.html">NOR-WAY</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,7 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="stasjonsliste.html">Stasjonsliste</a>
@@ -28,8 +29,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="bestillingsliste.html">Bestillingsliste</a>
                 </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="logginn.html">Logg inn</a>
+                    <form id="formAdminpanel">
+                        <button class="btn btn-primary" id="buttonAdminpanel">Adminpanel</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form id="formLoggut" style="display:none">
+                        <button class="btn btn-primary" id="buttonLoggut" onclick="loggUt()">Logg ut</button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -112,11 +122,11 @@
                 <div class="form-row">
                     <div class="col">
                         <label for="lagAvgangStasjonFra">Stasjon fra:</label>
-                        <select class="stasjoner form-control" id="lagAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
+                        <select class="stasjoner form-control" id="lagAvgangStasjonFra" onchange="lagAvgangerValg()"></select>
                     </div>
                     <div class="col">
                         <label for="lagAvgangStasjonTil">Stasjon til:</label>
-                        <select class="stasjoner form-control" id="lagAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
+                        <select class="stasjoner form-control" id="lagAvgangStasjonTil" onchange="lagAvgangerValg()"></select>
                     </div>
                     <div class="col">
                         <label for="datoValgLagAvganger">Dato:</label>
@@ -131,25 +141,25 @@
                         <input type="text" id="prisLagAvganger" class="form-control" />
                     </div>
                     <div class="col">
-                        <input type="button" value="Lag" onclick="lagAvgang()" class="btn btn-success" style="position: absolute; bottom: 0" />
+                        <input type="button" value="Lag" onclick="lagAvgang()" id="buttonLagAvgang" class="btn btn-success" style="position: absolute; bottom: 0" />
                     </div>
                 </div>
 
 
                 <!--Hvis vi eventuelt vil ha autogenerering for avganger
-            <br />
+                <br />
 
-            <div class="form-row">
-                <div class="col">
-                    <label class="form-check-label" for="autogenererAvgang">Auto generer avganger:</label>
-                    <input class="form-check-input" type="checkbox" value="" id="autogenererAvgang">
+                <div class="form-row">
+                    <div class="col">
+                        <label class="form-check-label" for="autogenererAvgang">Auto generer avganger:</label>
+                        <input class="form-check-input" type="checkbox" value="" id="autogenererAvgang">
+                    </div>
+                    <div class="col">
+                        <label for="timerAutogenerer">Ny avgang hver X time:</label>
+                        <input type="text" class="form-control" id="timerAutogenerer" />
+                    </div>
                 </div>
-                <div class="col">
-                    <label for="timerAutogenerer">Ny avgang hver X time:</label>
-                    <input type="text" class="form-control" id="timerAutogenerer" />
-                </div>
-            </div>
-            -->
+                -->
 
                 <br />
 
@@ -162,18 +172,18 @@
                 <div class="form-row">
                     <div class="col">
                         <label for="endreAvgangStasjonFra">Stasjon fra:</label>
-                        <select class="stasjoner form-control" id="endreAvgangStasjonFra" onchange="endretAvgangerValg()"></select>
+                        <select class="stasjoner form-control" id="endreAvgangStasjonFra" onchange="endreAvgangerValg()"></select>
                     </div>
                     <div class="col">
                         <label for="endreAvgangStasjonTil">Stasjon til:</label>
-                        <select class="stasjoner form-control" id="endreAvgangStasjonTil" onchange="endretAvgangerValg()"></select>
+                        <select class="stasjoner form-control" id="endreAvgangStasjonTil" onchange="endreAvgangerValg()"></select>
                     </div>
                     <div class="col">
                         <label for="datoValgEndreAvganger">Dato:</label>
                         <input type="text" id="datoValgEndreAvganger" class="form-control">
                     </div>
                     <div class="col">
-                        <input type="button" value="Finn avganger" onclick="sjekkAvgang()" class="btn btn-primary" style="position: absolute; bottom: 0" />
+                        <input type="button" value="Finn avganger" onclick="sjekkAvgang()" id="buttonEndreAvgang" class="btn btn-primary" style="position: absolute; bottom: 0" />
                     </div>
                 </div>
 

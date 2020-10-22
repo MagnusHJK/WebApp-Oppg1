@@ -10,7 +10,7 @@
     <script src="js/bestillingsliste.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="index.html">NOR-WAY</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="stasjonsliste.html">Stasjonsliste</a>
@@ -26,8 +26,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="bestillingsliste.html">Bestillingsliste</a>
                 </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="logginn.html">Logg inn</a>
+                    <form id="formAdminpanel">
+                        <button class="btn btn-primary" id="buttonAdminpanel">Adminpanel</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form id="formLoggut" style="display:none">
+                        <button class="btn btn-primary" id="buttonLoggut" onclick="loggUt()">Logg ut</button>
+                    </form>
                 </li>
             </ul>
         </div>

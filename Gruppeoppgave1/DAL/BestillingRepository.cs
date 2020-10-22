@@ -57,18 +57,17 @@ namespace Gruppeoppgave1.DAL
             foreach(Bestillinger bestilling in bestillinger)
             {
                 mailBody += "<h2>" + bestilling.Antall + " billett(er) for strekningen: </h2><br/>" + 
-                            bestilling.Avgang.StasjonFra.Navn + " -> " + bestilling.Avgang.StasjonTil.Navn + " " + bestilling.Avgang.Dato.ToString("dddd, dd MMMM yyyy HH:mm:ss") + "<br/>" +
-                            "Total pris " + (bestilling.Avgang.Pris * bestilling.Antall) + " ,- <br/>";
+                            bestilling.Avgang.StasjonFra.Navn + " -> " + bestilling.Avgang.StasjonTil.Navn + " " + 
+                            bestilling.Avgang.Dato.ToString("dddd, dd MMMM yyyy HH:mm:ss") + "<br/>" +
+                            "Total pris " + (bestilling.Avgang.Pris * bestilling.Antall) + ",- <br/>";
             }
 
             using(MailMessage emailMessage = new MailMessage())
             {
                 var fraAddresse = new MailAddress("NORWAY.ITPE3200@gmail.com", "NOR-WAY");
                 var fraPassord = "*c*S%vX6PSXr6mw9tjy!tstfF";
-
                 var tilAddresse = new MailAddress(tilMail);
                
-
                 emailMessage.To.Add(tilAddresse);
                 emailMessage.From = fraAddresse;
                 emailMessage.Subject = "NOR-WAY - Dine bestillinger";
