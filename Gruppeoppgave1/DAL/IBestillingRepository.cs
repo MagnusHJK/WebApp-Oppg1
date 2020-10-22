@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gruppeoppgave1.DAL
 {
+
     public interface IBestillingRepository
     {
         Task<bool> LagBestilling(int avgangId, int antall, int brukerId);

@@ -28,20 +28,16 @@ namespace Gruppeoppgave1.Controllers
 
         public async Task<ActionResult> LagBestilling(int avgangId, int antall, int brukerId)
         {
-            if (ModelState.IsValid)
-            {
-                bool returOK = await _db.LagBestilling(avgangId, antall, brukerId);
+            bool returOK = await _db.LagBestilling(avgangId, antall, brukerId);
 
-                if (!returOK)
-                {
-                    _log.LogInformation("Bestilling ble ikke opprettet");
-                    return BadRequest("Bestilling ble ikke opprettet");
-                }
-                return Ok("Bestilling opprettet");
+            if (!returOK)
+            {
+                _log.LogInformation("Bestilling ble ikke opprettet");
+                return BadRequest("Bestilling ble ikke opprettet");
             }
-            _log.LogInformation("Feil input validering");
-            return BadRequest("Feil input validering");
+            return Ok("Bestilling opprettet");
         }
+
         public async Task<ActionResult> SendBestillingMail(string tilMail, int brukerId)
         {
             bool returOK = await _db.SendBestillingMail(tilMail, brukerId);

@@ -291,21 +291,12 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task HentAvgangerIkkeOK()
         {
-            //Arrange
-            DateTime dato = new DateTime(2021, 10, 10);
-            var stasjon1 = new Stasjoner { Id = 15, Navn = "Seljestad" };
-            var stasjon2 = new Stasjoner { Id = 16, Navn = "Oslo" };
-            var avgang1 = new Avganger { Id = 1, StasjonFra = stasjon1, StasjonTil = stasjon2, Dato = dato, Pris = 200 };
-            var avgangerListe = new List<Avganger>
-            {
-                avgang1
-            };
 
-            mockRep.Setup(a => a.HentAvganger(avgang1.StasjonFra.Id, avgang1.StasjonTil.Id, avgang1.Dato.ToString())).ReturnsAsync(avgangerListe);
+            mockRep.Setup(a => a.HentAvganger(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(()=>null);
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            var resultat = await avgangController.HentAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString()) as NotFoundObjectResult;
+            var resultat = await avgangController.HentAvganger(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()) as NotFoundObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
@@ -340,16 +331,15 @@ namespace XUnitTestGruppeoppgave1
         [Fact]
         public async Task HentAlleAvgangerIkkeOK()
         {
-            DateTime dato = new DateTime(2020, 10, 10);
-            mockRep.Setup(a => a.HentAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString())).ReturnsAsync(It.IsAny<List<Avganger>>());
+            mockRep.Setup(a => a.HentAlleAvganger()).ReturnsAsync(()=>null);
 
             var avgangController = new AvgangController(mockRep.Object, mockLog.Object);
 
-            var resultat = await avgangController.HentAvganger(It.IsAny<int>(), It.IsAny<int>(), dato.ToString()) as NotFoundObjectResult;
+            var resultat = await avgangController.HentAlleAvganger() as NotFoundObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
-            Assert.Equal("Avganger ble ikke hentet", resultat.Value);
+            Assert.Equal("Fant ingen avganger", resultat.Value);
         }
 
     }

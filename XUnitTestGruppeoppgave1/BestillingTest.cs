@@ -58,6 +58,39 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
+        public async Task SendBestillingMailOK()
+        {
+            mockRep.Setup(s => s.SendBestillingMail(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
+
+            var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
+
+            //Act
+            var resultat = await BestillingController.SendBestillingMail(It.IsAny<string>(), It.IsAny<int>()) as OkObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Mail sendt", resultat.Value);
+        }
+
+
+        [Fact]
+        public async Task SendBestillingMailIkkeOK()
+        {
+            mockRep.Setup(s => s.SendBestillingMail(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(false);
+
+            var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
+
+            //Act
+            var resultat = await BestillingController.SendBestillingMail(It.IsAny<string>(), It.IsAny<int>()) as BadRequestObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Mail om bestilling ble ikke sendt", resultat.Value);
+        }
+
+
+
+        [Fact]
         public async Task EndreBestillingInnloggetOK()
         {
             mockRep.Setup(s => s.EndreBestilling(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(true);
@@ -218,10 +251,10 @@ namespace XUnitTestGruppeoppgave1
         public async Task HentAlleBestillingerIkkeOK()
         {
 
-            mockRep.Setup(s => s.HentBestillinger(It.IsAny<int>())).ReturnsAsync(It.IsAny<List<Bestillinger>>);
+            mockRep.Setup(s => s.HentAlleBestillinger()).ReturnsAsync(()=>null);
             var BestillingController = new BestillingController(mockRep.Object, mockLog.Object);
 
-            var resultat = await BestillingController.HentBestillinger(It.IsAny<int>()) as NotFoundObjectResult;
+            var resultat = await BestillingController.HentAlleBestillinger() as NotFoundObjectResult;
 
             //Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);

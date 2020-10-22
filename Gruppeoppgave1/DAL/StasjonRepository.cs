@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gruppeoppgave1.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class StasjonRepository : IStasjonRepository
     {
         private readonly NORWAYContext _db;

@@ -94,19 +94,13 @@ namespace Gruppeoppgave1.Controllers
             {
                 return Unauthorized("Ikke innlogget");
             }
-
-            if(ModelState.IsValid)
+            bool returOK = await _db.SlettStasjon(id);
+            if(!returOK)
             {
-                bool returOK = await _db.SlettStasjon(id);
-                if(!returOK)
-                {
-                    _log.LogInformation("Sletting av stasjon feilet");
-                    return BadRequest("Sletting av stasjon feilet");
-                }
-                return Ok("Stasjon slettet");
+                _log.LogInformation("Sletting av stasjon feilet");
+                return BadRequest("Sletting av stasjon feilet");
             }
-            _log.LogInformation("Feil i sletting av Stasjon");
-            return BadRequest("Feil i sletting av Stasjon");
+            return Ok("Stasjon slettet");
         }
     }
 }

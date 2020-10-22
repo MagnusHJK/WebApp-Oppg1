@@ -184,7 +184,7 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
-        public async Task EndreStasjonInnlogget()
+        public async Task EndreStasjonInnloggetOK()
         {
             mockRep.Setup(s => s.EndreStasjon(It.IsAny<Stasjon>())).ReturnsAsync(true);
 
@@ -201,6 +201,28 @@ namespace XUnitTestGruppeoppgave1
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal("Stasjon endret", resultat.Value);
         }
+
+        [Fact]
+        public async Task EndreStasjonInnloggetFeilModel()
+        {
+            mockRep.Setup(s => s.EndreStasjon(It.IsAny<Stasjon>())).ReturnsAsync(true);
+
+            var stasjonController = new StasjonController(mockRep.Object, mockLog.Object);
+
+            stasjonController.ModelState.AddModelError("Navn", "Feil i inputvalidering for endring av Stasjon");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            stasjonController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            //Act
+            var resultat = await stasjonController.EndreStasjon(It.IsAny<Stasjon>()) as BadRequestObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering for endring av Stasjon", resultat.Value);
+        }
+
 
         [Fact]
         public async Task EndreStasjonInnloggetIkkeOK()

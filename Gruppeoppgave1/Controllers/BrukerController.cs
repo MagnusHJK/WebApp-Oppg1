@@ -54,9 +54,8 @@ namespace Gruppeoppgave1.Controllers
             }
             else
             {
-                return Ok("Admin innlogget");
+                return Ok("Innlogget");
             }
-
         }
 
         public async Task<ActionResult> HentAlleBrukere()

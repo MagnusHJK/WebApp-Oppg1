@@ -97,6 +97,38 @@ namespace XUnitTestGruppeoppgave1
         }
 
         [Fact]
+        public void SjekkInnloggetOK()
+        {
+            var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
+
+            mockHttpContext.Setup(b => b.Session).Returns(mockSession);
+            mockSession[_loggetInn] = _loggetInn;
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resultat = BrukerController.SjekkInnlogget() as OkObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Innlogget", resultat.Value);
+        }
+
+        [Fact]
+        public void SjekkInnloggetIkkeOK()
+        {
+            var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
+
+            mockHttpContext.Setup(b => b.Session).Returns(mockSession);
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resultat = BrukerController.SjekkInnlogget() as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("Ikke innlogget", resultat.Value);
+        }
+
+        [Fact]
         public async Task HentAlleBrukereInnloggetOK()
         {
             //Arrange

@@ -8,10 +8,10 @@
 function statusMelding(tekst, sannhet) {
     if (sannhet) {
         $("#statusMeldingOK").html(tekst);
-        $("#statusMeldingOK").fadeIn('fast').delay(15000).fadeOut('slow');
+        $("#statusMeldingOK").fadeIn('fast').delay(10000).fadeOut('slow');
     } else {
         $("#statusMeldingFeil").html(tekst);
-        $("#statusMeldingFeil").fadeIn('fast').delay(15000).fadeOut('slow');
+        $("#statusMeldingFeil").fadeIn('fast').delay(10000).fadeOut('slow');
     }
 }
 

@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Gruppeoppgave1.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class BrukerRepository : IBrukerRepository
     {
         private readonly NORWAYContext _db;

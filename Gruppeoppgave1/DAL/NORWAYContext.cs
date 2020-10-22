@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gruppeoppgave1.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class Stasjoner
     {
         [Key]
@@ -14,6 +16,7 @@ namespace Gruppeoppgave1.DAL
         public string Navn { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Avganger
     {
         [Key]
@@ -28,6 +31,7 @@ namespace Gruppeoppgave1.DAL
         public int Pris { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Bestillinger
     {
         [Key]
@@ -40,6 +44,7 @@ namespace Gruppeoppgave1.DAL
         virtual public Brukere Bruker { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Brukere
     {
         [Key]
@@ -52,6 +57,7 @@ namespace Gruppeoppgave1.DAL
         public byte[] Salt { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class NORWAYContext : DbContext
     {
         public NORWAYContext (DbContextOptions<NORWAYContext> options) : base(options)

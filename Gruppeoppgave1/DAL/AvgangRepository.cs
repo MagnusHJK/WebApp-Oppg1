@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Gruppeoppgave1.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class AvgangRepository : IAvgangRepository
     {
         private readonly NORWAYContext _db;

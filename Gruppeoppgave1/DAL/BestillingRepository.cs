@@ -3,12 +3,14 @@ using Gruppeoppgave1.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace Gruppeoppgave1.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class BestillingRepository : IBestillingRepository
     {
         private readonly NORWAYContext _db;
