@@ -106,8 +106,8 @@ namespace Gruppeoppgave1.DAL
             }
         }
 
-        //Endrer brukernavn, ofte brukt for å koble en epost addresse til en gjestebruker
-        //Da kan man fin
+        //Endrer brukernavn, denne er ikke i bruk
+        //Kan tenkes å brukes hvis man vil knytte navn til bruker
         public async Task<bool> EndreBrukernavn(Bruker bruker)
         {
             try
@@ -119,6 +119,30 @@ namespace Gruppeoppgave1.DAL
                     return true;
                 }
 
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //Sletter bruker med brukerId
+        public async Task<bool> SlettBruker(int brukerId)
+        {
+            try
+            {
+                Brukere funnetBruker = await _db.Brukere.FindAsync(brukerId);
+                System.Diagnostics.Debug.WriteLine(funnetBruker.Id + " " + funnetBruker.Brukernavn);
+                if (funnetBruker != null)
+                {
+                    if(funnetBruker.Brukernavn != "Admin")
+                    {
+                        _db.Brukere.Remove(funnetBruker);
+                        await _db.SaveChangesAsync();
+                        return true;
+                    }
+                }
                 return false;
             }
             catch

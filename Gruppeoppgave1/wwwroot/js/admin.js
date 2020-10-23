@@ -1,6 +1,7 @@
 ﻿$(function () {
     hentAlleStasjoner();
     hentAlleAvganger();
+    hentAlleBrukere();
     $("#accordion").accordion({
         heightStyle: "content"
     });
@@ -88,7 +89,10 @@ function slettStasjon() {
         } else {
             statusMelding("Feilet på server - prøv igjen senere", false);
         }
-    });
+    })
+        .fail(function () {
+            statusMelding("Feilet, kanskje den har avganger koblet til seg?", false);
+        });
 }
 
 
@@ -309,7 +313,7 @@ function slettAvgang(avgangId) {
         }
     })
         .fail(function (){
-            statusMelding("Feilet på server - prøv igjen senere", false);
+            statusMelding("Feilet, kanskje den har bestillinger knyttet til seg?", false);
         });
 }
 
@@ -340,7 +344,7 @@ function lagBestilling(gjesteBruker) {
             statusMelding("Bestilling opprettet", true);
         })
             .fail(function () {
-                statusMelding("Feilet på server - prøv igjen senere", false);
+                statusMelding("Bestilling ble ikke opprettet", false);
             });
     }
 }
@@ -366,9 +370,21 @@ function endreBestilling(bestillingId) {
             statusMelding("Bestilling endret", true);
         })
             .fail(function () {
-                statusMelding("Feilet på server - prøv igjen senere", false);
+                statusMelding("Bestilling ble ikke endret", false);
             });
     }
+}
+
+function slettBestilling(bestillingId) {
+    const url = "Bestilling/SlettBestilling?bestillingId=" + bestillingId;
+
+    $.get(url, function () {
+        hentAlleBestillinger();
+        statusMelding("Bestilling ble slettet", true);
+    })
+        .fail(function () {
+            statusMelding("Feilet, kanskje den har brukere knyttet opp til seg?", false);
+        });
 }
 
 //Henter alle bestillinger, ingen sjekk eller filtrering først
@@ -379,7 +395,7 @@ function hentAlleBestillinger() {
         formaterBestillinger(bestillinger);
     })
         .fail(function () {
-            statusMelding("Feilet på server - prøv igjen senere", false);
+            statusMelding("Fant ingen bestillinger", false);
         });
 }
 
@@ -461,9 +477,24 @@ function hentAlleBrukere() {
 
 //Fyller inn brukere i alle dropdowns
 function fyllInnBrukere(brukere) {
-
+    $(".brukere").html("");
+    $(".brukere").append($('<option></option>').val("").html(""));
 
     for (let bruker of brukere) {
         $(".brukere").append($('<option></option>').val(bruker.id).html(bruker.id + ": " + bruker.brukernavn));
     }
+}
+
+
+function slettBruker() {
+    var brukerId = $("#slettBruker").val();
+    const url = "Bruker/SlettBruker?brukerId=" + brukerId;
+
+    $.get(url, function () {
+        hentAlleBrukere();
+        statusMelding("Bruker slettet", true);
+    })
+        .fail(function () {
+            statusMelding("Feilet, kanskje bruker er knyttet til en bestilling?", false);
+        });
 }

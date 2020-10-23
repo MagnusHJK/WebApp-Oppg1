@@ -91,9 +91,13 @@ namespace Gruppeoppgave1.DAL
             try
             {
                 Stasjoner slettStasjon = await _db.Stasjoner.FindAsync(id);
-                _db.Stasjoner.Remove(slettStasjon);
-                await _db.SaveChangesAsync();
-                return true;
+                if(slettStasjon != null)
+                {
+                    _db.Stasjoner.Remove(slettStasjon);
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                return false;
             }
             catch
             {

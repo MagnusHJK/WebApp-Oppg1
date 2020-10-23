@@ -13,5 +13,7 @@ namespace Gruppeoppgave1.DAL
         Task<List<Brukere>> HentAlleBrukere();
 
         Task<Brukere> LagGjesteBruker();
+
+        Task<bool> SlettBruker(int brukerId);
     }
 }

@@ -223,5 +223,65 @@ namespace XUnitTestGruppeoppgave1
             Assert.Equal("Oppretting av gjestebruker feilet", resultat.Value);
         }
 
+        [Fact]
+        public async Task SlettBrukerInnloggetOK()
+        {
+            mockRep.Setup(b => b.SlettBruker(It.IsAny<int>())).ReturnsAsync(true);
+
+            var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
+
+            mockHttpContext.Setup(b => b.Session).Returns(mockSession);
+            mockSession[_loggetInn] = _loggetInn;
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            //Act
+            var resultat = await BrukerController.SlettBruker(It.IsAny<int>()) as OkObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Bruker ble slettet", resultat.Value);
+        }
+
+
+        [Fact]
+        public async Task SlettBrukerInnloggetIkkeOK()
+        {
+            mockRep.Setup(b => b.SlettBruker(It.IsAny<int>())).ReturnsAsync(false);
+
+            var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
+
+            mockHttpContext.Setup(b => b.Session).Returns(mockSession);
+            mockSession[_loggetInn] = _loggetInn;
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            //Act
+            var resultat = await BrukerController.SlettBruker(It.IsAny<int>()) as NotFoundObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
+            Assert.Equal("Sletting av bruker feilet", resultat.Value);
+        }
+
+
+        [Fact]
+        public async Task SlettBrukerIkkeInnlogget()
+        {
+            mockRep.Setup(b => b.SlettBruker(It.IsAny<int>())).ReturnsAsync(false);
+
+            var BrukerController = new BrukerController(mockRep.Object, mockLog.Object);
+
+            mockHttpContext.Setup(b => b.Session).Returns(mockSession);
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            BrukerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            //Act
+            var resultat = await BrukerController.SlettBruker(It.IsAny<int>()) as UnauthorizedObjectResult;
+
+            //Assert
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("Ikke innlogget", resultat.Value);
+        }
+
+
     }
 }

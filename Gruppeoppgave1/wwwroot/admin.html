@@ -10,6 +10,7 @@
     <script src="js/valideringAdmin.js"></script>
     <script src="js/admin.js"></script>
     <script src="js/loggUt.js"></script>
+    <script src="js/logginn.js"></script>
 </head>
 <body>
 
@@ -38,17 +39,19 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form id="formLoggut" style="display:none">
-                        <button class="btn btn-primary my-2 my-sm-0" id="buttonLoggut" onclick="loggUt()">Logg ut</button>
+                    <form id="formLoggut">
+                        <button class="btn btn-danger my-2 my-sm-0" id="buttonLoggut" onclick="loggUt()">Logg ut</button>
                     </form>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid">
         <h1>Adminpanel</h1>
-        <p>Velkommen! Her kan alle entiteter i databasen endres</p>
+        <p>Velkommen! Her kan alle entiteter i databasen endres <br />
+        <span style="color: red">Husk at entitetene kan ha relasjoner og koblinger til andre enheter, disse enhetene må derfor slettes først<br />
+            f. eks, en stasjon med avganger knyttet til seg kan ikke slettes før disse avgangene er slettet</span></p>
 
         <div id="statusMeldingFeil" style="color: red; font-size: 1.3em; text-align:center"></div>
         <div id="statusMeldingOK" style="color: green; font-size: 1.3em; text-align:center"></div>
@@ -58,7 +61,7 @@
         <div id="accordion">
             <!--Stasjoner-->
             <h1>Stasjoner</h1>
-            <div class="container" style="padding-bottom: 10px;">
+            <div class="container-fluid" style="padding-bottom: 10px;">
                 <b>Lag stasjoner</b>
 
                 <div class="form-row">
@@ -112,12 +115,10 @@
 
             <!--Avganger-->
             <h1>Avganger</h1>
-            <div class="container" style="padding-bottom: 10px;">
+            <div class="container-fluid" style="padding-bottom: 10px;">
                 <p>
                     <b>Lag avganger</b> <br />
-                    Velg fra, til stasjoner og dato<br />
-                    Det kan enten opprettes en og en avgang, eller så kan du velge å auto generere avganger <br />
-                    for hver x gitte time for hele den valgte dagen
+                    Velg fra, til stasjoner og dato
                 </p>
 
                 <div class="form-row">
@@ -138,29 +139,13 @@
                         <input type="text" id="tidspunktLagAvganger" class="form-control" />
                     </div>
                     <div class="col">
-                        <label for="prisLagAvganger">Pris:</label>
+                        <label for="prisLagAvganger">Pris per billett:</label>
                         <input type="text" id="prisLagAvganger" class="form-control" />
                     </div>
                     <div class="col">
                         <input type="button" value="Lag" onclick="lagAvgang()" id="buttonLagAvgang" class="btn btn-success" style="position: absolute; bottom: 0" />
                     </div>
                 </div>
-
-
-                <!--Hvis vi eventuelt vil ha autogenerering for avganger
-                <br />
-
-                <div class="form-row">
-                    <div class="col">
-                        <label class="form-check-label" for="autogenererAvgang">Auto generer avganger:</label>
-                        <input class="form-check-input" type="checkbox" value="" id="autogenererAvgang">
-                    </div>
-                    <div class="col">
-                        <label for="timerAutogenerer">Ny avgang hver X time:</label>
-                        <input type="text" class="form-control" id="timerAutogenerer" />
-                    </div>
-                </div>
-                -->
 
                 <br />
 
@@ -200,7 +185,7 @@
 
             <!--Bestillinger-->
             <h1>Bestillinger</h1>
-            <div class="container" style="padding-bottom: 10px;">
+            <div class="container-fluid" style="padding-bottom: 10px;">
                 <p>
                     <b>Lag bestilligner</b> <br />
                     Opprett bestillinger raskt her
@@ -225,8 +210,7 @@
                 <p>
                     <b>Endre og slette bestilligner</b> <br />
                     Trykk på knappen under for å hente bestillinger fra backend.
-                    Avganger kan endres i en singel dropdown med oversikt over alle mulige avganger, hvis <br />
-                    dette blir for rotete anbefales det å bare opprette en helt ny bestilling slik at du får mer kontroll og oversikt.
+                    Avganger kan endres i en singel dropdown med oversikt over alle mulige avganger for å gjøre det så enkelt som mulig
                 </p>
 
                 <div class="form-row">
@@ -239,6 +223,26 @@
 
                 </div>
 
+            </div>
+
+
+            <h1>Brukere</h1>
+            <div class="container-fluid" style="padding-bottom: 10px;">
+                <p>
+                    <b>Slette gjestebrukere</b> <br />
+                    Hver gang en bestilling blir lagt inn, opprettes en gjestebruker som tilkobling. <br />
+                    Her kan de slettes hvis det er ønskelig. (Admin bruker kan ikke slettes)
+                </p>
+
+                <div class="form-row">
+                    <div class="col">
+                        <label for="slettBruker">Bruker:</label>
+                        <select class="brukere form-control" id="slettBruker"></select>
+                    </div>
+                    <div class="col">
+                        <input type="button" value="Slett" onclick="slettBruker()" class="btn btn-danger" style="position: absolute; bottom: 0" />
+                    </div>
+                </div>
             </div>
 
         </div>

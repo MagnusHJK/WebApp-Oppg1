@@ -88,5 +88,24 @@ namespace Gruppeoppgave1.Controllers
             _log.LogInformation("Gjestebruker opprettet");
             return Ok(returBruker);
         }
+
+        public async Task<ActionResult> SlettBruker(int brukerId)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized("Ikke innlogget");
+            }
+
+            var returOK = await _db.SlettBruker(brukerId);
+
+            if (!returOK)
+            {
+                _log.LogInformation("Sletting av bruker feilet");
+                return NotFound("Sletting av bruker feilet");
+            }
+
+            _log.LogInformation("Bruker ble slettet");
+            return Ok("Bruker ble slettet");
+        }
     }
 }
